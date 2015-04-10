@@ -6,11 +6,6 @@ import os.path
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "static"),
-)
-
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR,  'templates'),
      os.path.join(os.path.dirname(__file__), 'templates').replace('\\', '/'),
@@ -84,6 +79,7 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "static"),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -126,8 +122,8 @@ import os
 TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), '..', 'templates').replace('\\','/'),)
 
 INSTALLED_APPS = (
-    # 'django.contrib.auth',
-    # 'django.contrib.contenttypes',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
     # 'django.contrib.sessions',
     # 'django.contrib.sites',
     # 'django.contrib.messages',
