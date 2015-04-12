@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 # Django settings for myobject project.
 
 import os
@@ -5,10 +7,10 @@ import os.path
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-
+# 模板加载
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR,  'templates'),
-     os.path.join(os.path.dirname(__file__), 'templates').replace('\\', '/'),
+    os.path.join(os.path.dirname(__file__), 'templates').replace('\\', '/'),
 )
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -19,6 +21,7 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+# 数据库设置
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
@@ -100,17 +103,13 @@ SECRET_KEY = 'co1&7l15i3+w7r6v477_o&%=zt#3ysy@%m3d2czl(97$=dwj=o'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
-    # 'django.middleware.common.CommonMiddleware',
-    # 'django.contrib.sessions.middleware.SessionMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
-    # 'django.contrib.auth.middleware.AuthenticationMiddleware',
-    # 'django.contrib.messages.middleware.MessageMiddleware',
-    # Uncomment the next line for simple clickjacking protection:
-    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.transaction.TransactionMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
 )
 
 ROOT_URLCONF = 'myobject.urls'
@@ -118,13 +117,13 @@ ROOT_URLCONF = 'myobject.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'myobject.wsgi.application'
 
-import os
-TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), '..', 'templates').replace('\\','/'),)
+# import os
+# TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), '..', 'templates').replace('\\','/'),)
 
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    # 'django.contrib.sessions',
+    'django.contrib.sessions',
     # 'django.contrib.sites',
     # 'django.contrib.messages',
     # 'django.contrib.staticfiles',
@@ -134,6 +133,9 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'user_account',
 )
+
+# 自定义User Model
+AUTH_USER_MODEL = 'user_account.User'
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
@@ -165,3 +167,8 @@ LOGGING = {
         },
     }
 }
+
+LOGIN_URL = '/user_account/login/'
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+DATE_INPUT_FORMATS = ('%Y/%m/%d',)
+DATE_FORMAT = 'Y/m/d'
