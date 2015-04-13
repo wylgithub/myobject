@@ -103,6 +103,9 @@ class User(PermissionsMixin):
         return role in ROLES and self.groups.filter(name=ROLES[role]).exists()
 
     class Meta:
+        permissions = (
+            ("view_user", u"能否查看用户"),
+        )
         db_table = "graduation_design_account_user"  # 这里没有弄明白使用db_table为什么会报错，而使用app_label不会报错,这个问题在家里行不通，可视在公司测试了一下居然行了
         # app_label = 'user_account'
 
