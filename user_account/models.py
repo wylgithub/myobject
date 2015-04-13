@@ -103,8 +103,8 @@ class User(PermissionsMixin):
         return role in ROLES and self.groups.filter(name=ROLES[role]).exists()
 
     class Meta:
-        # db_table = "graduation_design_account_user",这里没有弄明白使用db_table为什么会报错，而使用app_label不会报错
-        app_label = 'user_account'
+        db_table = "graduation_design_account_user"  # 这里没有弄明白使用db_table为什么会报错，而使用app_label不会报错,这个问题在家里行不通，可视在公司测试了一下居然行了
+        # app_label = 'user_account'
 
     def __unicode__(self):
         return self.username
