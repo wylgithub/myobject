@@ -34,7 +34,7 @@
             padding: 7px 9px;
         }
     </style>
-    <script type="text/javascript" data-main="{{ STATIC_URL }}js/main"
+    <script type="text/javascript" data-main="{{ STATIC_URL }}js/main.js"
             src="{{ STATIC_URL }}js/lib/require-jquery.js"></script>
     <script type="text/javascript">
 
@@ -52,6 +52,7 @@
     </script>
 </head>
 <body>
+    <input type="hidden" id="amd_module" value="{{ static_path }}js/views/login.js"/>
     <div class="container" style="margin-top:30px;">
         <form class="form-signin" action="/user_account/login/action/" id="frmLogin" method="post">
             {% csrf_token %}
@@ -71,9 +72,6 @@
             <div style="width: 100%; text-align: center">
                 <button class="btn btn-large btn-primary default_button" type="button" id="btnLogin">登录</button>
                 <button class="btn btn-large btn-success default_button" type="button" id="btnLogin">注册</button>
-                <div class="version_no" style="margin-top: 10px;">
-                    V {{ app_version }}
-                </div>
             </div>
         </form>
     </div>
