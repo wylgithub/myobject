@@ -6,11 +6,13 @@ from django.contrib.admindocs.utils import ROLES
 from django.contrib.auth import authenticate
 from django.contrib.auth.hashers import make_password, check_password, is_password_usable
 from django.contrib.auth.models import PermissionsMixin, UserManager
+from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from django.forms import Form
 
 
 class MyUserManage(UserManager):
+    # 创建user
     def create_user(self, username, password=None, **extra_fields):
         """
         Creates and saves a User with the given username, email and password.
@@ -23,6 +25,7 @@ class MyUserManage(UserManager):
         user.save(using=self._db)
         return user
 
+    # 创建超级管理员
     def create_superuser(self, username, password, **extra_fields):
         u = self.create_user(username, password, **extra_fields)
         u.is_active = True
@@ -32,13 +35,14 @@ class MyUserManage(UserManager):
 
 
 class User(PermissionsMixin):
-    username = models.CharField(max_length=40, db_index=True, unique=True)
+    username = models.CharField(_("username"), max_length=40, db_index=True, unique=True)
     create_datetime = models.DateTimeField(auto_now_add=True)  # 用户的创建日期
     update_datetime = models.DateTimeField(auto_now=True)  # 用户的更新日期
-    full_name = models.CharField(max_length=20)  # 用户的全名
-    password = models.CharField(max_length=128)  # 用户的密码
-    last_login = models.DateTimeField(default=datetime.datetime.now())  # 用户上一次登录的日期时间。默认设置为当前的日期和时间。
+    full_name = models.CharField(_("full_name"), max_length=20)  # 用户的全名
+    password = models.CharField(_("password"), max_length=128)  # 用户的密码
+    last_login = models.DateTimeField(_('date joined'), default=datetime.datetime.now())  # 用户上一次登录的日期时间。默认设置为当前的日期和时间。
     is_active = models.BooleanField(default=True)  # 标识用户能否登录到admin界面。如果不想删除用户请把它设为 False
+    objects = MyUserManage()
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = []
 
@@ -99,12 +103,8 @@ class User(PermissionsMixin):
         return role in ROLES and self.groups.filter(name=ROLES[role]).exists()
 
     class Meta:
-        permissions = (
-            ("view_user", u"能否查看用户"),
-        )
-        db_table = "graduation_design_account_user"
-
-        abstract = True
+        # db_table = "graduation_design_account_user",这里没有弄明白使用db_table为什么会报错，而使用app_label不会报错
+        app_label = 'user_account'
 
     def __unicode__(self):
         return self.username
