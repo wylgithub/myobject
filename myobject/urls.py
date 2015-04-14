@@ -7,5 +7,7 @@ from myobject.views import get_current_datetime
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    (r'^show_time/$', get_current_datetime),
+    (r'^$', get_current_datetime),
+
+    url(r'^user_account/', include('user_account.urls')),
 )

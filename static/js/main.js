@@ -10,66 +10,20 @@ require.config({
             ],
             exports: 'Backbone'
         },
-        'ZeroClipboard': {
-            exports: 'ZeroClipboard'
-        },
         'jquery': {
             exports: '$'
         },
         'datepicker': {
             deps: ['bootstrap', 'jquery'],
             exports: 'datepicker'
-        },
-        'datetimepicker': {
-            deps: ['bootstrap', 'jquery'],
-            exports: 'datetimepicker'
-        },
-        'datetimepickerCN': {
-            deps: ['datetimepicker'],
-            exports: 'datetimepickerCN'
-        },
-        'jqueryuicore': {
-            deps: ['jquery']
-        },
-        'jqueryuiwidget': {
-            deps: ['jqueryuicore']
-        },
-        'jqueryuiprogressbar': {
-            deps: ['jqueryuiwidget']
-        },
-        'wysi1': {
-            deps: ['bootstrap', 'jquery'],
-            exports: 'wysi1'
-        },
-        'wysi2': {
-            deps: ['wysi1'],
-            exports: 'wysi2'
-        },
-        'wysi3': {
-            deps: ['wysi1', 'wysi2'],
-            exports: 'wysi3'
-        },
-        'editable': {
-            deps: ['bootstrap', 'jquery'],
-            exports: 'editable'
         }
     },
     paths: {
         underscore: 'lib/underscore-min',
         backbone: 'lib/backbone-min',
-        ZeroClipboard: 'lib/ZeroClipboard',
         bootstrap: 'lib/bootstrap-min',
         datepicker: 'lib/bootstrap-datepicker',
-        datetimepicker: 'lib/bootstrap-datetimepicker',
-        datetimepickerCN: 'lib/locales/bootstrap-datetimepicker.zh-CN',
-        jqueryuicore: 'lib/jqueryui/core',
-        jqueryuiwidget: 'lib/jqueryui/widget',
-        jqueryuiprogressbar: 'lib/jqueryui/progressbar',
-        cookie: 'lib/jquery.cookie',
-        wysi1: 'lib/wysihtml5-0.3.0',
-        wysi2: 'lib/bootstrap-wysihtml5',
-        wysi3: 'lib/locales/bootstrap-wysihtml5.zh-CN',
-        editable: 'lib/bootstrap-editable'
+        datetimepicker: 'lib/bootstrap-datetimepicker'
     }
 });
 

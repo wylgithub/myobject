@@ -1,5 +1,8 @@
 body { font-family: Arial,Helvetica,"微软雅黑","宋体",sans-serif; }
 
+input.uppercase {
+    text-transform:uppercase;
+}
 
 /* For Required fields - puts a yellow background color on inputs */
 input.highlight, select.highlight, textarea.highlight {
@@ -34,10 +37,10 @@ input.currency {
 }
 /*定义成well的区段，使用这个css让内部控件靠左显示*/
 .fly_left_well {
-    width: 960px;
+    width: 480px;
 }
 .fly_left_well .control-group {
-    margin-left:-90px;
+    margin-left: -80px;
 }
 /*页脚专用样式*/
 #page_footer {
@@ -51,6 +54,20 @@ input.currency {
 #page_footer a:hover{
     color: #0088cc;
     text-decoration: none;
+}
+/*Ajax加载专用Logo的样式*/
+#ajax_logo {
+    display: none;
+    z-index: 1031;
+    position: fixed;
+    top: 50px;
+    right: 60px;
+    float: right;
+    padding: 2px 8px;
+}
+#ajax_logo img {
+    width: 40px;
+    height: 40px;
 }
 /*版本号显示样式*/
 .version_no {
@@ -92,123 +109,15 @@ input.currency {
 .numberic_only {
     ime_mode:disabled !important;
 }
-.hiddenRow {
-    padding: 0 !important;
-}
-.floated {
-    float:left;
-}
-.inline {
-    display: inline-block;
+/** 搜索用开始结束时间输入框*/
+.datetime_searchgroup div {
+    display: inline;
 }
 
-.dropdown_city {
-    height: 208px;
-    overflow: auto;
+.btn-group button {
+    min-height: 30px;
 }
-
-/*模式弹出窗口专用*/
-.overlay {
-    background-color: rgba(0, 0, 0, 0.6);
-    bottom: 0;
-    cursor: default;
-    left: 0;
-    opacity: 0;
-    filter:alpha(opacity=0); /* For IE8 and earlier */
-    position: fixed;
-    right: 0;
-    top: 0;
-    text-align: center;
-    z-index: 2000;
-}
-
-.popup {
-    background-color: #fff;
-    border: 2px solid #444;
-    display: inline-block;
-    padding: 15px;
-    position: relative;
-    opacity: 0;
-    filter:alpha(opacity=1); /* For IE8 and earlier */
-    z-index: 1001;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 120px;
-    height: 400px;
-    width: 800px;
-    overflow: hidden;
-
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    -ms-border-radius: 10px;
-    -o-border-radius: 10px;
-    border-radius: 10px;
-}
-
-/*Ajax加载专用Logo的样式*/
-.ajax_logo {
-    display: none;
-    z-index: 9999;
-    position: fixed;
-    top: 0;
-    right: 0;
-    float: right;
-    padding: 4px 6px;
-    background-color: #ff3300;
-    color: #ffffff;
-    font-weight: bolder;
-    font-size: 1.1em;
-    width:60px;
-    text-align: center;
-    vertical-align: middle;
-    height:18px;
-}
-
-.splash_panel {
-    display: none;
-    z-index: 9999;
-    position: relative;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 200px;
-    padding: 4px 6px;
-    background-color: #ff3300;
-    color: #ffffff;
-    font-weight: bolder;
-    font-size: 1.4em;
-    width:320px;
-    text-align: center;
-    vertical-align: middle;
-    height:18px;
-}
-
-/*网站维护首页展示条*/
-.maintain_notice {
-    position:absolute;
-    z-index:99998;
-    top:0;
-    left:0;
-    height: 36px;
-    width: 100%;
-    font-size: 1.10em;
-    color: #c09853;
-    text-shadow: 0 rgba(255,255,255,0.5);
-    background-color: #fcf8e3;
-    text-align: center
-}
-
-.maintain_notice .maintain_notice_in {
-    height: 26px;
-    line-height: 32px;
-    overflow: hidden;
-    position: relative
-}
-
-#maintainClose {
-    position:absolute;
-    z-index:99999;
-    right:0;
-    cursor: pointer;
-    font-size: 28px;
-    color: #000000;
+.btn-group ul {
+    min-height: 20px;
+    min-width: 190px;
 }
