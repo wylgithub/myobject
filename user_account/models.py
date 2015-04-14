@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import datetime
+from captcha.fields import CaptchaField
 from django import forms
 from django.contrib.admindocs.utils import ROLES
 from django.contrib.auth import authenticate
@@ -8,7 +9,7 @@ from django.contrib.auth.hashers import make_password, check_password, is_passwo
 from django.contrib.auth.models import PermissionsMixin, UserManager
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
-from django.forms import Form
+from django.forms import Form, ModelForm
 
 
 class MyUserManage(UserManager):
@@ -38,6 +39,8 @@ class User(PermissionsMixin):
     username = models.CharField(_("username"), max_length=40, db_index=True, unique=True)
     create_datetime = models.DateTimeField(auto_now_add=True)  # 用户的创建日期
     update_datetime = models.DateTimeField(auto_now=True)  # 用户的更新日期
+    mobile = models.CharField(u"手机号码", max_length=15)  # 手机号码
+    email = models.EmailField(u"邮箱", max_length=50)  # 邮箱
     full_name = models.CharField(_("full_name"), max_length=20)  # 用户的全名
     password = models.CharField(_("password"), max_length=128)  # 用户的密码
     last_login = models.DateTimeField(_('date joined'), default=datetime.datetime.now())  # 用户上一次登录的日期时间。默认设置为当前的日期和时间。
@@ -111,6 +114,31 @@ class User(PermissionsMixin):
 
     def __unicode__(self):
         return self.username
+
+
+class UserForm(ModelForm):
+
+    class Meta:
+        model = User
+        fields = ('username', 'password', 'mobile', 'email')
+
+    def clean(self):
+        cleaned_data = super(UserForm, self).clean()
+
+        if 'captcha' in cleaned_data:
+            #添加模式下检查用户名是否唯一(验证码通过验证的场合)
+            if 'username' in cleaned_data:
+                username = cleaned_data['username']
+                if User.objects.filter(username=username).count() > 0:
+                    msg = u"用户名已存在"
+                    self._errors["username"] = self.error_class([msg])
+                    del cleaned_data["username"]
+                    #检查邮箱有效性
+        if 'email' not in cleaned_data:
+            self._errors["email"] = self.error_class([u"请输入有效的邮箱地址"])
+
+        return cleaned_data
+
 
 
 class UserLoginForm(Form):

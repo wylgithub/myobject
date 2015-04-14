@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <title>家庭理财管理系统 - 注册</title>
+    <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}css/common.css" rel="stylesheet">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ STATIC_URL }}favicon.ico">
+</head>
+<body>
+<div class="container_12">
+    <div class="grid_12 regContent">
+        <input type="hidden" id="amd_module" value="{{ STATIC_URL }}js/views/account_register.js"/>
+            <div class="regDiv">
+                        <form id="regForm" action="/user_account/register/action/" name="regForm" method="post" class="form-inline">
+                            <div class="form-group">
+                                <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
+                                <div class="input-group">
+                                      <div class="input-group-addon">$</div>
+                                            <input type="text" class="form-control" id="exampleInputAmount" placeholder="Amount">
+                                      <div class="input-group-addon">.00</div>
+                                </div>
+                          </div>
+                          <button type="submit" class="btn btn-primary">Transfer cash</button>
+                            {% csrf_token %}
+                            <ul class="form_inputs">
+                                <li>
+                                    <div class="register_title">用户名：</div>
+                                    <input name="username" id="txtUserName" value="{% if form.username.value %}{{ form.username.value }}{% endif %}" type="text" size="27"  maxlength="20" />
+                                    <label class="tipinfo_reg"></label>
+                                </li>
+                                <li>
+                                    <div class="register_title">密码：</div>
+                                    <input name="password" id="txtPassword"  type="password" size="27" maxlength="22"/>
+                                    <label class="tipinfo_reg"></label>
+                                </li>
+                                <li>
+                                    <div class="register_title">密码确认：</div>
+                                        <input name="passwordagain" id="txtPasswordAgain" type="password" size="27" maxlength="22" />
+                                        <label class="tipinfo_reg"></label>
+                                </li>
+                                <li>
+                                    <div class="register_title">手机号码：</div>
+                                        <input name="mobile" id="txtMobile" value="{% if form.mobile.value %}{{ form.mobile.value}}{% endif %}" type="text" size="27" maxlength="11" />
+                                        <label class="tipinfo_reg"></label>
+                                </li>
+                                <li>
+                                    <div class="register_title">邮箱：</div>
+                                    <input name="email" id="txtEmail"
+                                           value="{% if form.mobile.value %}{{ form.email.value }}{% endif %}"
+                                           type="text" size="27" maxlength="50"/>
+
+                                    {% if form.email.errors %}
+                                        {% with form.email.errors|first as error %}
+                                            <br/><span class="error_reg">{{ error }}</span>
+                                        {% endwith %}
+                                    {% else %}
+                                        <label class="tipinfo_reg"></label>
+                                    {% endif %}
+                                </li>
+                                <li>
+                                    <div class="submit_input">
+                                        <input type="button" id="btnReg" name="btnReg" value=""  class="btn_reg" />
+                                    </div>
+                                </li>
+                            </ul>
+                        </form>
+                <div class="doLgTip">
+                        <div class="lgTip">已经注册过了!现在就</div>
+                        <div class="lgbutton"><a href="{{login_url}}?next="><input type="button" id="btnLogin" name="btnLogin"  value="" class="btn_login" /></a></div>
+                </div>
+            </div>
+    </div>
+</div>
+</body>
+</html>
