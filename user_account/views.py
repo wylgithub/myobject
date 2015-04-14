@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 
-from django.shortcuts import render_to_response, render, redirect
+from django.shortcuts import render, redirect
 
 from user_account.models import UserLoginForm
 from django.contrib.auth import authenticate, login, logout
@@ -32,7 +32,7 @@ def login_action(request):
     form = UserLoginForm(request.POST)
 
     if form.is_valid():
-        cleaned_data = form.clead_data
+        cleaned_data = form.cleaned_data
         if cleaned_data.has_key('needRemember') and cleaned_data['needRemember']:
             request.session.set_expiry(2678400)  # session保持一个月
 

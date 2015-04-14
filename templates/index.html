@@ -5,4 +5,13 @@
 
 {% block content %}
     <p>It is now:{{ current_now }}</p>
+    <p>hello world!</p>
+
+    {% if user.is_authenticated %}
+        <p>Welcome, {{ user.username }}. Thanks for logging in.</p>
+    {% else %}
+        <p>Welcome, new user. Please log in.</p>
+    {% endif %}
+
+    <a id="lnkLogout" href="/user_account/logout/">注销</a>
 {% endblock %}
