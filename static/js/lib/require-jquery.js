@@ -1516,7 +1516,7 @@ var requirejs, require, define;
 
                 //If a colon is in the URL, it indicates a protocol is used and it is just
                 //an URL to a file, or if it starts with a slash, contains a query arg (i.e. ?)
-                //or ends with .js, then assume the account meant to use an url and not a module id.
+                //or ends with .js, then assume the epiao_account meant to use an url and not a module id.
                 //The slash is important for protocol-less URLs as well as full paths.
                 if (req.jsExtRegExp.test(moduleName)) {
                     //Just a plain path, not module name lookup, so just return it.
@@ -3575,7 +3575,7 @@ jQuery.extend({
 		thisCache = cache[ id ];
 
 		// jQuery data() is stored in a separate object inside the object's internal data
-		// cache in order to avoid key collisions between internal data and account-defined
+		// cache in order to avoid key collisions between internal data and epiao_account-defined
 		// data.
 		if ( !pvt ) {
 			if ( !thisCache.data ) {
@@ -5361,7 +5361,7 @@ if ( !jQuery.support.submitBubbles ) {
 		},
 
 		postDispatch: function( event ) {
-			// If form was submitted by the account, bubble the event up the tree
+			// If form was submitted by the epiao_account, bubble the event up the tree
 			if ( event._submit_bubble ) {
 				delete event._submit_bubble;
 				if ( this.parentNode && !event.isTrigger ) {
@@ -6052,7 +6052,7 @@ Sizzle.attr = function( elem, name ) {
 
 Expr = Sizzle.selectors = {
 
-	// Can be adjusted by the account
+	// Can be adjusted by the epiao_account
 	cacheLength: 50,
 
 	createPseudo: markFunction,
@@ -6342,7 +6342,7 @@ Expr = Sizzle.selectors = {
 				fn = Expr.pseudos[ pseudo ] || Expr.setFilters[ pseudo.toLowerCase() ] ||
 					Sizzle.error( "unsupported pseudo: " + pseudo );
 
-			// The account may use createPseudo to indicate that
+			// The epiao_account may use createPseudo to indicate that
 			// arguments are needed to create the filter function
 			// just as Sizzle does
 			if ( fn[ expando ] ) {
