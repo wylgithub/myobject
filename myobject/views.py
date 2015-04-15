@@ -14,4 +14,4 @@ def get_current_datetime(request):
 
     now = datetime.datetime.now()
 
-    return render_to_response('index.html', {'current_now': now})
+    return render_to_response('index/index.html', {'current_now': now})

@@ -117,28 +117,25 @@ class User(PermissionsMixin):
 
 
 class UserForm(ModelForm):
+    role = forms.IntegerField()
+    cinema = forms.CharField(required=False)
 
     class Meta:
         model = User
-        fields = ('username', 'password', 'mobile', 'email')
+        fields = ('username', 'password', 'full_name')
 
     def clean(self):
         cleaned_data = super(UserForm, self).clean()
+        #  检查用户的唯一性
+        if 'username' in cleaned_data and 'mode' in cleaned_data:
+            username = cleaned_data['username']
+            if User.objects.filter(username=username).count() > 0:
+                msg = u"用户名已存在。"
+                self._errors["username"] = self.error_class([msg])
 
-        if 'captcha' in cleaned_data:
-            #添加模式下检查用户名是否唯一(验证码通过验证的场合)
-            if 'username' in cleaned_data:
-                username = cleaned_data['username']
-                if User.objects.filter(username=username).count() > 0:
-                    msg = u"用户名已存在"
-                    self._errors["username"] = self.error_class([msg])
-                    del cleaned_data["username"]
-                    #检查邮箱有效性
-        if 'email' not in cleaned_data:
-            self._errors["email"] = self.error_class([u"请输入有效的邮箱地址"])
+                del cleaned_data["username"]
 
         return cleaned_data
-
 
 
 class UserLoginForm(Form):
