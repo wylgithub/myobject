@@ -5,9 +5,9 @@ from django.contrib.auth.models import Group
 __author__ = 'wyl'
 
 ROLE_SYSADMIN = 99
-ROLE_MEMBER = 1
-ROLE_FAMILY_SUPER_USER = 2
-ROLE_FAMILY_COMMON_USER = 3
+ROLE_FAMILY_SUPER_USER = 10
+ROLE_MEMBER = 20
+ROLE_FAMILY_COMMON_USER = 30
 
 ROLES = {
     ROLE_SYSADMIN: u'系统管理员',  # 系统内的最大权限用户

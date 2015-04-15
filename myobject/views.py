@@ -2,16 +2,20 @@
 # -*- coding: utf-8 -*-
 import datetime
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, render
 
 
 __author__ = 'wyl'
 
 
-# 测试模板的访问----测试结果(OK)
 @login_required
-def get_current_datetime(request):
+def index_view(request):
+    """
+    首页View
+    """
+    # 如果是影院账户，则跳转到专用画面
+    login_user = request.user
 
-    now = datetime.datetime.now()
-
-    return render_to_response('index/index.html', {'current_now': now})
+    return render(request, "index/index.html", {
+        'user': login_user
+    })

@@ -1,3 +1,6 @@
+/**
+ * Created by cc on 15-4-15.
+ */
 define([
     'require',
     'jquery',
@@ -5,20 +8,23 @@ define([
 ], function (require, $, Backbone) {
     "use strict";
 
-    var AppView = Backbone.View.extend({
+    return Backbone.View.extend({
         el:"body",
+        in_syncing:false,  //防止两重提交标志位
         role:$('#id_role'),
         btnRoleDisplay:$('#btnRoleDisplay'),
-        in_syncing:false,  //防止两重提交标志位
 
         events:{
-            'click #btnSave':'save',
             'click .dropdownItem':'dropdownItem_click',
-            'click #btnReturn':'return_to_prev_page'
+            'click #btnReturn':'return_to_prev_page',
+            'click #btnSave':'save'
         },
 
         initialize:function () {
-
+            var ru = $('#redirect_url');
+            if (ru && ru.val() === '') {
+                $('#btnReturn').hide();
+            }
         },
 
         save:function() {
@@ -27,8 +33,13 @@ define([
                 return;
             }
             this.in_syncing = true;
+            var txtPassword = $('#txtPassword');
+            if (txtPassword.val() === '') {
+                txtPassword.prop('disabled', true);
+            }
             $('#btnSave').prop('disabled', true);
-            $('#frmAddUser').submit();
+
+            $('#frmEditUser').submit();
         },
 
         // 返回用户一览
@@ -53,5 +64,4 @@ define([
             }
         }
     });
-    return AppView;
 });

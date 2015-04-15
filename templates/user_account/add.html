@@ -51,14 +51,14 @@
                 <div class="control-group">
                     <label class="control-label" for="role">身份</label>
                     <div class="controls">
-                        <input type="hidden" name="role" id="id_role" value="{% if form.role.value == '1' or form.role.value == '2' or form.role.value == '3' %}{{ form.role.value }}{% else %}2{% endif %}"/>
+                        <input type="hidden" name="role" id="id_role" value="{% if form.role.value %}{{ form.role.value }}{% else %}10{% endif %}"/>
                         <div class="btn-group">
                             <button class="btn" type="button" data-toggle="dropdown" id="btnRoleDisplay">
-                                {% if form.role.value == "2" %}
+                                {% if form.role.value == "10" %}
                                     家庭管理员
-                                {% elif form.role.value == "1" %}
+                                {% elif form.role.value == "20" %}
                                     会员
-                                {% elif form.role.value == "3" %}
+                                {% elif form.role.value == "30" %}
                                     家庭普通成员
                                 {% endif %}
                             </button>
@@ -66,9 +66,9 @@
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a href="#" class="dropdownItem" for="id_role" value="2">家庭管理员</a></li>
-                                <li><a href="#" class="dropdownItem" for="id_role" value="1">会员</a></li>
-                                <li><a href="#" class="dropdownItem" for="id_role" value="3">家庭普通成员</a></li>
+                                <li><a href="#" class="dropdownItem" for="id_role" value="10">家庭管理员</a></li>
+                                <li><a href="#" class="dropdownItem" for="id_role" value="20">会员</a></li>
+                                <li><a href="#" class="dropdownItem" for="id_role" value="30">家庭普通成员</a></li>
                             </ul>
                         </div>
                         {% if form.role.errors %}
