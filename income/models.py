@@ -10,8 +10,7 @@ class Income(models.Model):
     """
     家庭收入管理模型
     """
-    income_type = models.PositiveSmallIntegerField(u"家庭收入类型", max_length=10, choices=INCOME_TYPE_CHOICE,
-                                                   default=INCOME_TYPE_FOR_WORK)  # 家庭收入类型字段,也就是收入来源
+    income_type = models.CharField(u"家庭收入类型", max_length=10)  # 家庭收入类型字段,也就是收入来源
     create_datetime = models.DateTimeField(auto_now_add=True)  # 添加时间
     update_datetime = models.DateTimeField(auto_now=True)  # 更新日期
     income_amount = models.DecimalField(u'收入金额', max_digits=8, decimal_places=2, default=0)  #收入金额

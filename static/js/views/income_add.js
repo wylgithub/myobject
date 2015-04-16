@@ -1,14 +1,16 @@
 define([
+    'jquery',
     'require',
     'jquery',
-    'backbone'
+    'backbone',
+    'datepicker',
+    'datetimepicker',
+    'datetimepickerCN'
 ], function (require, $, Backbone) {
     "use strict";
 
     var AppView = Backbone.View.extend({
         el:"body",
-        role:$('#id_role'),
-        btnRoleDisplay:$('#btnRoleDisplay'),
         in_syncing:false,  //防止两重提交标志位
 
         events:{
@@ -16,6 +18,9 @@ define([
         },
 
         initialize:function () {
+            $('#id_origin_date').datepicker().on('changeDate', function(event) {
+                $(event.target).datepicker('hide');
+            });
 
         },
 
@@ -34,7 +39,7 @@ define([
             var ru = $('#redirect_url');
             var url;
             if (!ru || ru.length === 0 || !ru.val()) {
-                url = '/user_account/list/';
+                url = '/income/list/';
             }else {
                 url = ru.val();
             }

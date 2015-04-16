@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
+from income.models import IncomeForm, Income
 
 
 @login_required
@@ -11,7 +12,13 @@ def add_income_view(request):
     :param request:
     :return:
     """
+    form = IncomeForm(request.POST, instance=Income())
+
+    if form.is_valid():
+        form.save()
+
     return render(request, "income/add_income.html", {
+        'form': form,
 
     })
 
