@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block title %} - 添加收入明细{% endblock %}
+{% block content %}
+    <input type="hidden" id="amd_module" value="{% static "js/views/user_add.js" %}"/>
+    <div class="container" style="margin-top:60px;">
+        <div class="page_header">
+            <ul class="bc">
+                <li><a href="/">主页</a><span class="divider">/</span></li>
+                <li><a href="/user_account/list/">添加收入明细</a> <span class="divider">/</span></li>
+                <li class="active">添加明细</li>
+            </ul>
+        </div>
+        <form class="form-horizontal" action="/user_account/add/action/" id="frmAddUser" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="redirect_url" id="redirect_url" value="{{ redirect_url|default_if_none:"" }}"/>
+            <div class="well well-large fly_right_well">
+                <div class="control-group">
+                <label class="control-label" for="id_flavor">收入类型</label>
+                <div class="controls">
+                    <input type="hidden" name="flavor" id="id_flavor" value="{{ form.flavor.value }}"/>
+                    <div class="btn-group">
+                        <button class="btn" type="button" style="min-width:194px;text-align:left" data-toggle="dropdown" id="id_flavor_trigger">
+                        </button>
+                        <button class="btn dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+
+                        </ul>
+                    </div>
+                    {% if form.flavor.errors %}
+                        {% with form.flavor.errors|first as error %}
+                            <br/>
+                            <span class="error_message">{{ error }}</span>
+                        {% endwith %}
+                    {% endif %}
+                </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="txtUserName">用户名</label>
+                    <div class="controls">
+                        <input type="text" id="txtUserName" name="username" class="highlight first_focus{% if form.username.errors %} error_flg{% endif %}" maxlength="30" value="{{ form.username.value|default_if_none:"" }}"/>
+                        {% if form.username.errors %}
+                            {% with form.username.errors|first as error %}
+                                <br/><span class="error_message">{{ error }}</span>{% endwith %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="txtFullName">记录人</label>
+                    <div class="controls">
+                        <input type="text" class="highlight input{% if form.last_name.errors %} error_flg{% endif %}" name="full_name" id="txtFullName" maxlength="20" value="{{ form.full_name.value|default_if_none:"" }}"/>
+                        {% if form.full_name.errors %}
+                            {% with form.full_name.errors|first as error %}
+                                <br/><span class="error_message">{{ error }}</span>
+                            {% endwith %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="txtFullName">备注</label>
+                    <div class="controls">
+                        <textarea rows="10" class="highlight">
+
+                        </textarea>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <button type="button" id="add" class="btn btn-primary default_button">添加</button>
+                        <button type="button" id="btnReturn" class="btn">取消</button>
+                    </div>
+                </div>
+                {% if form.non_field_errors %}
+                    {% with form.non_field_errors|first as error %}
+                        <div class="control-group">
+                            <div class="controls"><span class="error_message">{{ error }}</span></div>
+                        </div>
+                    {% endwith %}
+                {% endif %}
+            </div>
+        </form>
+    </div>
+{% endblock %}

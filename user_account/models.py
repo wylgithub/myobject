@@ -116,13 +116,6 @@ class User(PermissionsMixin):
         return self.username
 
 
-class UserEditForm(UserForm):
-
-    class Meta:
-        model = User
-        fields = ('username', 'full_name')
-
-
 class UserForm(ModelForm):
     role = forms.IntegerField()
     cinema = forms.CharField(required=False)
@@ -143,6 +136,13 @@ class UserForm(ModelForm):
                 del cleaned_data["username"]
 
         return cleaned_data
+
+
+class UserEditForm(UserForm):
+
+    class Meta:
+        model = User
+        fields = ('username', 'full_name')
 
 
 class UserLoginForm(Form):

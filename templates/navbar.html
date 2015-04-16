@@ -2,14 +2,15 @@
 <div id="navbar" class="navbar navbar-fixed-top">
     <div class="navbar-inner">
         <div class="container">
-            <a class="brand" href="/">
-                <p>Manager</p>
-            </a>
+                <a class="brand" href="/">
+                <img src="{{ STATIC_URL }}image/logo.png" alt="logo" style="margin:0;padding:0;height:20px;"/>理财宝
+                </a>
             <ul class="nav nav-pills">
-            {% if user|in_group:"家庭管理员,系统管理员" or user.is_superuser %}
+            {% if user.is_superuser %}
                 <li class="dropdown" id="menuAccount" active-by-url="\/user_account\/">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#menuAccount">
-                        用户管理{{ user }}
+                        用户管理
+                        <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
                         <li active-by-url="\/user_account\/add\/"><a href="/user_account/add/">添加用户</a></li>
@@ -18,6 +19,96 @@
                 </li>
             {% endif %}
             </ul>
+
+            <ul class="nav nav-pills">
+            {% if not user.is_superuser %}
+                <li class="dropdown" id="menuIncome" active-by-url="\/income\/">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#menuIncome">
+                        收入管理
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li active-by-url="\/income\/add\/"><a href="/income/add/">添加收入明细</a></li>
+                        <li active-by-url="\/income\/list\/"><a href="/income/list/">收入明细一览</a></li>
+                    </ul>
+                </li>
+            {% endif %}
+            </ul>
+
+            <ul class="nav nav-pills">
+            {% if not user.is_superuser %}
+                <li class="dropdown" id="menuPay" active-by-url="\/income\/">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#menuPay">
+                        支出管理
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li active-by-url="\/income\/add\/"><a href="/income/add/">添加收入明细</a></li>
+                        <li active-by-url="\/income\/list\/"><a href="/income/list/">支出明细一览</a></li>
+                    </ul>
+                </li>
+            {% endif %}
+            </ul>
+
+            <ul class="nav nav-pills">
+            {% if not user.is_superuser %}
+                <li class="dropdown" id="menuBorrow" active-by-url="\/income\/">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#menuBorrow">
+                        借入管理
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li active-by-url="\/income\/add\/"><a href="/income/add/">添加借入明细</a></li>
+                        <li active-by-url="\/income\/list\/"><a href="/income/list/">借入明细一览</a></li>
+                    </ul>
+                </li>
+            {% endif %}
+            </ul>
+
+             <ul class="nav nav-pills">
+            {% if not user.is_superuser %}
+                <li class="dropdown" id="menuLend" active-by-url="\/income\/">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#menuLend">
+                        借出管理
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li active-by-url="\/income\/add\/"><a href="/income/add/">添加借出明细</a></li>
+                        <li active-by-url="\/income\/list\/"><a href="/income/list/">借出明细一览</a></li>
+                    </ul>
+                </li>
+            {% endif %}
+            </ul>
+
+             <ul class="nav nav-pills">
+            {% if not user.is_superuser %}
+                <li class="dropdown" id="menuDeposit" active-by-url="\/income\/">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#menuDeposit">
+                        存款管理
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li active-by-url="\/income\/add\/"><a href="/income/add/">添加存款明细</a></li>
+                        <li active-by-url="\/income\/list\/"><a href="/income/list/">存款明细一览</a></li>
+                    </ul>
+                </li>
+            {% endif %}
+            </ul>
+            <ul class="nav nav-pills">
+            {% if not user.is_superuser %}
+                <li class="dropdown" id="menuInvest" active-by-url="\/income\/">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#menuInvest">
+                        个人投资管理
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li active-by-url="\/income\/add\/"><a href="/income/add/">添加投资明细</a></li>
+                        <li active-by-url="\/income\/list\/"><a href="/income/list/">投资明细一览</a></li>
+                    </ul>
+                </li>
+            {% endif %}
+            </ul>
+
             <ul class="nav pull-right">
 
                 {% if user.is_authenticated %}

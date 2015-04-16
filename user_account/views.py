@@ -94,7 +94,7 @@ def register_action(request):
         # 直接登录该用户
         login(request, user)
 
-        return render(request, "account/reg.html", {
+        return render(request, "user_account/reg.html", {
             "form": form,
         })
 
@@ -197,7 +197,6 @@ def user_list_view(request):
         "need_pagination": params['limit'] < total_count,
         "total_count": total_count,
     })
-
 
 
 @login_required
@@ -308,7 +307,7 @@ def user_edit_action(request):
         # 员工没有访问list权限,所以这里返回index
         if check_role(request, ROLE_FAMILY_COMMON_USER):
             return back_to_original_page(request, "/")
-        return back_to_original_page(request, "/account/list/")
+        return back_to_original_page(request, "/user_account/list/")
     else:
         role = form.cleaned_data['role'] if 'role' in form.cleaned_data else None
         return render(request, "user_account/edit.html", {
@@ -318,25 +317,3 @@ def user_edit_action(request):
             "role_name": ROLES[role] if role in ROLES else "",
             # "update_timestamp": crypt.encryt(unicode(user.update_datetime))
         })
-
-#
-# @login_required
-# def user_delete_action(request):
-#     """
-#     删除用户
-#     """
-#     if check_role(request, ROLE_CHANNEL_MANAGER) or check_role(request, ROLE_SALES_MANAGER):
-#         raise PermissionDeniedError
-#
-#     if not request.POST.has_key('pk'):
-#         raise InvalidPostDataError()
-#     pk = request.POST["pk"]
-#     pks = []
-#     for key in pk.split(','):
-#         if key and is_int(key):
-#             pks.append(int(key))
-#
-#     User.objects.filter(id__in=pks).update(is_active=False)
-#     return back_to_original_page(request, '/epiao_account/list/')
-#
-# # 用户维护模块结束

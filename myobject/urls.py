@@ -14,4 +14,5 @@ urlpatterns = patterns('',
     (r'^$', index_view),
 
     url(r'^user_account/', include('user_account.urls')),
+    url(r'^income/', include('income.urls')),
 )

@@ -22,7 +22,7 @@ define([
 
         goto_edit:function() {
             var id = $('#id_pk').val();
-            var url = '/account/edit/' + id + '/';
+            var url = '/user_account/edit/' + id + '/';
             window.location.href = url + '?' + this.options.parentView.get_next_link();
         },
 
@@ -31,7 +31,7 @@ define([
             var ru = $('#redirect_url');
             var url;
             if (!ru || ru.length === 0 || !ru.val()) {
-                url = '/account/list/';
+                url = '/user_account/list/';
             }else {
                 url = ru.val();
             }

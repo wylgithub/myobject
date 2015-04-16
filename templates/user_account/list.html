@@ -63,7 +63,7 @@
                                 <tr>
                                     <td class="cell_center"><input type="checkbox" class="list_selector" pk="{{ user.id }}"/></td>
                                     <td>
-                                        <a href="/account/{{ user.id }}/" class="btn-link edit_link">{{ user.username }}</a>
+                                        <a href="/user_account/{{ user.id }}/" class="btn-link edit_link">{{ user.username }}</a>
                                     </td>
                                     <td>{{ user.get_full_name }}</td>
                                     <td>{{ user.create_datetime|date:"Y/m/d H:i:s" }}</td>
@@ -88,7 +88,7 @@
             </div>
         {% endif %}
     </div>
-    <form action="/account/delete/action/" method="post" id="frmDeleteUser">
+    <form action="/user_account/delete/action/" method="post" id="frmDeleteUser">
         {% csrf_token %}
         <input type="hidden" name="pk" id="pk"/>
         <input type="hidden" name="redirect_url" id="redirect_url" value="{{ url_path }}"/>

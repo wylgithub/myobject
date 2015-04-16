@@ -6,7 +6,7 @@
     <div class="container" style="margin-top:60px;">
         <div class="page_header">
             <ul class="bc">
-                <li><a href="/">主页</a> <span class="divider">/</span></li>
+                <li><a href="/">主页</a><span class="divider">/</span></li>
                 <li><a href="/user_account/list/">用户一览</a> <span class="divider">/</span></li>
                 <li class="active">添加用户</li>
             </ul>
@@ -21,7 +21,7 @@
                         <input type="text" id="txtUserName" name="username" class="highlight first_focus{% if form.username.errors %} error_flg{% endif %}" maxlength="30" value="{{ form.username.value|default_if_none:"" }}"/>
                         {% if form.username.errors %}
                             {% with form.username.errors|first as error %}
-                                <br/><span class="error_message">{{ error }}</span>0                            {% endwith %}
+                                <br/><span class="error_message">{{ error }}</span>{% endwith %}
                         {% endif %}
                     </div>
                 </div>
