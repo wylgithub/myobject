@@ -3,14 +3,14 @@
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
-from user_account.models import UserLoginForm, UserForm, User
+from user_account.models import UserLoginForm, UserForm, User, UserEditForm
 from django.contrib.auth import authenticate, login, logout
 from utility.base_view import back_to_original_page, get_list_params
 from utility.exception import PermissionDeniedError
 from utility.role_manager import check_role, ROLE_FAMILY_SUPER_USER, ROLES, ROLE_FAMILY_COMMON_USER, ROLE_SYSADMIN, \
-    ROLE_MEMBER
+    ROLE_MEMBER, check_permission_allowed, get_role_id
 from utility import role_manager
 
 
@@ -107,6 +107,10 @@ def user_add_view(request):
     """
     增加用户View
     """
+
+    if check_role(request, ROLE_FAMILY_COMMON_USER):
+        raise PermissionDeniedError
+
     form = UserForm()
     return render(request, "user_account/add.html", {
         "form": form,
@@ -161,7 +165,6 @@ def user_list_view(request):
         u"fn": "full_name",
         u"cd": "create_datetime",
         u"gr": "groups",
-        u"ci": "city_id",
     }
 
     # 搜索条件
@@ -194,6 +197,127 @@ def user_list_view(request):
         "need_pagination": params['limit'] < total_count,
         "total_count": total_count,
     })
+
+
+
+@login_required
+def user_view_view(request, id):
+    """
+    查看用户视图
+    """
+    if not check_permission_allowed(request, id):
+        raise PermissionDeniedError
+
+    user = get_object_or_404(User, id=id)
+    role_name = None
+    if user.groups.count() > 0:
+        role_name = user.groups.get().name
+    form = UserForm(instance=user)
+    role_id = get_role_id(role_name) if role_name else None
+
+    return render(request, "user_account/view.html", {
+        "form": form,
+        "role": role_id,
+        "role_name": role_name,
+    })
+
+
+@login_required
+def user_delete_action(request):
+    """
+    删除用户
+    """
+    if check_role(request, ROLE_FAMILY_COMMON_USER):
+        raise PermissionDeniedError
+
+    # if not request.POST.has_key('pk'):
+    #     raise InvalidPostDataError()
+    pk = request.POST["pk"]
+    pks = []
+    for key in pk.split(','):
+        # if key and is_int(key):
+        if key:
+            pks.append(int(key))
+
+    User.objects.filter(id__in=pks).update(is_active=False)
+    return back_to_original_page(request, '/user_account/list/')
+
+
+@login_required
+def user_edit_view(request, id):
+    """
+    编辑用户视图
+    """
+    if not check_permission_allowed(request, id):
+        raise PermissionDeniedError
+
+    user = get_object_or_404(User, id=id)
+
+    form = UserForm(instance=user)
+    if user.groups.count() > 0:
+        role_name = user.groups.get().name
+    else:
+        role_name = None
+    return render(request, "user_account/edit.html", {
+        "form": form,
+        "id": id,
+        "role": get_role_id(role_name),
+        "role_name": role_name,
+        # "update_timestamp": crypt.encryt(unicode(user.update_datetime))
+    })
+
+
+@login_required
+def user_edit_action(request):
+    """
+    编辑用户动作
+    """
+    # if not request.POST.has_key('id'):
+    #     raise InvalidPostDataError()
+    id = request.POST['id']
+
+    if not check_permission_allowed(request, id):
+        raise PermissionDeniedError
+
+    user = get_object_or_404(User, id=id)
+
+    if request.POST.has_key('password'):
+        form = UserForm(request.POST, instance=user)
+    else:
+        form = UserEditForm(request.POST, instance=user)
+
+    if form.is_valid():
+        # 数据一致性校验
+        # if not 'update_timestamp' in request.POST or crypt.loads(request.POST["update_timestamp"]) != unicode(
+        #         user.update_datetime):
+        #     raise DataExclusivityError()
+        if request.user.is_superuser:
+            role = form.cleaned_data['role']
+            group = role_manager.get_role(role)
+            if group:
+                user.groups.clear()
+                user.groups.add(group)
+        user.full_name = form.cleaned_data['full_name']
+
+        if not isinstance(form, UserEditForm):
+            user.set_password(form.cleaned_data['password'])
+            user.save(update_fields=("full_name", "password", "update_datetime"))
+        else:
+            user.save(update_fields=("full_name", "update_datetime"))
+
+        # 员工没有访问list权限,所以这里返回index
+        if check_role(request, ROLE_FAMILY_COMMON_USER):
+            return back_to_original_page(request, "/")
+        return back_to_original_page(request, "/account/list/")
+    else:
+        role = form.cleaned_data['role'] if 'role' in form.cleaned_data else None
+        return render(request, "user_account/edit.html", {
+            "form": form,
+            "id": id,
+            "role": role,
+            "role_name": ROLES[role] if role in ROLES else "",
+            # "update_timestamp": crypt.encryt(unicode(user.update_datetime))
+        })
 
 #
 # @login_required

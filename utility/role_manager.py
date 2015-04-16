@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from django.contrib.auth.models import Group
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import Group, User
 
 __author__ = 'wyl'
 
@@ -40,3 +41,23 @@ def check_role(request, role):
 
     user = request.user
     return ROLES. has_key(role) and user.groups.filter(name=ROLES[role]).exists()
+
+
+# 检查当前用户是否符合操作权限级别
+# 既只能对自己或者低于自己权限用户进行操作
+def check_permission_allowed(request, id):
+    user = get_object_or_404(User, id=id)
+    role_name = None
+    if user.groups.count() > 0:
+        role_name = user.groups.get().name
+    role_id = get_role_id(role_name) if role_name else None
+
+    if check_role(request, ROLE_FAMILY_SUPER_USER) and ((role_id == ROLE_FAMILY_SUPER_USER and request.user.id != long(id))
+                                              or user.is_superuser):
+        return False
+    if check_role(request, ROLE_MEMBER) and ((role_id == ROLE_MEMBER and request.user.id != long(id))
+                                         or role_id not in (ROLE_FAMILY_COMMON_USER, ROLE_FAMILY_SUPER_USER)):
+        return False
+    if check_role(request, ROLE_FAMILY_COMMON_USER) and user.username != request.user.username:
+        return False
+    return True

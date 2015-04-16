@@ -116,6 +116,13 @@ class User(PermissionsMixin):
         return self.username
 
 
+class UserEditForm(UserForm):
+
+    class Meta:
+        model = User
+        fields = ('username', 'full_name')
+
+
 class UserForm(ModelForm):
     role = forms.IntegerField()
     cinema = forms.CharField(required=False)
