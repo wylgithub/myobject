@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 
-from django.forms import ModelForm
+from django.forms import ModelForm, Form
 from utility.constant import INCOME_TYPE_FOR_WORK, INCOME_TYPE_CHOICE
 
 
@@ -22,16 +22,63 @@ class Income(models.Model):
 
 
 # 添加收入表单提交Form表单
-class IncomeForm(ModelForm):
+class IncomeForm(Form):
     """
     收入Form
     """
+    recode_name = models.CharField()  # 记录人姓名
+    income_type = models.CharField()  # 收入类型
+    income_amount = models.IntegerField()  # 收入数量
+    recode_date = models.DateTimeField()  # 记录日期
+    remark = models.TextField()  # 备注
+
     def clean(self):
         cleaned_data = super(IncomeForm, self).clean()
 
+        # 添加记录人的姓名
+        if 'recode_name' in cleaned_data:
+            name = cleaned_data['recode_name']
+            if name is u'':
+                msg = u"记录人的姓名不可以为空!"
+                self._errors['recode_name'] = self.errror_class([msg])
+
+        # 判断收入类型是否满足要求
+        if 'income_type' in cleaned_data:
+            itype = cleaned_data['income_type']
+            if itype is u'':
+                msg = u'收入类型不可以为空!'
+                self._errors['income_type'] = self.error_class([msg])
+
+        # 判断收入金额是满足要求
+        if 'income_amount' in cleaned_data:
+            amount = cleaned_data['income_amount']
+            int_amount = int(amount)
+            if int_amount is None or int_amount <= 0:
+                msg = u"收入金额不允许为空,并且必须大于0!"
+                self._errors['income_amount'] = self.error_class([msg])
+
+        # 日期是否合适:
+        if 'recode_date' in cleaned_data:
+            r_date = cleaned_data['recode_date']
+
+            if r_date is u'':
+                msg = u'请填写记录撰写时间!'
+                self._errors['recode_date'] = self.error_class([msg])
+
+        # 判断是否有备注
+        if 'remark' in cleaned_data:
+            remarks = cleaned_data['remark']
+
+            if remarks is u'':
+                msg = u'请输入本次收入的具体来源,以防以后对账!'
+                self._errors['remark'] = self.error_class([msg])
+
         return cleaned_data
 
-    class Meta:
-        model = Income
-        fields = ('income_type', 'income_amount', 'remarks', 'handler')
+    def __init__(self, *args, **kwargs):
+        super(IncomeForm, self).__init__(*args, **kwargs)
+
+    # class Meta:
+    #     model = Income
+    #     fields = ('income_type', 'income_amount', 'remarks', 'handler')
 
