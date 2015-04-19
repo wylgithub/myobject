@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response
+from django.template import RequestContext
 from income.models import IncomeForm, Income
-from utility.constant import DATE_INPUT_FORMAT_HYPHEN, DATE_TIME_FORMATS, DATE_INPUT_FORMATS
+from utility.constant import DATE_INPUT_FORMAT_HYPHEN, DATE_TIME_FORMATS, DATE_INPUT_FORMATS, JSON_ERROR_CODE_NO_ERROR
 
 
 @login_required
@@ -36,16 +37,12 @@ def add_income_action(request):
         # 将前端传入的时间格式化为日期
         # get_add_date = to_date(request.POST['recode_date'], DATE_TIME_FORMATS)
         get_add_date = request.POST['recode_date']
-
         # 收入类型
         income_type = request.POST['income_type']
-
         # 收入金额:将前端传入的unicode金额类型转换成float型
         income_amount = float(request.POST['income_amount'])
-
         # 标识字段
         remark = request.POST['remark']
-
         # 信息登记人
         mark_name = request.POST['recode_name']
 
@@ -54,10 +51,24 @@ def add_income_action(request):
                               income_amount=income_amount,
                               remarks=remark,
                               handler=mark_name,)
+        return render_to_response("income/add_income.html", {
+                'result': 'OK',
+                'error_code': JSON_ERROR_CODE_NO_ERROR,
+                'validation': True,
+                'form': form,
+                },  context_instance=RequestContext(request))
+    else:
+        return render_to_response("income/add_income.html", {
+            'result': 'OK',
+            'error_code': JSON_ERROR_CODE_NO_ERROR,
+            'validation': False,
+            'form': form,
+        }, context_instance=RequestContext(request))
 
-        return render(request, "income/add_income.html", {
-                                                            'form': form,
-                                                        })
+    # return render(request, "income/add_income.html", {
+    #                 'form': form,
+    #                 'validation': True
+    #                 })
 
 
 @login_required

@@ -1,77 +1,141 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8">
     <title>家庭理财管理系统 - 注册</title>
-    <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
-    <link href="{{ STATIC_URL }}css/bootstrap-responsive.min.css" rel="stylesheet">
-    <link href="{{ STATIC_URL }}css/common.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
     <link rel="shortcut icon" type="image/x-icon" href="{{ STATIC_URL }}favicon.ico">
+<!--[if lt IE 9]>
+      <script src="{{ STATIC_URL }}js/lib/html5.js"></script>
+    <![endif]-->
+    <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+	<link href="{% static "css/bootstrap-responsive.min.css" %}" rel="stylesheet">
+	<link href="{% static "css/common.css" %}" rel="stylesheet">
+    <script type="text/javascript" data-main="{{ STATIC_URL }}js/main.js"
+        src="{{ STATIC_URL }}js/lib/require-jquery.js"></script>
 </head>
 <body>
-<div class="container_12">
-    <div class="grid_12 regContent">
-        <input type="hidden" id="amd_module" value="{{ STATIC_URL }}js/views/account_register.js"/>
-            <div class="regDiv">
-                        <form id="regForm" action="/user_account/register/action/" name="regForm" method="post" class="form-inline">
-                            <div class="form-group">
-                                <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
-                                <div class="input-group">
-                                      <div class="input-group-addon">$</div>
-                                            <input type="text" class="form-control" id="exampleInputAmount" placeholder="Amount">
-                                      <div class="input-group-addon">.00</div>
-                                </div>
-                          </div>
-                          <button type="submit" class="btn btn-primary">Transfer cash</button>
-                            {% csrf_token %}
-                            <ul class="form_inputs">
-                                <li>
-                                    <div class="register_title">用户名：</div>
-                                    <input name="username" id="txtUserName" value="{% if form.username.value %}{{ form.username.value }}{% endif %}" type="text" size="27"  maxlength="20" />
-                                    <label class="tipinfo_reg"></label>
-                                </li>
-                                <li>
-                                    <div class="register_title">密码：</div>
-                                    <input name="password" id="txtPassword"  type="password" size="27" maxlength="22"/>
-                                    <label class="tipinfo_reg"></label>
-                                </li>
-                                <li>
-                                    <div class="register_title">密码确认：</div>
-                                        <input name="passwordagain" id="txtPasswordAgain" type="password" size="27" maxlength="22" />
-                                        <label class="tipinfo_reg"></label>
-                                </li>
-                                <li>
-                                    <div class="register_title">手机号码：</div>
-                                        <input name="mobile" id="txtMobile" value="{% if form.mobile.value %}{{ form.mobile.value}}{% endif %}" type="text" size="27" maxlength="11" />
-                                        <label class="tipinfo_reg"></label>
-                                </li>
-                                <li>
-                                    <div class="register_title">邮箱：</div>
-                                    <input name="email" id="txtEmail"
-                                           value="{% if form.mobile.value %}{{ form.email.value }}{% endif %}"
-                                           type="text" size="27" maxlength="50"/>
+<input type="hidden" id="amd_module" value="{% static "js/views/account_register.js" %}"/>
+    <div id="navbar" class="navbar navbar-fixed-top navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav nav-pills">
+                    <li class="active">
+                        <span class="">
+                        <a style="width: 2500px;" class="btn btn-link" id="lnkLogin" href="/user_account/login/">立即登录</a>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="container" style="margin-top:60px;">
+                <form class="form-horizontal" action="/user_account/register/action/" id="registerForm" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="validation" id="id_validation" value="{{ validation }}">
+                    <input type="hidden" name="redirect_url" id="redirect_url" value="{{ redirect_url|default_if_none:"" }}"/>
+                    <div class="well well-large">
+                        <div class="control-group">
+                            <label class="control-label" for="txtUserName">用户名</label>
+                            <div class="controls">
+                                <input type="text" id="txtUserName" name="username" class="highlight first_focus{% if form.username.errors %} error_flg{% endif %}" maxlength="30" value="{{ form.username.value|default_if_none:"" }}"/>
+                                {% if form.username.errors %}
+                                    {% with form.username.errors|first as error %}
+                                        <br/><span class="error_message">{{ error }}</span>{% endwith %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="txtPassword">密码</label>
+                            <div class="controls">
+                                <input type="password" id="txtPassword" name="password" maxlength="20" class="highlight{% if form.password.errors %} error_flg{% endif %}">
+                                {% if form.password.errors %}
+                                    {% with form.password.errors|first as error %}
+                                        <br/><span class="error_message">{{ error }}</span>
+                                    {% endwith %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="txtFullName">姓名</label>
+                            <div class="controls">
+                                <input type="text" class="highlight input{% if form.last_name.errors %} error_flg{% endif %}" name="full_name" id="txtFullName" maxlength="20" value="{{ form.full_name.value|default_if_none:"" }}"/>
+                                {% if form.full_name.errors %}
+                                    {% with form.full_name.errors|first as error %}
+                                        <br/><span class="error_message">{{ error }}</span>
+                                    {% endwith %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="txtEmail">邮箱</label>
+                            <div class="controls">
+                                <input type="text" class="highlight input{% if form.email.errors %} error_flg{% endif %}" name="email" id="txtEmail" maxlength="20" value="{{ form.email.value|default_if_none:"" }}"/>
+                                {% if form.email.errors %}
+                                    {% with form.email.errors|first as error %}
+                                        <br/><span class="error_message">{{ error }}</span>
+                                    {% endwith %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="txtMobile">手机号码</label>
+                            <div class="controls">
+                                <input type="text" class="highlight input{% if form.mobile.errors %} error_flg{% endif %}" name="mobile" id="txtMobile" maxlength="20" value="{{ form.mobile.value|default_if_none:"" }}"/>
+                                {% if form.mobile.errors %}
+                                    {% with form.mobile.errors|first as error %}
+                                        <br/><span class="error_message">{{ error }}</span>
+                                    {% endwith %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="role">身份</label>
+                            <div class="controls">
+                                <input type="hidden" name="role" id="id_role" value="{% if form.role.value %}{{ form.role.value }}{% else %}10{% endif %}"/>
+                                <div class="btn-group">
+                                    <button class="btn span2" type="button" data-toggle="dropdown" id="btnRoleDisplay">
+                                        {% if form.role.value == "10" %}
+                                            家庭管理员
+                                        {% elif form.role.value == "20" %}
+                                            会员
+                                        {% else %}
+                                            家庭普通成员
+                                        {% endif %}
+                                    </button>
+                                    <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#" class="dropdownItem" for="id_role" value="10">家庭管理员</a></li>
+                                        <li><a href="#" class="dropdownItem" for="id_role" value="20">会员</a></li>
+                                        <li><a href="#" class="dropdownItem" for="id_role" value="50">家庭普通成员</a></li>
 
-                                    {% if form.email.errors %}
-                                        {% with form.email.errors|first as error %}
-                                            <br/><span class="error_reg">{{ error }}</span>
-                                        {% endwith %}
-                                    {% else %}
-                                        <label class="tipinfo_reg"></label>
-                                    {% endif %}
-                                </li>
-                                <li>
-                                    <div class="submit_input">
-                                        <input type="button" id="btnReg" name="btnReg" value=""  class="btn_reg" />
-                                    </div>
-                                </li>
-                            </ul>
-                        </form>
-                <div class="doLgTip">
-                        <div class="lgTip">已经注册过了!现在就</div>
-                        <div class="lgbutton"><a href="{{login_url}}?next="><input type="button" id="btnLogin" name="btnLogin"  value="" class="btn_login" /></a></div>
-                </div>
+                                    </ul>
+                                </div>
+                                {% if form.role.errors %}
+                                    {% with form.role.errors|first as error %}
+                                        <br/><span class="error_message">{{ error }}</span>
+                                    {% endwith %}
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <div class="controls">
+                                <button type="button" id="btnRegister" class="btn btn-success">注册</button>
+                                <button type="button" id="btnReturn" class="btn">返回</button>
+                            </div>
+                        </div>
+                        {% if form.non_field_errors %}
+                            {% with form.non_field_errors|first as error %}
+                                <div class="control-group">
+                                    <div class="controls"><span class="error_message">{{ error }}</span></div>
+                                </div>
+                            {% endwith %}
+                        {% endif %}
+                    </div>
+                </form>
             </div>
     </div>
-</div>
 </body>
 </html>

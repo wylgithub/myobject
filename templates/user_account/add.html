@@ -14,7 +14,7 @@
         <form class="form-horizontal" action="/user_account/add/action/" id="frmAddUser" method="post">
             {% csrf_token %}
             <input type="hidden" name="redirect_url" id="redirect_url" value="{{ redirect_url|default_if_none:"" }}"/>
-            <div class="well well-large fly_left_well">
+            <div class="well well-large">
                 <div class="control-group">
                     <label class="control-label" for="txtUserName">用户名</label>
                     <div class="controls">
@@ -47,7 +47,28 @@
                         {% endif %}
                     </div>
                 </div>
-
+                <div class="control-group">
+                    <label class="control-label" for="txtEmail">邮箱</label>
+                    <div class="controls">
+                        <input type="text" class="highlight input{% if form.email.errors %} error_flg{% endif %}" name="email" id="txtEmail" maxlength="20" value="{{ form.email.value|default_if_none:"" }}"/>
+                        {% if form.email.errors %}
+                            {% with form.email.errors|first as error %}
+                                <br/><span class="error_message">{{ error }}</span>
+                            {% endwith %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="txtMobile">手机号码</label>
+                    <div class="controls">
+                        <input type="text" class="highlight input{% if form.mobile.errors %} error_flg{% endif %}" name="mobile" id="txtMobile" maxlength="20" value="{{ form.mobile.value|default_if_none:"" }}"/>
+                        {% if form.mobile.errors %}
+                            {% with form.mobile.errors|first as error %}
+                                <br/><span class="error_message">{{ error }}</span>
+                            {% endwith %}
+                        {% endif %}
+                    </div>
+                </div>
                 <div class="control-group">
                     <label class="control-label" for="role">身份</label>
                     <div class="controls">

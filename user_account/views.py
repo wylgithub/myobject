@@ -1,13 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import json
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, render_to_response
+from django.template import RequestContext
 
-from user_account.models import UserLoginForm, UserForm, User, UserEditForm
+from user_account.models import UserLoginForm, UserForm, User, UserEditForm, UserRegisterForm
 from django.contrib.auth import authenticate, login, logout
 from utility.base_view import back_to_original_page, get_list_params
+from utility.constant import JSON_ERROR_CODE_NO_ERROR
 from utility.exception import PermissionDeniedError
 from utility.role_manager import check_role, ROLE_FAMILY_SUPER_USER, ROLES, ROLE_FAMILY_COMMON_USER, ROLE_SYSADMIN, \
     ROLE_MEMBER, check_permission_allowed, get_role_id
@@ -61,15 +65,10 @@ def register_view(request):
     added by 2013/04/23
     """
 
-    form = UserForm()
-
-    # challenge, response = captcha.conf.settings.get_challenge()()
-    # store = CaptchaStore.objects.create(challenge=challenge, response=response)
-    # CaptchaStore.generate_key()
+    form = UserRegisterForm()
 
     return render(request, "user_account/register.html", {
         "form": form,
-        # "captcha_key": store.hashkey
     })
 
 
@@ -77,27 +76,43 @@ def register_action(request):
     """
     用户注册
     """
-    form = UserForm(request.POST)
+    response_data = {}
+    try:
+        form = UserRegisterForm(request.POST, instance=User())
+        if form.is_valid():
 
-    if form.is_valid():
+            role = form.cleaned_data['role']
+            form.instance.username = request.POST['username']
+            form.instance.password = request.POST['password']
+            form.instance.full_name = request.POST['full_name']
+            form.instance.email = request.POST['email']
+            form.instance.mobile = request.POST['mobile']
 
-        reg_user = form.save()
-        reg_user.set_password(form.cleaned_data['password'])
-        ip = request.META.get('REMOTE_ADDR')
-        reg_user.last_login_ip = ip
-        reg_user.save()
+            user = form.save()
+            user.set_password(form.instance.password)
+            group = role_manager.get_role(role)
 
-        # 登录操作
-        cleaned_data = form.cleaned_data
+            if group:
+                user.groups.add(group)
+            user.save()
+            return render_to_response("user_account/register.html", {
+                'result': 'OK',
+                'error_code': JSON_ERROR_CODE_NO_ERROR,
+                'validation': True,
+                'form': form,
+            }, context_instance=RequestContext(request))
 
-        user = authenticate(username=cleaned_data['username'], password=cleaned_data['password'])
-        # 直接登录该用户
-        login(request, user)
+        else:
+            return render_to_response("user_account/register.html", {
+                'result': 'OK',
+                'error_code': JSON_ERROR_CODE_NO_ERROR,
+                'validation': False,
+                'goods': form,
+            }, context_instance=RequestContext(request))
 
-        return render(request, "user_account/reg.html", {
-            "form": form,
-        })
-
+    except:
+        response_data['validate'] = True
+        return HttpResponse(json.dumps(response_data), mimetype="application/json")
 #  用户注册模块结束
 
 
@@ -165,6 +180,8 @@ def user_list_view(request):
         u"fn": "full_name",
         u"cd": "create_datetime",
         u"gr": "groups",
+        u"mb": "mobile",
+        u"em": "email",
     }
 
     # 搜索条件

@@ -56,6 +56,8 @@
                                 <th><a href="#" class="data_column" sort_key="fn">姓名</a></th>
                                 <th><a href="#" class="data_column" sort_key="cd">创建日期</a></th>
                                 <th><a href="#" class="data_column" sort_key="gr">身份</a></th>
+                                <th><a href="#" class="data_column" sort_key="mb">手机</a></th>
+                                <th><a href="#" class="data_column" sort_key="em">邮箱</a></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -68,6 +70,8 @@
                                     <td>{{ user.get_full_name }}</td>
                                     <td>{{ user.create_datetime|date:"Y/m/d H:i:s" }}</td>
                                     <td>{{ user.groups.all|first }}</td>
+                                    <td>{{ user.mobile }}</td>
+                                    <td>{{ user.email }}</td>
                                 </tr>
                             {% endfor %}
                             </tbody>

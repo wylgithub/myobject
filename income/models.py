@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from django import forms
 from django.db import models
 
 from django.forms import ModelForm, Form
@@ -26,11 +27,11 @@ class IncomeForm(Form):
     """
     收入Form
     """
-    recode_name = models.CharField()  # 记录人姓名
-    income_type = models.CharField()  # 收入类型
-    income_amount = models.IntegerField()  # 收入数量
-    recode_date = models.DateTimeField()  # 记录日期
-    remark = models.TextField()  # 备注
+    recode_name = forms.CharField(required=False)  # 记录人姓名
+    income_type = forms.CharField(required=False)  # 收入类型
+    income_amount = forms.IntegerField(required=False)  # 收入数量
+    recode_date = forms.DateTimeField(required=False)  # 记录日期
+    remark = forms.Textarea()  # 备注
 
     def clean(self):
         cleaned_data = super(IncomeForm, self).clean()
@@ -53,7 +54,7 @@ class IncomeForm(Form):
         if 'income_amount' in cleaned_data:
             amount = cleaned_data['income_amount']
             int_amount = int(amount)
-            if int_amount is None or int_amount <= 0:
+            if int_amount is u'' or int_amount <= 0:
                 msg = u"收入金额不允许为空,并且必须大于0!"
                 self._errors['income_amount'] = self.error_class([msg])
 
@@ -77,8 +78,4 @@ class IncomeForm(Form):
 
     def __init__(self, *args, **kwargs):
         super(IncomeForm, self).__init__(*args, **kwargs)
-
-    # class Meta:
-    #     model = Income
-    #     fields = ('income_type', 'income_amount', 'remarks', 'handler')
 

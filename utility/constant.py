@@ -21,3 +21,6 @@ DATE_TIME_FORMATS = ('%Y-%m-%d %H:%M',)
 DATE_INPUT_FORMAT_SLASH = '%Y/%m/%d'
 DATE_INPUT_FORMAT_HYPHEN = '%Y-%m-%d'
 DATE_INPUT_FORMAT_HYPHEN_DETAIL = '%Y-%m-%d %H:%M'
+
+# 与前台Ajax互动返回的各种错误代码
+JSON_ERROR_CODE_NO_ERROR = 0  # 没有错误

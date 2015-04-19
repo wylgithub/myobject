@@ -14,28 +14,45 @@
         <form class="form-horizontal" action="/income/add/action/" id="IncomeAdd" method="post">
             {% csrf_token %}
             <input type="hidden" name="redirect_url" id="redirect_url" value="" />
+            <input type="hidden" name="validation" id="id_validation" value="{{ validation }}">
             <div class="well well-large">
-                <div class="control-group success">
-                    <label class="control-label" for="regName">记录人</label>
+                <div class="control-group">
+                    <label class="control-label" for="regName">操作人员</label>
                     <div class="controls">
                         <input type="text" id="regName" name="recode_name" class="highlight" maxlength="30" value="" autofocus/>
                     </div>
                 </div>
-                <div class="control-group success">
+                {% if form.recode_name.errors %}
+                    {% with form.recode_name.errors|first as error %}
+                        <br/>
+                        <span class="error_message">{{ error }}</span>
+                    {% endwith %}
+                {% endif %}
+                <div class="control-group">
                     <label class="control-label" for="incomeType">收入类型</label>
                     <div class="controls">
                         <input type="text" class="highlight" name="income_type" id="incomeType" maxlength="20" value=""/>
-
                     </div>
+                    {% if form.income_type.errors %}
+                        {% with form.income_type.errors|first as error %}
+                            <br/>
+                            <span class="error_message">{{ error }}</span>
+                        {% endwith %}
+                    {% endif %}
                 </div>
-                <div class="control-group success">
+                <div class="control-group">
                     <label class="control-label" for="incomeAmount">收入金额</label>
                     <div class="controls">
                         <input type="text" class="highlight" name="income_amount" id="incomeAmount" maxlength="20" value=""/>
-
                     </div>
+                    {% if form.income_amount.errors %}
+                        {% with form.income_amount.errors|first as error %}
+                            <br/>
+                            <span class="error_message">{{ error }}</span>
+                        {% endwith %}
+                    {% endif %}
                 </div>
-                <div class="control-group success">
+                <div class="control-group">
                     <label class="control-label" for="id_style">记录日期</label>
                     <div class="controls">
                         <div class="input-append date" id="red_date" data-date="">
@@ -43,19 +60,30 @@
                                   size="16" type="text" name="recode_date" value="" maxlength="10" readonly/>
                             <span class="add-on"><i class="icon-calendar"></i></span>
                         </div>
-                    </div>
-                </div>
-                <div class="control-group success">
-                    <label class="control-label" for="addRemarks">备注</label>
-                    <div class="controls">
-                        <textarea rows="5" class="highlight" id="addRemarks" name="remark">
-
-                        </textarea>
+                        {% if form.recode_date.errors %}
+                        {% with form.recode_date.errors|first as error %}
+                            <br/>
+                            <span class="error_message">{{ error }}</span>
+                        {% endwith %}
+                    {% endif %}
                     </div>
                 </div>
                 <div class="control-group">
+                    <label class="control-label" for="addRemarks">撰写备注</label>
                     <div class="controls">
-                        <button type="button" id="btnAdd" class="btn btn-success">添加</button>
+                        <textarea rows="5" class="highlight" id="addRemarks" name="remark">
+                        </textarea>
+                    </div>
+                    {% if form.remark.errors %}
+                        {% with form.remark.errors|first as error %}
+                            <br/>
+                            <span class="error_message">{{ error }}</span>
+                        {% endwith %}
+                    {% endif %}
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <button type="button" id="btnAdd" class="btn btn-primary">添加</button>
                         <button type="button" id="btnReturn" class="btn">取消</button>
                     </div>
                 </div>
