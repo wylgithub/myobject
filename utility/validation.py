@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import re
 from datetime import datetime
+import re
+
 
 __author__ = 'wyl'
 
