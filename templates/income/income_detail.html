@@ -58,6 +58,7 @@
                                 <th><a href="#" class="data_column" sort_key="tm">添加时间</a></th>
                                 <th><a href="#" class="data_column" sort_key="hl">操作人员</a></th>
                                 <th><a href="#" class="data_column" sort_key="mk">备&nbsp;&nbsp;注</a></th>
+
                             </tr>
                             </thead>
                             <tbody>
@@ -68,7 +69,11 @@
                                     <td>{{ income.income_amount }}</td>
                                     <td>{{ income.create_datetime|date:"Y/m/d H:i:s" }}</td>
                                     <td>{{ income.handler }}</td>
-                                    <td>{{ income.remarks }}</td>
+                                    <td>
+                                        <a href="javascript: void(0);" class="tip" data-toggle="tooltip" title="{{ income.remarks }}">
+                                            <div style="width: 140px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{ income.remarks }}</div>
+                                        </a>
+                                    </td>
                                 </tr>
                             {% endfor %}
                             </tbody>
