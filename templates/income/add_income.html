@@ -11,15 +11,16 @@
                 <li class="active">添加明细</li>
             </ul>
         </div>
-        <form class="form-horizontal" action="/income/add/action/" id="IncomeAdd" method="post">
+        <form class="form-horizontal" action="/income/{{ user_id }}/add/action/" id="IncomeAdd" method="post">
             {% csrf_token %}
             <input type="hidden" name="redirect_url" id="redirect_url" value="" />
             <input type="hidden" name="validation" id="id_validation" value="{{ validation }}">
+            <input type="hidden" name="id" id="pk" value="{{ user_id }}"/>
             <div class="well well-large">
                 <div class="control-group">
                     <label class="control-label" for="regName">操作人员</label>
                     <div class="controls">
-                        <input type="text" id="regName" name="recode_name" class="highlight" maxlength="30" value="" autofocus/>
+                        <input type="text" id="regName" name="recode_name" class="highlight" maxlength="30" value="{{ username }}" readonly/>
                     </div>
                 </div>
                 {% if form.recode_name.errors %}
@@ -84,7 +85,6 @@
                 <div class="control-group">
                     <div class="controls">
                         <button type="button" id="btnAdd" class="btn btn-primary">添加</button>
-                        <button type="button" id="btnReturn" class="btn">取消</button>
                     </div>
                 </div>
                 {% if form.non_field_errors %}
