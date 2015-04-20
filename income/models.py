@@ -3,8 +3,8 @@
 from django import forms
 from django.db import models
 
-from django.forms import ModelForm, Form
-from utility.constant import INCOME_TYPE_FOR_WORK, INCOME_TYPE_CHOICE
+from django.forms import Form
+from user_account.models import User
 
 
 class Income(models.Model):
@@ -17,6 +17,7 @@ class Income(models.Model):
     income_amount = models.DecimalField(u'收入金额', max_digits=8, decimal_places=2, default=0)  #收入金额
     remarks = models.TextField(u"备注", null=True, blank=True)  # 备注的添加用于描述这笔收入的具体来源和数量描述
     handler = models.CharField(u"处理者", max_length=255, null=True, blank=True)  # 处理者:添加信息的人
+    user = models.ForeignKey(User, verbose_name=u"家庭收入管理信息登记人", blank=True, null=True, related_name='user_income')
 
     class Meta:
         db_table = 'graduation_design_income'
@@ -43,6 +44,8 @@ class IncomeForm(Form):
                 msg = u"记录人的姓名不可以为空!"
                 self._errors['recode_name'] = self.errror_class([msg])
 
+                del cleaned_data['recode_name']
+
         # 判断收入类型是否满足要求
         if 'income_type' in cleaned_data:
             itype = cleaned_data['income_type']
@@ -50,21 +53,27 @@ class IncomeForm(Form):
                 msg = u'收入类型不可以为空!'
                 self._errors['income_type'] = self.error_class([msg])
 
+                del cleaned_data['recode_name']
+
         # 判断收入金额是满足要求
         if 'income_amount' in cleaned_data:
-            amount = cleaned_data['income_amount']
-            int_amount = int(amount)
-            if int_amount is u'' or int_amount <= 0:
+            amount = cleaned_data['income_type']
+
+            if amount is u'' or amount <= 0:
                 msg = u"收入金额不允许为空,并且必须大于0!"
                 self._errors['income_amount'] = self.error_class([msg])
 
+                del cleaned_data['recode_name']
+
         # 日期是否合适:
         if 'recode_date' in cleaned_data:
-            r_date = cleaned_data['recode_date']
+            r_date = cleaned_data['income_amount']
 
             if r_date is u'':
                 msg = u'请填写记录撰写时间!'
                 self._errors['recode_date'] = self.error_class([msg])
+
+                del cleaned_data['recode_date']
 
         # 判断是否有备注
         if 'remark' in cleaned_data:
@@ -73,6 +82,8 @@ class IncomeForm(Form):
             if remarks is u'':
                 msg = u'请输入本次收入的具体来源,以防以后对账!'
                 self._errors['remark'] = self.error_class([msg])
+
+            del cleaned_data['remark']
 
         return cleaned_data
 

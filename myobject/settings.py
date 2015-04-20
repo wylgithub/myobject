@@ -130,6 +130,14 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'user_account',
     'income',
+    'pay',
+    'lend',
+    'bond',
+    'borrow',
+    'fund',
+    'stock',
+    'deposit',
+    'Transfer_withdrawal',
 
 )
 
