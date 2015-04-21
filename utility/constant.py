@@ -15,6 +15,10 @@ INCOME_TYPE_CHOICE = (
 INCOME_TYPE_DICT = dict((x, y) for x, y in INCOME_TYPE_CHOICE)
 
 
+# 家庭支出类型:
+PAY_TYPE_FOR_SHOPPING = 1  # 购物
+
+
 # 系统中使用的格式化日期配置
 DATE_INPUT_FORMATS = ('%Y/%m/%d',)
 DATE_TIME_FORMATS = ('%Y-%m-%d %H:%M',)
