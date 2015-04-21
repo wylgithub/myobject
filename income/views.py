@@ -16,17 +16,12 @@ def add_income_view(request, user_id):
     :param request:
     :return:
     """
-    # form = IncomeForm()
-    # 获取用户对象实例
     id = int(user_id)
     user = User.objects.filter(id=id).get()
 
     user_name = u''
     if user.groups.count() > 0:
         user_name = user.groups.get().name
-
-    # 获取操作人员
-    # income_info = Income.objects.filter(id=id)
 
     return render(request, "income/add_income.html", {
         'user_id': id,
@@ -70,14 +65,11 @@ def add_income_action(request, user_id):
                               handler=mark_name,
                               user_id=id,
                               )
-
         return back_to_original_page(request, "/income/list/")
-
     else:
         return render_to_response("income/add_income.html", {
             'form': form,
         }, context_instance=RequestContext(request))
-
 
 
 @login_required
@@ -139,6 +131,7 @@ def add_expend_view(request, user_id):
     """
     id = int(user_id)
 
+    form = ExpendForm(request.POST)
     # 获取当前登录用户
     user = User.objects.filter(id=id).get()
     # 获取登录用户的全名
@@ -157,6 +150,7 @@ def add_expend_view(request, user_id):
         'full_name': full_name,
         'username': username,
         'identity': user_identity,
+        'form': form,
     })
 
 
@@ -200,14 +194,13 @@ def expend_list_view(request):
     params = get_list_params(request)
 
     order_dict = {
-        u"type": "income_type",
-        u"acc": "income_amount",
-        u"amo": "create_datetime",
-        u"amc": "handler",
-        u"tm": "remarks",
-        u"hl": "remarks",
+        u"type": "expend_type",
+        u"acc": "expend_account",
+        u"amo": "expend_amount",
+        u"bal": "balance",
+        u"dat": "expend_date",
+        u"hl": "handler",
         u"mk": "remarks",
-        u"tm": "remarks",
     }
 
     # 搜索条件
@@ -216,13 +209,13 @@ def expend_list_view(request):
 
     # 排序
     if not params['order_field'] or not order_dict. has_key(params['order_field']):
-        params['order_field'] = 'am'
+        params['order_field'] = 'amo'
         params['order_direction'] = ''
 
     queryset = queryset.order_by("%s%s" % (params['order_direction'], order_dict[params['order_field']]))
     total_count = queryset.count()
 
-    return render(request, "income/income_detail.html", {
+    return render(request, "income/expend_list.html", {
         'incomes': queryset[params['from']: params['to']],
         'query_params': params,
         'need_pagination': params['limit'] < total_count,

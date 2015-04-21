@@ -56,23 +56,25 @@
                                 <th><a href="#" class="data_column" sort_key="type">支出类型</a></th>
                                 <th><a href="#" class="data_column" sort_key="acc">支出账户</a></th>
                                 <th><a href="#" class="data_column" sort_key="amo">支出金额</a></th>
-                                <th><a href="#" class="data_column" sort_key="amc">账户余额</a></th>
-                                <th><a href="#" class="data_column" sort_key="tm">添加时间</a></th>
+                                <th><a href="#" class="data_column" sort_key="bal">账户余额</a></th>
+                                <th><a href="#" class="data_column" sort_key="dat">添加时间</a></th>
                                 <th><a href="#" class="data_column" sort_key="hl">操作人员</a></th>
                                 <th><a href="#" class="data_column" sort_key="mk">备&nbsp;&nbsp;注</a></th>
                             </tr>
                             </thead>
                             <tbody>
-                            {% for income in incomes %}
+                            {% for expend in expends %}
                                 <tr>
-                                    <td class="cell_center"><input type="checkbox" class="list_selector" pk="{{ income.id }}"/></td>
-                                    <td>{{ income.income_type }}</td>
-                                    <td>{{ income.income_amount }}</td>
-                                    <td>{{ income.create_datetime|date:"Y/m/d H:i:s" }}</td>
-                                    <td>{{ income.handler }}</td>
+                                    <td class="cell_center"><input type="checkbox" class="list_selector" pk="{{ expend.id }}"/></td>
+                                    <td>{{ expend.expend_type }}</td>
+                                    <td>{{ expend.expend_account }}</td>
+                                    <td>{{ expend.expend_amount }}</td>
+                                    <td>{{ expend.balance }}</td>
+                                    <td>{{ expend.create_datetime|date:"Y/m/d H:i:s" }}</td>
+                                    <td>{{ expend.handler }}</td>
                                     <td>
-                                        <a href="javascript: void(0);" class="tip" data-toggle="tooltip" title="{{ income.remarks }}">
-                                            <div style="width: 140px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{ income.remarks }}</div>
+                                        <a href="javascript: void(0);" class="tip" data-toggle="tooltip" title="{{ expend.remarks }}">
+                                            <div style="width: 140px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{ expend.remarks }}</div>
                                         </a>
                                     </td>
                                 </tr>

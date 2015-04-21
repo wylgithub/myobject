@@ -22,10 +22,6 @@ define([
         },
         //表单的同步提交
         btnSave:function() {
-            //if(!this.validate(event)){
-            //    return;
-            //}
-            //防止两重提交
             if (this.in_syncing) {
                 return;
             }

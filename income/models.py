@@ -119,6 +119,15 @@ class ExpendForm(ModelForm):
         cleaned_data = super(ExpendForm, self).clean()
 
         # 家庭支出信息后端check开始
+        if 'expend_type' in cleaned_data:
+            expend_type = cleaned_data['expend_type']
+            if expend_type in u'' or expend_type.isdigit():
+                msg = u"请输入正确的支出类型"
+                self._errors['expend_type'] = self.error_class([msg])
+
+                del cleaned_data['expend_type']
+
+
 
         # 家庭支出信息后端check结束
         return cleaned_data
