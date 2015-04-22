@@ -129,15 +129,10 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     'user_account',
-    'income',
-    'pay',
-    'lend',
-    'bond',
-    'borrow',
-    'fund',
-    'stock',
-    'deposit',
-    'Transfer_withdrawal',
+    'income',   # 收入app
+    'stock',    # 股票交易
+    # 'deposit',
+    # 'Transfer_withdrawal',
 
 )
 

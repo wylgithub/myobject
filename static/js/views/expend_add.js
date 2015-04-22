@@ -6,41 +6,33 @@ define([
     'datetimepicker',
     'datepicker',
     'datetimepickerCN',
-    //'jqueryuiprogressbar'
 ], function (require, $, Backbone) {
     "use strict";
 
     var AppView = Backbone.View.extend({
         el:"body",
         in_syncing:false,  //防止两重提交标志位
-
         events:{
-            //'click #btnAdd': 'btnAdd',
-            'click #btnAdd': 'btnAdd'
+            'click #btnSave': 'btnSave'
         },
-
         initialize:function () {
-            $('#red_date').datepicker().on('changeDate', function(event) {
+            $('#expend_date').datepicker().on('changeDate', function(event) {
                 $(event.target).datepicker('hide');
             });
-
         },
         //表单的同步提交
-        btnAdd:function() {
+        btnSave:function() {
             if (this.in_syncing) {
                 return;
             }
             this.in_syncing = true;
-            $('#btnAdd').prop('disabled', true);
-            $('#IncomeAdd').submit();
+            $('#btnSave').prop('disabled', true);
+            $('#Expend').submit();
         },
-
         validate: function(event){
             var recode_user = $("#regName").val();    // 获取前端规格输入框的内容
             var income_type = $("#incomeType").val();   // 获取前端价格输入框的内容
             var income_amount = $("#incomeAmount").val(); //检查收入金额是否正确
-
-
             if(recode_user == ""){
                 alert("请填上记录人姓名！");
                 return false;

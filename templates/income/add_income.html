@@ -20,7 +20,7 @@
                 <div class="control-group">
                     <label class="control-label" for="regName">操作人员</label>
                     <div class="controls">
-                        <input type="text" id="regName" name="recode_name" class="highlight" maxlength="30" value="{{ username }}" readonly/>
+                        <input type="text" id="regName" name="recode_name" class="highlight" maxlength="30" value="{{ username }}"/>
                     </div>
                 </div>
                 {% if form.recode_name.errors %}
@@ -32,41 +32,41 @@
                 <div class="control-group">
                     <label class="control-label" for="incomeType">收入类型</label>
                     <div class="controls">
-                        <input type="text" class="highlight" name="income_type" id="incomeType" maxlength="20" value=""/>
+                        <input type="text" class="highlight" name="income_type" id="incomeType" maxlength="20" value="{{ form.income_type.value }}"/>
+                        {% if form.income_type.errors %}
+                            {% with form.income_type.errors|first as error %}
+                                <br/>
+                                <span class="error_message">{{ error }}</span>
+                            {% endwith %}
+                        {% endif %}
                     </div>
-                    {% if form.income_type.errors %}
-                        {% with form.income_type.errors|first as error %}
-                            <br/>
-                            <span class="error_message">{{ error }}</span>
-                        {% endwith %}
-                    {% endif %}
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="incomeAmount">收入金额</label>
                     <div class="controls">
-                        <input type="text" class="highlight" name="income_amount" id="incomeAmount" maxlength="20" value=""/>
+                        <input type="text" class="highlight" name="income_amount" id="incomeAmount" maxlength="20" value="{{ form.income_amount.value }}"/>
+                        {% if form.income_amount.errors %}
+                            {% with form.income_amount.errors|first as error %}
+                                <br/>
+                                <span class="error_message">{{ error }}</span>
+                            {% endwith %}
+                        {% endif %}
                     </div>
-                    {% if form.income_amount.errors %}
-                        {% with form.income_amount.errors|first as error %}
-                            <br/>
-                            <span class="error_message">{{ error }}</span>
-                        {% endwith %}
-                    {% endif %}
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="id_style">记录日期</label>
                     <div class="controls">
-                        <div class="input-append date" id="red_date" data-date="">
+                        <div class="input-append date" id="red_date" data-date="{{ current_now }}" data-date-format="yyyy-mm-dd hh:mm">
                             <input class="span2 highlight" id="r_date"
-                                  size="16" type="text" name="recode_date" value="" maxlength="10" readonly/>
+                                  size="16" type="text" name="recode_date" value="{{ current_now }}" maxlength="10" readonly/>
                             <span class="add-on"><i class="icon-calendar"></i></span>
                         </div>
                         {% if form.recode_date.errors %}
-                        {% with form.recode_date.errors|first as error %}
-                            <br/>
-                            <span class="error_message">{{ error }}</span>
-                        {% endwith %}
-                    {% endif %}
+                            {% with form.recode_date.errors|first as error %}
+                                <br/>
+                                <span class="error_message">{{ error }}</span>
+                            {% endwith %}
+                        {% endif %}
                     </div>
                 </div>
                 <div class="control-group">
@@ -74,17 +74,17 @@
                     <div class="controls">
                         <textarea rows="5" class="highlight" id="addRemarks" name="remark">
                         </textarea>
+                        {% if form.remark.errors %}
+                            {% with form.remark.errors|first as error %}
+                                <br/>
+                                <span class="error_message">{{ error }}</span>
+                            {% endwith %}
+                        {% endif %}
                     </div>
-                    {% if form.remark.errors %}
-                        {% with form.remark.errors|first as error %}
-                            <br/>
-                            <span class="error_message">{{ error }}</span>
-                        {% endwith %}
-                    {% endif %}
                 </div>
                 <div class="control-group">
                     <div class="controls">
-                        <button type="button" id="btnAdd" class="btn btn-primary">添加</button>
+                        <button type="button" id="btnAdd" class="btn btn-primary">保存</button>
                     </div>
                 </div>
                 {% if form.non_field_errors %}
