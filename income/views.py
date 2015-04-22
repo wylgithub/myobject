@@ -9,6 +9,11 @@ from utility.base_view import back_to_original_page, get_list_params
 
 
 # 添加收入信息模块开始
+from utility.constant import DATE_INPUT_FORMAT_HYPHEN, DATE_INPUT_FORMAT_SLASH, DATE_INPUT_FORMAT_SLASH_TWO, \
+    DATE_INPUT_FORMAT_HYPHEN_DETAIL
+from utility.datetime_utility import get_now, to_datetime, get_today
+
+
 @login_required
 def add_income_view(request, user_id):
     """
@@ -26,7 +31,8 @@ def add_income_view(request, user_id):
     return render(request, "income/add_income.html", {
         'user_id': id,
         'username': user.full_name,
-        'user_type': user_name
+        'user_type': user_name,
+        'current_now': get_today().strftime(DATE_INPUT_FORMAT_HYPHEN_DETAIL),
     })
 
 
@@ -41,10 +47,12 @@ def add_income_action(request, user_id):
 
     form = IncomeForm(request.POST)
 
-    if form.is_valid():
+    # 获取用户名报讯到数据库
+    user = User.objects.filter(id=id).get()
+    # 信息登记人
+    mark_name = user.full_name
 
-        # 获取用户名报讯到数据库
-        user = User.objects.filter(id=id).get()
+    if form.is_valid():
 
         # 将前端传入的时间格式化为日期
         # get_add_date = to_date(request.POST['recode_date'], DATE_TIME_FORMATS)
@@ -55,8 +63,6 @@ def add_income_action(request, user_id):
         income_amount = float(request.POST['income_amount'])
         # 标识字段
         remark = request.POST['remark']
-        # 信息登记人
-        mark_name = user.full_name
 
         Income.objects.create(income_type=income_type,
                               create_datetime=get_add_date,
@@ -68,7 +74,10 @@ def add_income_action(request, user_id):
         return back_to_original_page(request, "/income/list/")
     else:
         return render_to_response("income/add_income.html", {
+            'user_id': id,
             'form': form,
+            'username': mark_name,
+            'current_now': get_today().strftime(DATE_INPUT_FORMAT_HYPHEN_DETAIL),
         }, context_instance=RequestContext(request))
 
 
@@ -150,7 +159,7 @@ def add_expend_view(request, user_id):
         'full_name': full_name,
         'username': username,
         'identity': user_identity,
-        'form': form,
+        'current_now': get_today().strftime(DATE_INPUT_FORMAT_SLASH),
     })
 
 
@@ -164,7 +173,10 @@ def add_expend_action(request, user_id):
     """
     # 将登录用户id进行格式化
     id = int(user_id)
+    user = User.objects.filter(id=id).get()
 
+    # 获取登录人姓名
+    username = user.full_name
     # 获取前端提交的信息
     form = ExpendForm(request.POST, instance=Expend())
 
@@ -178,6 +190,9 @@ def add_expend_action(request, user_id):
     else:
         return render(request, "income/add_expend.html", {
             'form': form,
+            'user_id': id,
+            'username': username,
+            'current_now': get_today().strftime(DATE_INPUT_FORMAT_SLASH),
         })
 
 

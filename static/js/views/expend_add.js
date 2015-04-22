@@ -26,8 +26,8 @@ define([
                 return;
             }
             this.in_syncing = true;
-            $('#btnAdd').prop('disabled', true);
-            $('#IncomeAdd').submit();
+            $('#btnSave').prop('disabled', true);
+            $('#Expend').submit();
         },
         validate: function(event){
             var recode_user = $("#regName").val();    // 获取前端规格输入框的内容

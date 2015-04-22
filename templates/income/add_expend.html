@@ -11,78 +11,78 @@
                 <li class="active">添加明细</li>
             </ul>
         </div>
-        <form class="form-horizontal" action="/income/expend/{{ user_id }}/add/action/" id="IncomeAdd" method="post">
+        <form class="form-horizontal" action="/income/expend/{{ user_id }}/add/action/" id="Expend" method="post">
             {% csrf_token %}
             <input type="hidden" name="redirect_url" id="redirect_url" value="" />
             <input type="hidden" name="validation" id="id_validation" value="{{ validation }}">
             <input type="hidden" name="id" id="pk" value="{{ user_id }}"/>
-            <div class="well well-large">
+            <div class="well well-large fly_left_well">
                 <div class="control-group">
                     <label class="control-label" for="regName">操作人员</label>
                     <div class="controls">
                         <input type="text" id="regName" name="handler" class="highlight" maxlength="30" value="{{ username }}" readonly/>
                     </div>
-                </div>
-                {% if form.handler.errors %}
-                    {% with form.handler.errors|first as error %}
-                        <br/>
-                        <span class="error_message">{{ error }}</span>
-                    {% endwith %}
-                {% endif %}
-                <div class="control-group">
-                    <label class="control-label" for="incomeType">支出类型</label>
-                    <div class="controls">
-                        <input type="text" class="highlight" name="expend_type" id="incomeType" maxlength="20" value=""/>
-                    </div>
-                    {% if form.expend_type.errors %}
-                        {% with form.expend_type.errors|first as error %}
+                    {% if form.handler.errors %}
+                        {% with form.handler.errors|first as error %}
                             <br/>
                             <span class="error_message">{{ error }}</span>
                         {% endwith %}
                     {% endif %}
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="incomeType">支出类型</label>
+                    <div class="controls">
+                        <input type="text" class="highlight" name="expend_type" id="incomeType" maxlength="20" value="{{ form.expend_type.value }}"/>
+                        {% if form.expend_type.errors %}
+                            {% with form.expend_type.errors|first as error %}
+                                <br/>
+                                <span class="error_message">{{ error }}</span>
+                            {% endwith %}
+                        {% endif %}
+                    </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="incomeAmount">支出金额</label>
                     <div class="controls">
-                        <input type="text" class="highlight" name="expend_amount" id="incomeAmount" maxlength="20" value=""/>
+                        <input type="text" class="highlight" name="expend_amount" id="incomeAmount" maxlength="20" value="{{ form.expend_amount.value }}"/>
+                        {% if form.expend_amount.errors %}
+                            {% with form.expend_amount.errors|first as error %}
+                                <br/>
+                                <span class="error_message">{{ error }}</span>
+                            {% endwith %}
+                        {% endif %}
                     </div>
-                    {% if form.expend_amount.errors %}
-                        {% with form.expend_amount.errors|first as error %}
-                            <br/>
-                            <span class="error_message">{{ error }}</span>
-                        {% endwith %}
-                    {% endif %}
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="incomeType">支出账户</label>
                     <div class="controls">
-                        <input type="text" class="highlight" name="expend_account" id="incomeType" maxlength="20" value=""/>
+                        <input type="text" class="highlight" name="expend_account" id="incomeType" maxlength="20" value="{{ form.expend_account.value }}"/>
+                        {% if form.expend_account.errors %}
+                            {% with form.expend_account.errors|first as error %}
+                                <br/>
+                                <span class="error_message">{{ error }}</span>
+                            {% endwith %}
+                        {% endif %}
                     </div>
-                    {% if form.expend_account.errors %}
-                        {% with form.expend_account.errors|first as error %}
-                            <br/>
-                            <span class="error_message">{{ error }}</span>
-                        {% endwith %}
-                    {% endif %}
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="incomeType">账户余额</label>
                     <div class="controls">
-                        <input type="text" class="highlight" name="balance" id="incomeType" maxlength="20" value=""/>
+                        <input type="text" class="highlight" name="balance" id="incomeType" maxlength="20" value="{{ form.balance.value }}"/>
+                        {% if form.balance.errors %}
+                            {% with form.balance.errors|first as error %}
+                                <br/>
+                                <span class="error_message">{{ error }}</span>
+                            {% endwith %}
+                        {% endif %}
                     </div>
-                    {% if form.balance.errors %}
-                        {% with form.balance.errors|first as error %}
-                            <br/>
-                            <span class="error_message">{{ error }}</span>
-                        {% endwith %}
-                    {% endif %}
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="id_style">记录日期</label>
                     <div class="controls">
                         <div class="input-append date" id="expend_date" data-date="">
-                            <input class="span2 highlight" id="r_date"
-                                  size="16" type="text" name="expend_datetime" value="" maxlength="10" readonly/>
+                            <input class="span3 highlight" id="r_date"
+                                  size="16" type="text" name="expend_datetime" value="{{ current_now }}" maxlength="10" readonly/>
                             <span class="add-on"><i class="icon-calendar"></i></span>
                         </div>
                         {% if form.expend_datetime.errors %}

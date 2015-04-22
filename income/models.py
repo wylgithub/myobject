@@ -30,7 +30,7 @@ class IncomeForm(Form):
     """
     recode_name = forms.CharField(required=False)  # 记录人姓名
     income_type = forms.CharField(required=False)  # 收入类型
-    income_amount = forms.IntegerField(required=False)  # 收入数量
+    income_amount = forms.DecimalField(required=False)  # 收入数量
     recode_date = forms.DateTimeField(required=False)  # 记录日期
     remark = forms.Textarea()  # 备注
 
@@ -57,17 +57,19 @@ class IncomeForm(Form):
 
         # 判断收入金额是满足要求
         if 'income_amount' in cleaned_data:
-            amount = cleaned_data['income_type']
+            amount = cleaned_data['income_amount']
+
+            # to_float = float(amount)
 
             if amount is u'' or amount <= 0:
                 msg = u"收入金额不允许为空,并且必须大于0!"
                 self._errors['income_amount'] = self.error_class([msg])
 
-                del cleaned_data['recode_name']
+                del cleaned_data['income_amount']
 
         # 日期是否合适:
         if 'recode_date' in cleaned_data:
-            r_date = cleaned_data['income_amount']
+            r_date = cleaned_data['recode_date']
 
             if r_date is u'':
                 msg = u'请填写记录撰写时间!'
