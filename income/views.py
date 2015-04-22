@@ -9,9 +9,8 @@ from utility.base_view import back_to_original_page, get_list_params
 
 
 # 添加收入信息模块开始
-from utility.constant import DATE_INPUT_FORMAT_HYPHEN, DATE_INPUT_FORMAT_SLASH, DATE_INPUT_FORMAT_SLASH_TWO, \
-    DATE_INPUT_FORMAT_HYPHEN_DETAIL
-from utility.datetime_utility import get_now, to_datetime, get_today
+from utility.constant import DATE_INPUT_FORMAT_HYPHEN, DATE_INPUT_FORMAT_SLASH
+from utility.datetime_utility import get_today
 
 
 @login_required
@@ -32,7 +31,7 @@ def add_income_view(request, user_id):
         'user_id': id,
         'username': user.full_name,
         'user_type': user_name,
-        'current_now': get_today().strftime(DATE_INPUT_FORMAT_HYPHEN_DETAIL),
+        'current_now': get_today().strftime(DATE_INPUT_FORMAT_HYPHEN),
     })
 
 
@@ -55,7 +54,6 @@ def add_income_action(request, user_id):
     if form.is_valid():
 
         # 将前端传入的时间格式化为日期
-        # get_add_date = to_date(request.POST['recode_date'], DATE_TIME_FORMATS)
         get_add_date = request.POST['recode_date']
         # 收入类型
         income_type = request.POST['income_type']
@@ -77,7 +75,7 @@ def add_income_action(request, user_id):
             'user_id': id,
             'form': form,
             'username': mark_name,
-            'current_now': get_today().strftime(DATE_INPUT_FORMAT_HYPHEN_DETAIL),
+            'current_now': get_today().strftime(DATE_INPUT_FORMAT_HYPHEN),
         }, context_instance=RequestContext(request))
 
 

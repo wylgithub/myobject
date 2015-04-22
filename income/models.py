@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 from django import forms
 from django.db import models
+import datetime
 
 from django.forms import Form, ModelForm
 from user_account.models import User
@@ -15,8 +17,8 @@ class Income(models.Model):
     create_datetime = models.DateTimeField(auto_now_add=True)  # 添加时间
     update_datetime = models.DateTimeField(auto_now=True)  # 更新日期
     income_amount = models.DecimalField(u'收入金额', max_digits=8, decimal_places=2, default=0)  #收入金额
-    remarks = models.TextField(u"备注", null=True, blank=True)  # 备注的添加用于描述这笔收入的具体来源和数量描述
-    handler = models.CharField(u"处理者", max_length=255, null=True, blank=True)  # 处理者:添加信息的人
+    remarks = models.TextField(u"备注")  # 备注的添加用于描述这笔收入的具体来源和数量描述
+    handler = models.CharField(u"处理者", max_length=255)  # 处理者:添加信息的人
     user = models.ForeignKey(User, verbose_name=u"家庭收入管理信息登记人", blank=True, null=True, related_name='user_income')
 
     class Meta:
@@ -49,17 +51,15 @@ class IncomeForm(Form):
         # 判断收入类型是否满足要求
         if 'income_type' in cleaned_data:
             itype = cleaned_data['income_type']
-            if itype is u'':
-                msg = u'收入类型不可以为空!'
+            if itype is u'' or itype.isdigit():
+                msg = u'收入类型不可以为空和全为数字!!'
                 self._errors['income_type'] = self.error_class([msg])
 
-                del cleaned_data['recode_name']
+            del cleaned_data['recode_name']
 
         # 判断收入金额是满足要求
         if 'income_amount' in cleaned_data:
             amount = cleaned_data['income_amount']
-
-            # to_float = float(amount)
 
             if amount is u'' or amount <= 0:
                 msg = u"收入金额不允许为空,并且必须大于0!"
@@ -70,22 +70,26 @@ class IncomeForm(Form):
         # 日期是否合适:
         if 'recode_date' in cleaned_data:
             r_date = cleaned_data['recode_date']
+            # 获取当前时间date类型
+            today = datetime.date.today()
 
-            if r_date is u'':
-                msg = u'请填写记录撰写时间!'
+            # 将前端传过来的datetime转换为date
+            todate = r_date.date()
+            if r_date is u'' or todate > today:
+                msg = u'请填写记录撰写时间(时间必须小于等于当前日期)!'
                 self._errors['recode_date'] = self.error_class([msg])
 
                 del cleaned_data['recode_date']
 
-        # 判断是否有备注
-        if 'remark' in cleaned_data:
-            remarks = cleaned_data['remark']
-
-            if remarks is u'':
-                msg = u'请输入本次收入的具体来源,以防以后对账!'
-                self._errors['remark'] = self.error_class([msg])
-
-            del cleaned_data['remark']
+        # 判断是否有备注:这个备注可有可无,因为不是每一笔收入有要写入备注,
+        # if 'remark' in cleaned_data:
+        #     remarks = cleaned_data['remark']
+        #
+        #     if remarks is u'':
+        #         msg = u'请输入本次收入的具体来源,以防以后对账!'
+        #         self._errors['remark'] = self.error_class([msg])
+        #
+        #     del cleaned_data['remark']
 
         return cleaned_data
 
@@ -104,8 +108,8 @@ class Expend(models.Model):
     balance = models.DecimalField(u'账户余额', max_digits=10, decimal_places=2, default=0)  #账户余额
     create_datetime = models.DateTimeField(u'录入时间', auto_now_add=True)  # 添加支出信息时间
     update_datetime = models.DateTimeField(u'更新时间', auto_now=True)  # 支出信息更新日期
-    remarks = models.TextField(u"备注", null=True, blank=True)  # 备注的添加用于描述这笔收入的具体来源和数量描述
-    handler = models.CharField(u"添加支出信息的处理者", max_length=255, null=True, blank=True)  # 处理者:添加支出信息的人
+    remarks = models.TextField(u"备注", max_length=500)  # 备注的添加用于描述这笔收入的具体来源和数量描述
+    handler = models.CharField(u"添加支出信息的处理者", max_length=255)  # 处理者:添加支出信息的人
 
     class Meta:
         db_table = 'graduation_design_expend'
@@ -123,12 +127,29 @@ class ExpendForm(ModelForm):
         # 家庭支出信息后端check开始
         if 'expend_type' in cleaned_data:
             expend_type = cleaned_data['expend_type']
-            if expend_type in u'' or expend_type.isdigit():
-                msg = u"请输入正确的支出类型"
+            if expend_type in u'' or (not expend_type.isdigit()):
+                msg = u"请输入正确的支出类型(不可以全为数字!)"
                 self._errors['expend_type'] = self.error_class([msg])
 
                 del cleaned_data['expend_type']
 
+        if 'expend_amount' in cleaned_data:
+            expend_data = cleaned_data['expend_amount']
+
+            if expend_data is u'' or (not expend_data.isdigit()):
+                msg = u'支出金额不可以为空,且必须为数字!'
+                self._errors['expend_amount'] = self.error_class([msg])
+
+                del cleaned_data['expend_amount']
+
+        if 'expend_account' in cleaned_data:
+            expend_data = cleaned_data['expend_account']
+
+            if expend_data is u'' or (not expend_data.isdigit()):
+                msg = u'支出账户不可以为空,且必须为数字!'
+                self._errors['expend_account'] = self.error_class([msg])
+
+                del cleaned_data['expend_account']
 
 
         # 家庭支出信息后端check结束
