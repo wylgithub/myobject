@@ -121,10 +121,6 @@ class User(PermissionsMixin):
 class UserForm(ModelForm):
     role = forms.IntegerField()
 
-    class Meta:
-        model = User
-        fields = ('username', 'password', 'full_name', 'email', 'mobile')
-
     def clean(self):
         cleaned_data = super(UserForm, self).clean()
         #  检查用户的唯一性
@@ -164,6 +160,13 @@ class UserForm(ModelForm):
         #             del cleaned_data['email']
 
         return cleaned_data
+
+    def __init__(self, *args, **kwargs):
+        super(UserForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = User
+        fields = ('username', 'password', 'full_name', 'email', 'mobile')
 
 
 class UserRegisterForm(ModelForm):
@@ -218,7 +221,7 @@ class UserEditForm(UserForm):
 
     class Meta:
         model = User
-        fields = ('username', 'full_name')
+        fields = ('username', 'password', 'full_name', 'email', 'mobile')
 
 
 class UserLoginForm(Form):

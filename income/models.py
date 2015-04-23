@@ -13,40 +13,37 @@ class Income(models.Model):
     """
     家庭收入管理模型
     """
+    user = models.ForeignKey(User, verbose_name=u"家庭收入管理信息登记人", blank=True, null=True, related_name='user_income')
     income_type = models.CharField(u"家庭收入类型", max_length=10)  # 家庭收入类型字段,也就是收入来源
     create_datetime = models.DateTimeField(auto_now_add=True)  # 添加时间
     update_datetime = models.DateTimeField(auto_now=True)  # 更新日期
     income_amount = models.DecimalField(u'收入金额', max_digits=8, decimal_places=2, default=0)  #收入金额
     remarks = models.TextField(u"备注")  # 备注的添加用于描述这笔收入的具体来源和数量描述
     handler = models.CharField(u"处理者", max_length=255)  # 处理者:添加信息的人
-    user = models.ForeignKey(User, verbose_name=u"家庭收入管理信息登记人", blank=True, null=True, related_name='user_income')
+    delete_flg = models.BooleanField(default=False)  # 删除标志位
 
     class Meta:
         db_table = 'graduation_design_income'
 
 
 # 添加收入表单提交Form表单
-class IncomeForm(Form):
+class IncomeForm(ModelForm):
     """
     收入Form
     """
-    recode_name = forms.CharField(required=False)  # 记录人姓名
-    income_type = forms.CharField(required=False)  # 收入类型
-    income_amount = forms.DecimalField(required=False)  # 收入数量
     recode_date = forms.DateTimeField(required=False)  # 记录日期
-    remark = forms.Textarea()  # 备注
 
     def clean(self):
         cleaned_data = super(IncomeForm, self).clean()
 
         # 添加记录人的姓名
-        if 'recode_name' in cleaned_data:
-            name = cleaned_data['recode_name']
+        if 'handler' in cleaned_data:
+            name = cleaned_data['handler']
             if name is u'':
                 msg = u"记录人的姓名不可以为空!"
-                self._errors['recode_name'] = self.errror_class([msg])
+                self._errors['handler'] = self.errror_class([msg])
 
-                del cleaned_data['recode_name']
+                del cleaned_data['handler']
 
         # 判断收入类型是否满足要求
         if 'income_type' in cleaned_data:
@@ -55,7 +52,7 @@ class IncomeForm(Form):
                 msg = u'收入类型不可以为空和全为数字!!'
                 self._errors['income_type'] = self.error_class([msg])
 
-            del cleaned_data['recode_name']
+                del cleaned_data['income_type']
 
         # 判断收入金额是满足要求
         if 'income_amount' in cleaned_data:
@@ -96,6 +93,17 @@ class IncomeForm(Form):
     def __init__(self, *args, **kwargs):
         super(IncomeForm, self).__init__(*args, **kwargs)
 
+    class Meta:
+        model = Income
+        fields = ('income_type', 'income_amount', 'remarks', 'handler')
+
+
+# class IncomeEditForm(ModelForm):
+#
+#     class Meta:
+#         model = Income
+#         fields = ('income_type', 'update_datetime', 'income_amount', 'remarks', 'handler')
+
 
 class Expend(models.Model):
     """
@@ -110,6 +118,7 @@ class Expend(models.Model):
     update_datetime = models.DateTimeField(u'更新时间', auto_now=True)  # 支出信息更新日期
     remarks = models.TextField(u"备注", max_length=500)  # 备注的添加用于描述这笔收入的具体来源和数量描述
     handler = models.CharField(u"添加支出信息的处理者", max_length=255)  # 处理者:添加支出信息的人
+    delete_flg = models.BooleanField(default=False)  # 删除标志位
 
     class Meta:
         db_table = 'graduation_design_expend'
@@ -177,6 +186,7 @@ class Borrow(models.Model):
     repay_datetime = models.DateTimeField(auto_now_add=True)  # 预计还款日期
     update_datetime = models.DateTimeField(auto_now=True)  # 更新日期
     remarks = models.TextField(u"备注", null=True, blank=True)  # 备注的添加用于描述这笔借款的具体来源和数量描述
+    delete_flg = models.BooleanField(default=False)  # 删除标志位
 
     class Meta:
         db_table = 'graduation_design_borrow'
@@ -196,6 +206,7 @@ class Lend(models.Model):
     pay_datetime = models.DateTimeField(auto_now_add=True)  # 预计还款日期
     update_datetime = models.DateTimeField(auto_now=True)  # 更新日期
     remarks = models.TextField(u"备注", null=True, blank=True)  # 备注的添加用于描述这笔借款的具体来源和数量描述
+    delete_flg = models.BooleanField(default=False)  # 删除标志位
 
     class Meta:
         db_table = 'graduation_design_lend'

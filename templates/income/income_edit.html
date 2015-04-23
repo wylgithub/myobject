@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load extfilters %}
+{% block title %} - 修改用户{% endblock %}
+{% block content %}
+    <input type="hidden" id="amd_module" value="{% static "js/views/income_edit.js" %}"/>
+    <div class="container" style="margin-top:60px;">
+        <div class="page_header">
+            <ul class="bc">
+                <li><a href="/">主页</a> <span class="divider">/</span></li>
+                <li><a href="/income/list/">用户一览</a> <span class="divider">/</span></li>
+                <li class="active">{{ form.instance.get_full_name }}</li>
+            </ul>
+        </div>
+        <form class="form-horizontal" action="/income/{{ user_id }}/add/action/" id="IncomeAdd" method="post">
+
+            {% csrf_token %}
+            <input type="hidden" name="redirect_url" id="redirect_url" value="{{ redirect_url|default_if_none:"" }}"/>
+            <input type="hidden" name="mode" value="1"/>
+            <input type="hidden" name="id" value="{{ id }}"/>
+            <input type="hidden" name="username" value="{{ form.username.value }}"/>
+{#            <input type="hidden" name="redirect_url" id="redirect_url" value="" />#}
+{#            <input type="hidden" name="validation" id="id_validation" value="{{ validation }}">#}
+{#            <input type="hidden" name="id" id="pk" value="{{ user_id }}"/>#}
+            <div class="well well-large">
+                <div class="control-group">
+                    <label class="control-label" for="regName">操作人员</label>
+                    <div class="controls">
+                        <input type="text" id="regName" name="recode_name" class="highlight" maxlength="30" value="{{ form.handler.value }}" readonly/>
+                    </div>
+                </div>
+                {% if form.recode_name.errors %}
+                    {% with form.recode_name.errors|first as error %}
+                        <br/>
+                        <span class="error_message">{{ error }}</span>
+                    {% endwith %}
+                {% endif %}
+                <div class="control-group">
+                    <label class="control-label" for="incomeType">收入类型</label>
+                    <div class="controls">
+                        <input type="text" class="highlight" name="income_type" id="incomeType" maxlength="20" value="{{ form.income_type.value }}"/>
+                        {% if form.income_type.errors %}
+                            {% with form.income_type.errors|first as error %}
+                                <br/>
+                                <span class="error_message">{{ error }}</span>
+                            {% endwith %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="incomeAmount">收入金额</label>
+                    <div class="controls">
+                        <input type="text" class="highlight" name="income_amount" id="incomeAmount" maxlength="20" value="{{ form.income_amount.value }}"/>
+                        {% if form.income_amount.errors %}
+                            {% with form.income_amount.errors|first as error %}
+                                <br/>
+                                <span class="error_message">{{ error }}</span>
+                            {% endwith %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="id_style">记录日期</label>
+                    <div class="controls">
+                        <div class="input-append date" id="red_date" data-date="{{ current_now }}" data-date-format="yyyy-mm-dd">
+                            <input class="span2 highlight" id="r_date"
+                                  size="16" type="text" name="recode_date" value="{{ current_now }}" maxlength="10" readonly/>
+                            <span class="add-on"><i class="icon-calendar"></i></span>
+                        </div>
+                        {% if form.recode_date.errors %}
+                            {% with form.recode_date.errors|first as error %}
+                                <br/>
+                                <span class="error_message">{{ error }}</span>
+                            {% endwith %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="addRemarks">撰写备注</label>
+                    <div class="controls">
+                        <textarea rows="5" class="highlight" id="addRemarks" name="remark">
+                        </textarea>
+                        {% if form.remark.errors %}
+                            {% with form.remark.errors|first as error %}
+                                <br/>
+                                <span class="error_message">{{ error }}</span>
+                            {% endwith %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <button type="button" id="btnAdd" class="btn btn-primary">保存</button>
+                        <button type="button" id="btnReturn" class="btn">返回</button>
+                    </div>
+                </div>
+                {% if form.non_field_errors %}
+                    {% with form.non_field_errors|first as error %}
+                        <div class="control-group">
+                            <div class="controls"><span class="error_message">{{ error }}</span></div>
+                        </div>
+                    {% endwith %}
+                {% endif %}
+            </div>
+        </form>
+{#        <form class="form-horizontal" action="/income/edit/action/" method="post" id="frmEditUser">#}
+{#            {% csrf_token %}#}
+{##}
+{#            <div class="well well-large fly_left_well">#}
+{#                <div class="control-group">#}
+{#                    <label class="control-label" for="txtUserName">用户名</label>#}
+{#                    <div class="controls">#}
+{#                        <input type="text" id="txtUserName" class="highlight" disabled="disabled" placeholder="用户名" maxlength="30" value="{{ form.username.value }}"/>#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="control-group">#}
+{#                    <label class="control-label" for="txtPassword">密码</label>#}
+{#                    <div class="controls">#}
+{#                        <input type="password" id="txtPassword" name="password" maxlength="20" class="first_focus {% if form.password.errors %} error_flg{% endif %}" placeholder="密码留空即不修改">#}
+{#                        {% if form.password.errors %}#}
+{#                            {% with form.password.errors|first as error %}#}
+{#                                <br/><span class="error_message">{{ error }}</span>#}
+{#                            {% endwith %}#}
+{#                        {% endif %}#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="control-group">#}
+{#                    <label class="control-label" for="txtFullName">姓名</label>#}
+{#                    <div class="controls">#}
+{#                        <input type="text" class="highlight input{% if form.full_name.errors %} error_flg{% endif %}" name="full_name" id="txtFullName" maxlength="20" value="{{ form.full_name.value }}"/>#}
+{#                        {% if form.full_name.errors %}#}
+{#                            {% with form.full_name.errors|first as error %}#}
+{#                                <br/><span class="error_message">{{ error }}</span>#}
+{#                            {% endwith %}#}
+{#                        {% endif %}#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="control-group">#}
+{#                    <label class="control-label" for="txtEmail">邮箱</label>#}
+{#                    <div class="controls">#}
+{#                        <input type="text" class="highlight input{% if form.email.errors %} error_flg{% endif %}" name="email" id="txtEmail" maxlength="20" value="{{ form.email.value|default_if_none:"" }}"/>#}
+{#                        {% if form.email.errors %}#}
+{#                            {% with form.email.errors|first as error %}#}
+{#                                <br/><span class="error_message">{{ error }}</span>#}
+{#                            {% endwith %}#}
+{#                        {% endif %}#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="control-group">#}
+{#                    <label class="control-label" for="txtMobile">手机号码</label>#}
+{#                    <div class="controls">#}
+{#                        <input type="text" class="highlight input{% if form.mobile.errors %} error_flg{% endif %}" name="mobile" id="txtMobile" maxlength="20" value="{{ form.mobile.value|default_if_none:"" }}"/>#}
+{#                        {% if form.mobile.errors %}#}
+{#                            {% with form.mobile.errors|first as error %}#}
+{#                                <br/><span class="error_message">{{ error }}</span>#}
+{#                            {% endwith %}#}
+{#                        {% endif %}#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="control-group">#}
+{#                    <label class="control-label" for="role">身份</label>#}
+{#                    <div class="controls">#}
+{#                        <input type="hidden" name="role" id="id_role" value="{% if form.role.value %}{{ form.role.value }}{% else %}10{% endif %}"/>#}
+{#                        <div class="btn-group">#}
+{#                            <button class="btn" type="button" data-toggle="dropdown" id="btnRoleDisplay">#}
+{#                                {% if form.role.value == "10" %}#}
+{#                                    家庭管理员#}
+{#                                {% elif form.role.value == "20" %}#}
+{#                                    会员#}
+{#                                {% else %}#}
+{#                                    家庭普通成员#}
+{#                                {% endif %}#}
+{#                            </button>#}
+{#                            <button class="btn dropdown-toggle" data-toggle="dropdown">#}
+{#                                <span class="caret"></span>#}
+{#                            </button>#}
+{#                            <ul class="dropdown-menu">#}
+{#                                <li><a href="#" class="dropdownItem" for="id_role" value="10">家庭管理员</a></li>#}
+{#                                <li><a href="#" class="dropdownItem" for="id_role" value="20">会员</a></li>#}
+{#                                <li><a href="#" class="dropdownItem" for="id_role" value="50">家庭普通成员</a></li>#}
+{##}
+{#                            </ul>#}
+{#                        </div>#}
+{#                        {% if form.role.errors %}#}
+{#                            {% with form.role.errors|first as error %}#}
+{#                                <br/><span class="error_message">{{ error }}</span>#}
+{#                            {% endwith %}#}
+{#                        {% endif %}#}
+{#                    </div>#}
+{#                </div>#}
+{#                </div>#}
+{#                <div class="control-group">#}
+{#                    <div class="controls">#}
+{#                        <button type="button" class="btn btn-primary default_button" id="btnSave">保存</button>#}
+{#                        <button type="button" id="btnReturn" class="btn">返回</button>#}
+{#                    </div>#}
+{#                </div>#}
+{#                {% if form.non_field_errors %}#}
+{#                    {% with form.non_field_errors|first as error %}#}
+{#                        <div class="control-group">#}
+{#                            <div class="controls"><span class="error_message">{{ error }}</span></div>#}
+{#                        </div>#}
+{#                    {% endwith %}#}
+{#                {% endif %}#}
+{#        </form>#}
+    </div>
+{% endblock %}

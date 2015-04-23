@@ -1,16 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render, render_to_response, get_object_or_404
 from django.template import RequestContext
 from income.models import IncomeForm, Income, ExpendForm, Expend
-from user_account.models import User
+from user_account.models import User, UserForm
 from utility.base_view import back_to_original_page, get_list_params
 
 
 # 添加收入信息模块开始
 from utility.constant import DATE_INPUT_FORMAT_HYPHEN, DATE_INPUT_FORMAT_SLASH
 from utility.datetime_utility import get_today
+from utility.exception import PermissionDeniedError
+from utility.role_manager import check_role, ROLE_FAMILY_COMMON_USER, get_role_id
 
 
 @login_required
@@ -44,31 +46,18 @@ def add_income_action(request, user_id):
     """
     id = int(user_id)
 
-    form = IncomeForm(request.POST)
+    form = IncomeForm(request.POST, instance=Income())
 
-    # 获取用户名报讯到数据库
+    # 获取用户名保存到数据库
     user = User.objects.filter(id=id).get()
     # 信息登记人
     mark_name = user.full_name
 
     if form.is_valid():
+        form.instance.user_id = id
+        form.instance.create_datetime = request.POST['recode_date']
+        form.save()
 
-        # 将前端传入的时间格式化为日期
-        get_add_date = request.POST['recode_date']
-        # 收入类型
-        income_type = request.POST['income_type']
-        # 收入金额:将前端传入的unicode金额类型转换成float型
-        income_amount = float(request.POST['income_amount'])
-        # 标识字段
-        remark = request.POST['remark']
-
-        Income.objects.create(income_type=income_type,
-                              create_datetime=get_add_date,
-                              income_amount=income_amount,
-                              remarks=remark,
-                              handler=mark_name,
-                              user_id=id,
-                              )
         return back_to_original_page(request, "/income/list/")
     else:
         return render_to_response("income/add_income.html", {
@@ -123,6 +112,89 @@ def income_list_view(request):
         'income': incomes,
 
     })
+
+
+# 用户信息编辑模块开始
+@login_required
+def income_edit_view(request, id):
+    """
+    用户信息编辑view
+    :param requrst:
+    :param id:
+    :return:
+    """
+    user_id = int(id)
+    user = get_object_or_404(Income, id=id)
+
+    form = UserForm(instance=user)
+
+
+
+    # 获取当前修改用户的用户名
+    # user = User.objects.filter(id=user_id).get()
+    #
+    # username = user.username
+    #
+    # queryset = Income.objects.filter(id=id).get()
+    #
+    # # 获取操作人员
+    # handler = queryset.handler
+    # # 收入金额
+    # income_amount = queryset.income_amount
+    # # 获取备注信息
+    # remarks = queryset.remarks
+    # # 获取创建时间
+    # create_datetime = queryset.create_datetime
+    # # 收入类型
+    # income_type = queryset.income_type
+
+    # form = IncomeForm(request.POST)
+
+    return render(request, "income/income_edit.html", {
+        "form": form,
+        "id": user_id,
+        # "role": get_role_id(role_name),
+        # "username": username,
+        # "handler": handler,
+        # "income_amount": income_amount,
+        # "remarks": remarks,
+        # "create_datetime": create_datetime,
+        # "income_type": income_type,
+    })
+
+
+@login_required
+def income_edit_action(request):
+    """
+    用户信息action
+    :param request:
+    :return:
+    """
+    pass
+
+
+@login_required
+def income_delete_action(request):
+    """
+    用户信息action
+    :param request:
+    :return:
+    """
+    # 如果是家庭普通成员则报错
+    if check_role(request, ROLE_FAMILY_COMMON_USER):
+        raise PermissionDeniedError
+
+    pk = request.POST["pk"]
+    pks = []
+    for key in pk.split(','):
+        # if key and is_int(key):
+        if key:
+            pks.append(int(key))
+
+    User.objects.filter(id__in=pks).update(is_active=False)
+    return back_to_original_page(request, '/income/list/')
+
+# 用户信息编辑模块结束
 
 # 收入信息模块完成
 
