@@ -3,7 +3,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, render_to_response, get_object_or_404
 from django.template import RequestContext
-from income.models import IncomeForm, Income, ExpendForm, Expend
+from income.models import IncomeForm, Income, ExpendForm, Expend, IncomeEditForm
 from user_account.models import User, UserForm
 from utility.base_view import back_to_original_page, get_list_params
 
@@ -123,43 +123,15 @@ def income_edit_view(request, id):
     :param id:
     :return:
     """
-    user_id = int(id)
-    user = get_object_or_404(Income, id=id)
+    id = int(id)
+    user_income = get_object_or_404(Income, id=id)
 
-    form = UserForm(instance=user)
-
-
-
-    # 获取当前修改用户的用户名
-    # user = User.objects.filter(id=user_id).get()
-    #
-    # username = user.username
-    #
-    # queryset = Income.objects.filter(id=id).get()
-    #
-    # # 获取操作人员
-    # handler = queryset.handler
-    # # 收入金额
-    # income_amount = queryset.income_amount
-    # # 获取备注信息
-    # remarks = queryset.remarks
-    # # 获取创建时间
-    # create_datetime = queryset.create_datetime
-    # # 收入类型
-    # income_type = queryset.income_type
-
-    # form = IncomeForm(request.POST)
+    form = IncomeForm(instance=user_income)
 
     return render(request, "income/income_edit.html", {
         "form": form,
-        "id": user_id,
-        # "role": get_role_id(role_name),
-        # "username": username,
-        # "handler": handler,
-        # "income_amount": income_amount,
-        # "remarks": remarks,
-        # "create_datetime": create_datetime,
-        # "income_type": income_type,
+        "id": id,
+        "current_now": get_today().strftime(DATE_INPUT_FORMAT_HYPHEN),
     })
 
 
@@ -170,7 +142,23 @@ def income_edit_action(request):
     :param request:
     :return:
     """
-    pass
+    id = request.POST['id']
+
+    income = get_object_or_404(Income, id=id)
+
+    form = IncomeForm(request.POST, instance=income)
+    if form.is_valid():
+        # 获取更新时间
+        form.instance.update_datetime = request.POST['cleaned_data']
+        if not isinstance(form, IncomeEditForm):
+            income.save(update_fields=('income_type', 'income_amount', 'remarks', 'handler'))
+        return back_to_original_page(request, "/income/list/")
+    else:
+        return render(request, "income/income_edit.html", {
+            "form": form,
+            "id": id,
+            "current_now": get_today().strftime(DATE_INPUT_FORMAT_HYPHEN),
+        })
 
 
 @login_required

@@ -98,11 +98,12 @@ class IncomeForm(ModelForm):
         fields = ('income_type', 'income_amount', 'remarks', 'handler')
 
 
-# class IncomeEditForm(ModelForm):
-#
-#     class Meta:
-#         model = Income
-#         fields = ('income_type', 'update_datetime', 'income_amount', 'remarks', 'handler')
+class IncomeEditForm(ModelForm):
+    update_datetime = models.DateTimeField()  # 更新时间
+
+    class Meta:
+        model = Income
+        fields = ('income_type', 'income_amount', 'remarks', 'handler')
 
 
 class Expend(models.Model):

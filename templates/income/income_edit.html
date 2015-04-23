@@ -9,16 +9,15 @@
             <ul class="bc">
                 <li><a href="/">主页</a> <span class="divider">/</span></li>
                 <li><a href="/income/list/">用户一览</a> <span class="divider">/</span></li>
-                <li class="active">{{ form.instance.get_full_name }}</li>
+                <li class="active">{{ form.instance.income_type }}</li>
             </ul>
         </div>
-        <form class="form-horizontal" action="/income/{{ user_id }}/add/action/" id="IncomeAdd" method="post">
-
+        <form class="form-horizontal" action="/income/edit/action/" id="IncomeAdd" method="post">
             {% csrf_token %}
             <input type="hidden" name="redirect_url" id="redirect_url" value="{{ redirect_url|default_if_none:"" }}"/>
             <input type="hidden" name="mode" value="1"/>
             <input type="hidden" name="id" value="{{ id }}"/>
-            <input type="hidden" name="username" value="{{ form.username.value }}"/>
+            <input type="hidden" name="username" value="{{ form.handler.value }}"/>
 {#            <input type="hidden" name="redirect_url" id="redirect_url" value="" />#}
 {#            <input type="hidden" name="validation" id="id_validation" value="{{ validation }}">#}
 {#            <input type="hidden" name="id" id="pk" value="{{ user_id }}"/>#}

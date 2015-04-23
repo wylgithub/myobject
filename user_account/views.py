@@ -221,9 +221,6 @@ def user_view_view(request, id):
     """
     查看用户视图
     """
-    if not check_permission_allowed(request, id):
-        raise PermissionDeniedError
-
     user = get_object_or_404(User, id=id)
     role_name = None
     if user.groups.count() > 0:
@@ -286,12 +283,9 @@ def user_edit_action(request):
     #     raise InvalidPostDataError()
     id = request.POST['id']
 
-    if not check_permission_allowed(request, id):
-        raise PermissionDeniedError
-
     user = get_object_or_404(User, id=id)
 
-    if request.POST.has_key('password'):
+    if request.POST. has_key('password'):
         form = UserForm(request.POST, instance=user)
     else:
         form = UserEditForm(request.POST, instance=user)
