@@ -178,17 +178,94 @@ class Borrow(models.Model):
     user = models.ForeignKey(User, verbose_name=u"家庭借入管理信息登记人", blank=True, null=True, related_name='user_borrow')
     borrow_amount = models.DecimalField(u'借入金额', max_digits=8, decimal_places=2, default=0)  # 借入金额
     balance = models.DecimalField(u'账户余额', max_digits=8, decimal_places=2, default=0)  # 账户余额
-    borrow_person = models.CharField(u"借入人", max_length=255, null=True, blank=True)  # 借入款项人
-    lend_person = models.CharField(u"借出人", max_length=255, null=True, blank=True)  # 借出款项人
-    handler = models.CharField(u"借款信息记录人", max_length=255, null=True, blank=True)  # 登记信息人员
-    borrow_datetime = models.DateTimeField(auto_now_add=True)  # 借入日期
-    repay_datetime = models.DateTimeField(auto_now_add=True)  # 预计还款日期
+    borrow_person = models.CharField(u"借入人", max_length=255)  # 借入款项人
+    lend_person = models.CharField(u"借出人", max_length=255)  # 借出款项人
+    handler = models.CharField(u"借款信息记录人", max_length=255)  # 登记信息人员
+    borrow_datetime = models.DateTimeField()  # 借入日期
+    repay_datetime = models.DateTimeField()  # 预计还款日期
     update_datetime = models.DateTimeField(auto_now=True)  # 更新日期
     remarks = models.TextField(u"备注", null=True, blank=True)  # 备注的添加用于描述这笔借款的具体来源和数量描述
     delete_flg = models.BooleanField(default=False)  # 删除标志位
 
     class Meta:
         db_table = 'graduation_design_borrow'
+
+
+class BorrowForm(ModelForm):
+    """
+    家庭借入信息表单提交Form
+    """
+    def clean(self):
+        cleaned_data = super(BorrowForm, self).clean()
+        # 家庭借入信息后端check开始
+        if 'borrow_person' in cleaned_data:
+            borrow_person = cleaned_data['borrow_person']
+            if borrow_person is u"":
+                msg = u"借款人不可以为空,默认为当前登录用户!"
+                self._errors['borrow_person'] = self.error_class([msg])
+
+                del cleaned_data['borrow_person']
+
+        if 'lend_person' in cleaned_data:
+            lend_person = cleaned_data['lend_person']
+            if lend_person is u"" or lend_person.isdigit():
+                msg = u"借出款人不可以为空,且必须为有效的名字!!"
+                self._errors['lend_person'] = self.error_class([msg])
+
+                del cleaned_data['lend_person']
+
+        if 'borrow_amount' in cleaned_data:
+            borrow_amount = cleaned_data['borrow_amount']
+            amount = float(borrow_amount)
+            if borrow_amount is u"" or amount <= 0:
+                msg = u"请填入有效的借入金额(例如:100,单位默认为元)!!"
+                self._errors['borrow_amount'] = self.error_class([msg])
+
+                del cleaned_data['borrow_amount']
+
+        if 'balance' in cleaned_data:
+            balance = cleaned_data['balance']
+            amount = float(balance)
+            if balance is u"" or amount < 0:
+                msg = u"余额再怎么少,也不可能小雨0吧!"
+                self._errors['balance'] = self.error_class([msg])
+
+                del cleaned_data['balance']
+
+        if 'borrow_datetime' in cleaned_data:
+            borrow_datetime = cleaned_data['borrow_datetime']
+            if borrow_datetime is u"":
+                msg = u"borrow_datetime!"
+                self._errors['borrow_datetime'] = self.error_class([msg])
+
+                del cleaned_data['borrow_datetime']
+
+        if 'repay_datetime' in cleaned_data:
+            repay_datetime = cleaned_data['repay_datetime']
+            if repay_datetime is u"":
+                msg = u"预计还款日期不可以为空!"
+            r_date = repay_datetime.date()
+            if 'borrow_datetime' in cleaned_data:
+                borrow_datetime = cleaned_data['borrow_datetime']
+                b_date = borrow_datetime.date()
+
+                if b_date <= r_date:
+                    msg = u"还款日期必须比借款日期晚!"
+
+                    self._errors['repay_datetime'] = self.error_class([msg])
+                del cleaned_data['repay_datetime']
+
+
+        return cleaned_data
+        # 家庭借入信息后端check结束
+
+    def __init__(self, *args, **kwargs):
+        super(BorrowForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Borrow
+        fields = ('borrow_amount', 'balance', 'borrow_person', 'lend_person', 'repay_datetime',
+                  'borrow_datetime', 'remarks')
 
 
 class Lend(models.Model):
@@ -198,11 +275,11 @@ class Lend(models.Model):
     user = models.ForeignKey(User, verbose_name=u"家庭借出管理信息登记人", blank=True, null=True, related_name='user_lend')
     lend_amount = models.DecimalField(u'借出金额', max_digits=8, decimal_places=2, default=0)  # 借出金额
     balance = models.DecimalField(u'账户余额', max_digits=8, decimal_places=2, default=0)  # 账户余额
-    borrow_person = models.CharField(u"借入人", max_length=255, null=True, blank=True)  # 这个字段标识谁借了这笔款项
-    lend_person = models.CharField(u"借出人", max_length=255, null=True, blank=True)  # 这个字段标志了谁将这笔款项借出的
-    handler = models.CharField(u"信息记录人", max_length=255, null=True, blank=True)  # 谁记录了这条记录
-    lend_datetime = models.DateTimeField(auto_now_add=True)  # 借出日期
-    pay_datetime = models.DateTimeField(auto_now_add=True)  # 预计还款日期
+    borrow_person = models.CharField(u"借入人", max_length=255)  # 这个字段标识谁借了这笔款项
+    lend_person = models.CharField(u"借出人", max_length=255)  # 这个字段标志了谁将这笔款项借出的
+    handler = models.CharField(u"信息记录人", max_length=255)  # 谁记录了这条记录
+    lend_datetime = models.DateTimeField()  # 借出日期
+    pay_datetime = models.DateTimeField()  # 预计还款日期
     update_datetime = models.DateTimeField(auto_now=True)  # 更新日期
     remarks = models.TextField(u"备注", null=True, blank=True)  # 备注的添加用于描述这笔借款的具体来源和数量描述
     delete_flg = models.BooleanField(default=False)  # 删除标志位
