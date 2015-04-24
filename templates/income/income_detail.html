@@ -67,7 +67,12 @@
                                     <td>
                                         <a href="/income/edit/{{ user.id }}/" class="btn-link edit_link">{{ income.income_type }}</a>
                                     </td>
-                                    <td>{{ income.income_amount }}</td>
+{#                                    <td>{{ income.income_amount }}</td>#}
+                                    <td class="cell_center">
+                                        <a href="javascript: void(0);" class="password_reset" data-type="password"
+                                            data-original-title="重置密码" data-placeholder="新密码..." data-pk="{{ income.income_amount }}">
+                                        </a>
+                                    </td>
                                     <td>{{ income.create_datetime|date:"Y/m/d H:i:s" }}</td>
                                     <td>{{ income.handler }}</td>
                                     <td>
@@ -95,7 +100,7 @@
             </div>
         {% endif %}
     </div>
-    <form action="/account/delete/action/" method="post" id="frmDeleteUser">
+    <form action="/income/delete/action/" method="post" id="frmDeleteUser">
         {% csrf_token %}
         <input type="hidden" name="pk" id="pk"/>
         <input type="hidden" name="redirect_url" id="redirect_url" value="{{ url_path }}"/>

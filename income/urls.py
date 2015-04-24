@@ -22,8 +22,11 @@ urlpatterns = patterns('income.views',
     # 家庭收入编辑开始
     url(r'^edit/(\d+)/$', 'income_edit_view'),
     url(r'^edit/action/$', 'income_edit_action'),
+    url(r'^delete/action/$', 'income_delete_action'),
     # 家庭编辑完成
 
-    # 删除收入信息
-    url(r'^delete/action/$', 'income_delete_action'),
+    # 家庭支出信息编辑开始(只增加删除功能,编辑功能等有时间再做)
+    url(r'expend/delete/action/', 'expend_delete_action')
+    # 家庭支出信息编辑结束
+
 )

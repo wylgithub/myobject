@@ -35,8 +35,8 @@ define([
             'change .list_selector':'selectorChanged',
             'click .data_column':'sortColumn', // 排序
             'click #btnSearch':'search', //根据关键字搜索
-            'click #btnDelete':'deleteUser', //删除用户
-            'click #btnEdit':'editUser' //编辑用户
+            'click #btnDelete':'deleteUser' //删除用户
+            //'click #btnEdit':'editUser' //编辑用户
         },
 
         // 初始化
@@ -98,6 +98,9 @@ define([
             //防止两重提交
             if (this.in_syncing) return;
             this.in_syncing = true;
+            if (!window.confirm("警告!，请确认是否继续？")) {
+                return;
+            }
             this.btnDelete.prop('disabled', true);
             this.btnDelete.addClass('disabled');
             this.undelegateEvents();

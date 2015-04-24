@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, render_to_response, get_object_or_404
 from django.template import RequestContext
@@ -76,7 +77,7 @@ def income_list_view(request):
     :return:
     """
     # 获取收入信息的queryset
-    queryset = Income.objects.filter()
+    queryset = Income.objects.filter().exclude(delete_flg=True)
 
     # 获取收入信息实例
     incomes = queryset
@@ -179,7 +180,7 @@ def income_delete_action(request):
         if key:
             pks.append(int(key))
 
-    User.objects.filter(id__in=pks).update(is_active=False)
+    Income.objects.filter(id__in=pks).update(delete_flg=True, update_datetime=datetime.now())
     return back_to_original_page(request, '/income/list/')
 
 # 用户信息编辑模块结束
@@ -258,7 +259,7 @@ def add_expend_action(request, user_id):
 def expend_list_view(request):
 
     # 获取收入信息的queryset
-    queryset = Expend.objects.filter()
+    queryset = Expend.objects.filter().exclude(delete_flg=True)
 
     # 获取收入信息实例
     expends = queryset
@@ -296,5 +297,27 @@ def expend_list_view(request):
         'expends': expends,
 
     })
+
+
+@login_required
+def expend_delete_action(request):
+    """
+    家庭支出信息action
+    :param request:
+    :return:
+    """
+    # 如果是家庭普通成员则报错
+    if check_role(request, ROLE_FAMILY_COMMON_USER):
+        raise PermissionDeniedError
+
+    pk = request.POST["pk"]
+    pks = []
+    for key in pk.split(','):
+        # if key and is_int(key):
+        if key:
+            pks.append(int(key))
+
+    Expend.objects.filter(id__in=pks).update(delete_flg=True, update_datetime=datetime.now())
+    return back_to_original_page(request, '/income/expend/list/')
 
 # 支出模块结束

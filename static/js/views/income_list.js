@@ -98,6 +98,9 @@ define([
             //防止两重提交
             if (this.in_syncing) return;
             this.in_syncing = true;
+            if (!window.confirm("警告!，请确认是否继续？")) {
+                return;
+            }
             this.btnDelete.prop('disabled', true);
             this.btnDelete.addClass('disabled');
             this.undelegateEvents();

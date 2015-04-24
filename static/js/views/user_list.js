@@ -121,6 +121,7 @@ define([
             $('#frmDeleteUser').submit();
         },
 
+
         // 编辑用户
         editUser:function() {
             var pk = $('.list_selector:checked').attr('pk');

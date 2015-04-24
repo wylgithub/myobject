@@ -137,7 +137,7 @@ class ExpendForm(ModelForm):
         # 家庭支出信息后端check开始
         if 'expend_type' in cleaned_data:
             expend_type = cleaned_data['expend_type']
-            if expend_type in u'' or (not expend_type.isdigit()):
+            if expend_type in u'' or (expend_type.isdigit()):
                 msg = u"请输入正确的支出类型(不可以全为数字!)"
                 self._errors['expend_type'] = self.error_class([msg])
 
@@ -146,7 +146,7 @@ class ExpendForm(ModelForm):
         if 'expend_amount' in cleaned_data:
             expend_data = cleaned_data['expend_amount']
 
-            if expend_data is u'' or (not expend_data.isdigit()):
+            if expend_data is u'':
                 msg = u'支出金额不可以为空,且必须为数字!'
                 self._errors['expend_amount'] = self.error_class([msg])
 
@@ -160,8 +160,6 @@ class ExpendForm(ModelForm):
                 self._errors['expend_account'] = self.error_class([msg])
 
                 del cleaned_data['expend_account']
-
-
         # 家庭支出信息后端check结束
         return cleaned_data
 
