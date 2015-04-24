@@ -26,7 +26,13 @@ urlpatterns = patterns('income.views',
     # 家庭编辑完成
 
     # 家庭支出信息编辑开始(只增加删除功能,编辑功能等有时间再做)
-    url(r'expend/delete/action/', 'expend_delete_action')
+    url(r'expend/delete/action/', 'expend_delete_action'),
     # 家庭支出信息编辑结束
 
+    # 家庭借入信息模块开始:
+    url(r'^borrow/add/(\d+)/$', 'add_borrow_view'),  # 添加借入明细view
+    url(r'^borrow/(\d+)/add/action/$', 'add_borrow_action'),  # 添加借入明细action
+    url(r'^borrow/list/$', 'borrow_list_view'),  # 借入信息一览view
+    url(r'^borrow/delete/action/$', 'borrow_delete_action'),  # 删除明细一览view
+    # 家庭借入信息模块结束:
 )

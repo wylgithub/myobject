@@ -31,8 +31,8 @@
                         <li active-by-url="\/expend\/add\/"><a href="/income/expend/add/{{ user.id }}/">支出记录</a></li>
                         <li class="divider"></li>
 {#                        <li active-by-url="\/income\/add\/"><a href="/income/add/">转账取款记录</a></li>#}
-                        <li active-by-url="\/income\/add\/"><a href="/income/add/">借入记录</a></li>
-                        <li active-by-url="\/income\/add\/"><a href="/income/add/">借出记录</a></li>
+                        <li active-by-url="\/borrow\/add\/"><a href="/income/borrow/add/{{ user.id }}/">借入记录</a></li>
+                        <li active-by-url="\/income\/add\/"><a href="/income/lend/add/{{ user.id }}">借出记录</a></li>
                     </ul>
                 </li>
             {% endif %}
@@ -50,7 +50,7 @@
                         <li active-by-url="\/income\/add\/"><a href="/income/expend/list/">支出历史查询</a></li>
 {#                        <li active-by-url="\/income\/add\/"><a href="/income/add/">转账历史查询</a></li>#}
                         <li class="divider"></li>
-                        <li active-by-url="\/income\/add\/"><a href="/income/add/">借入历史查询</a></li>
+                        <li active-by-url="\/borrow\/add\/"><a href="/income/borrow/list/">借入历史查询</a></li>
                         <li active-by-url="\/income\/add\/"><a href="/income/add/">借出历史查询</a></li>
                     </ul>
                 </li>

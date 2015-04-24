@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% load staticfiles %}
-{% block title %} - 收入明细一览{% endblock %}
+{% block title %} - 借入明细一览{% endblock %}
 {% block content %}
 
-    <input type="hidden" id="amd_module" value="{% static "js/views/income_list.js" %}"/>
+    <input type="hidden" id="amd_module" value="{% static "js/views/borrow_list.js" %}"/>
     <input type="hidden" id="total_count" value="{{ total_count }}"/>
 {% for key,value in query_params.items %}
     <input type="hidden" id="qs_{{ key }}" value="{{ value }}"/>
@@ -12,7 +12,7 @@
         <div class="page_header">
             <ul class="bc">
                 <li><a href="/">主页</a> <span class="divider">/</span></li>
-                <li class="active">收入明细一览</li>
+                <li class="active">借入明细一览</li>
             </ul>
             <form class="form-search search_box">
                 <div class="input-append">
@@ -28,7 +28,7 @@
                     您搜索的结果不存在，请确认后重试。
                 </div>
                 <div class="span12">
-                    <a class="btn btn-primary" href="/income/add/{{ user.id }}/">添加收入信息</a>
+                    <a class="btn btn-primary" href="/borrow/add/{{ user.id }}/">添加借入信息</a>
                 </div>
             </div>
         {% else %}
@@ -36,8 +36,8 @@
                 <div class="span4">
                     <div class="btn-toolbar">
                         <div class="btn-group">
-                            <a class="btn" id="btnNew" href="/income/add/{{ user.id }}/" title="添加"><i class="icon-plus"></i></a>
-                            <a class="btn disabled" id="btnEdit" title="修改"><i class="icon-edit"></i></a>
+                            <a class="btn" id="btnNew" href="/income/borrow/add/{{ user.id }}/" title="添加"><i class="icon-plus"></i></a>
+{#                            <a class="btn disabled" id="btnEdit" title="修改"><i class="icon-edit"></i></a>#}
                             <a class="btn disabled" id="btnDelete" title="删除"><i class="icon-trash"></i></a>
                         </div>
                     </div>
@@ -53,26 +53,32 @@
                             <thead>
                             <tr>
                                 <th class="check_column"><input type="checkbox" id="checkSelectAll"/></th>
-                                <th><a href="#" class="data_column" sort_key="ty">收入类型</a></th>
-                                <th><a href="#" class="data_column" sort_key="am">收入金额</a></th>
-                                <th><a href="#" class="data_column" sort_key="tm">添加时间</a></th>
-                                <th><a href="#" class="data_column" sort_key="hl">操作人员</a></th>
+                                <th><a href="#" class="data_column" sort_key="op">操作人员</a></th>
+                                <th><a href="#" class="data_column" sort_key="jr">借入款人</a></th>
+                                <th><a href="#" class="data_column" sort_key="jc">借出款人</a></th>
+                                <th><a href="#" class="data_column" sort_key="jj">借入金额</a></th>
+                                <th><a href="#" class="data_column" sort_key="ky">卡类余额</a></th>
+                                <th><a href="#" class="data_column" sort_key="jq">借入日期</a></th>
+                                <th><a href="#" class="data_column" sort_key="hq">预还日期</a></th>
                                 <th><a href="#" class="data_column" sort_key="mk">备&nbsp;&nbsp;注</a></th>
                             </tr>
                             </thead>
                             <tbody>
-                            {% for income in incomes %}
+                            {% for borrow in borrows %}
                                 <tr>
-                                    <td class="cell_center"><input type="checkbox" class="list_selector" pk="{{ income.id }}"/></td>
+                                    <td class="cell_center"><input type="checkbox" class="list_selector" pk="{{ borrow.id }}"/></td>
                                     <td>
-                                        <a href="/income/edit/{{ user.id }}/" class="btn-link edit_link">{{ income.income_type }}</a>
+                                        {{ borrow.handler }}
                                     </td>
-                                    <td>{{ income.income_amount }}</td>
-                                    <td>{{ income.create_datetime|date:"Y/m/d H:i:s" }}</td>
-                                    <td>{{ income.handler }}</td>
+                                    <td>{{ borrow.borrow_person }}</td>
+                                    <td>{{ borrow.lend_person }}</td>
+                                    <td>{{ borrow.borrow_amount }}</td>
+                                    <td>{{ borrow.balance }}</td>
+                                    <td>{{ borrow.borrow_datetime|date:"Y/m/d H:i:s" }}</td>
+                                    <td>{{ borrow.repay_datetime|date:"Y/m/d H:i:s" }}</td>
                                     <td>
-                                        <a href="javascript: void(0);" class="tip" data-toggle="tooltip" title="{{ income.remarks }}">
-                                            <div style="width: 140px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{ income.remarks }}</div>
+                                        <a href="javascript: void(0);" class="tip" data-toggle="tooltip" title="{{ borrow.remarks }}">
+                                            <div style="width: 140px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{ borrow.remarks }}</div>
                                         </a>
                                     </td>
                                 </tr>
@@ -95,7 +101,7 @@
             </div>
         {% endif %}
     </div>
-    <form action="/income/delete/action/" method="post" id="frmDeleteUser">
+    <form action="/income/borrow/delete/action/" method="post" id="frmDeleteUser">
         {% csrf_token %}
         <input type="hidden" name="pk" id="pk"/>
         <input type="hidden" name="redirect_url" id="redirect_url" value="{{ url_path }}"/>
