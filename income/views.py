@@ -1,17 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from datetime import datetime
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render, render_to_response, get_object_or_404
 from django.template import RequestContext
-from income.models import IncomeForm, Income, ExpendForm, Expend
-from user_account.models import User
+from income.models import IncomeForm, Income, ExpendForm, Expend, IncomeEditForm
+from user_account.models import User, UserForm
 from utility.base_view import back_to_original_page, get_list_params
 
 
 # 添加收入信息模块开始
-from utility.constant import DATE_INPUT_FORMAT_HYPHEN, DATE_INPUT_FORMAT_SLASH, DATE_INPUT_FORMAT_SLASH_TWO, \
-    DATE_INPUT_FORMAT_HYPHEN_DETAIL
-from utility.datetime_utility import get_now, to_datetime, get_today
+from utility.constant import DATE_INPUT_FORMAT_HYPHEN, DATE_INPUT_FORMAT_SLASH
+from utility.datetime_utility import get_today
+from utility.exception import PermissionDeniedError
+from utility.role_manager import check_role, ROLE_FAMILY_COMMON_USER, get_role_id
 
 
 @login_required
@@ -32,7 +34,7 @@ def add_income_view(request, user_id):
         'user_id': id,
         'username': user.full_name,
         'user_type': user_name,
-        'current_now': get_today().strftime(DATE_INPUT_FORMAT_HYPHEN_DETAIL),
+        'current_now': get_today().strftime(DATE_INPUT_FORMAT_HYPHEN),
     })
 
 
@@ -45,39 +47,25 @@ def add_income_action(request, user_id):
     """
     id = int(user_id)
 
-    form = IncomeForm(request.POST)
+    form = IncomeForm(request.POST, instance=Income())
 
-    # 获取用户名报讯到数据库
+    # 获取用户名保存到数据库
     user = User.objects.filter(id=id).get()
     # 信息登记人
     mark_name = user.full_name
 
     if form.is_valid():
+        form.instance.user_id = id
+        form.instance.create_datetime = request.POST['recode_date']
+        form.save()
 
-        # 将前端传入的时间格式化为日期
-        # get_add_date = to_date(request.POST['recode_date'], DATE_TIME_FORMATS)
-        get_add_date = request.POST['recode_date']
-        # 收入类型
-        income_type = request.POST['income_type']
-        # 收入金额:将前端传入的unicode金额类型转换成float型
-        income_amount = float(request.POST['income_amount'])
-        # 标识字段
-        remark = request.POST['remark']
-
-        Income.objects.create(income_type=income_type,
-                              create_datetime=get_add_date,
-                              income_amount=income_amount,
-                              remarks=remark,
-                              handler=mark_name,
-                              user_id=id,
-                              )
         return back_to_original_page(request, "/income/list/")
     else:
         return render_to_response("income/add_income.html", {
             'user_id': id,
             'form': form,
             'username': mark_name,
-            'current_now': get_today().strftime(DATE_INPUT_FORMAT_HYPHEN_DETAIL),
+            'current_now': get_today().strftime(DATE_INPUT_FORMAT_HYPHEN),
         }, context_instance=RequestContext(request))
 
 
@@ -89,7 +77,7 @@ def income_list_view(request):
     :return:
     """
     # 获取收入信息的queryset
-    queryset = Income.objects.filter()
+    queryset = Income.objects.filter().exclude(delete_flg=True)
 
     # 获取收入信息实例
     incomes = queryset
@@ -125,6 +113,77 @@ def income_list_view(request):
         'income': incomes,
 
     })
+
+
+# 用户信息编辑模块开始
+@login_required
+def income_edit_view(request, id):
+    """
+    用户信息编辑view
+    :param requrst:
+    :param id:
+    :return:
+    """
+    id = int(id)
+    user_income = get_object_or_404(Income, id=id)
+
+    form = IncomeForm(instance=user_income)
+
+    return render(request, "income/income_edit.html", {
+        "form": form,
+        "id": id,
+        "current_now": get_today().strftime(DATE_INPUT_FORMAT_HYPHEN),
+    })
+
+
+@login_required
+def income_edit_action(request):
+    """
+    用户信息action
+    :param request:
+    :return:
+    """
+    id = request.POST['id']
+
+    income = get_object_or_404(Income, id=id)
+
+    form = IncomeForm(request.POST, instance=income)
+    if form.is_valid():
+        # 获取更新时间
+        form.instance.update_datetime = request.POST['cleaned_data']
+        if not isinstance(form, IncomeEditForm):
+            income.save(update_fields=('income_type', 'income_amount', 'remarks', 'handler'))
+        return back_to_original_page(request, "/income/list/")
+    else:
+        return render(request, "income/income_edit.html", {
+            "form": form,
+            "id": id,
+            "current_now": get_today().strftime(DATE_INPUT_FORMAT_HYPHEN),
+        })
+
+
+@login_required
+def income_delete_action(request):
+    """
+    用户信息action
+    :param request:
+    :return:
+    """
+    # 如果是家庭普通成员则报错
+    if check_role(request, ROLE_FAMILY_COMMON_USER):
+        raise PermissionDeniedError
+
+    pk = request.POST["pk"]
+    pks = []
+    for key in pk.split(','):
+        # if key and is_int(key):
+        if key:
+            pks.append(int(key))
+
+    Income.objects.filter(id__in=pks).update(delete_flg=True, update_datetime=datetime.now())
+    return back_to_original_page(request, '/income/list/')
+
+# 用户信息编辑模块结束
 
 # 收入信息模块完成
 
@@ -200,7 +259,7 @@ def add_expend_action(request, user_id):
 def expend_list_view(request):
 
     # 获取收入信息的queryset
-    queryset = Expend.objects.filter()
+    queryset = Expend.objects.filter().exclude(delete_flg=True)
 
     # 获取收入信息实例
     expends = queryset
@@ -238,5 +297,27 @@ def expend_list_view(request):
         'expends': expends,
 
     })
+
+
+@login_required
+def expend_delete_action(request):
+    """
+    家庭支出信息action
+    :param request:
+    :return:
+    """
+    # 如果是家庭普通成员则报错
+    if check_role(request, ROLE_FAMILY_COMMON_USER):
+        raise PermissionDeniedError
+
+    pk = request.POST["pk"]
+    pks = []
+    for key in pk.split(','):
+        # if key and is_int(key):
+        if key:
+            pks.append(int(key))
+
+    Expend.objects.filter(id__in=pks).update(delete_flg=True, update_datetime=datetime.now())
+    return back_to_original_page(request, '/income/expend/list/')
 
 # 支出模块结束

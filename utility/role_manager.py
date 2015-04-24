@@ -61,3 +61,23 @@ def check_permission_allowed(request, id):
     if check_role(request, ROLE_FAMILY_COMMON_USER) and user.username != request.user.username:
         return False
     return True
+
+
+# 只有家庭管理员和系统管理员才有查看和修改普通成员的信息的权限
+def check_permission(request, id):
+    # 根据id获取用户
+    # user_id = int(id)
+    # user = get_object_or_404(User, id=user_id)
+    #
+    # # 获取用户角色名:
+    # role_name = None
+    # if user.groups.count() > 0:
+    #     role_name = user.groups.get().name
+    #
+    # # 获取用户所对应的id
+    # role_id = get_role_id(role_name) if role_name else None
+    #
+    # # 判断用户权限是否符合
+    # if check_role(request, ROLE_SYSADMIN) and (user.is_superuser or )
+
+    pass

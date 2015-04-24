@@ -1,7 +1,14 @@
+/**
+ * Created by wyl on 15-4-23.
+ */
 define([
     'require',
     'jquery',
-    'backbone'
+    'backbone',
+    'datepicker',
+    'datetimepicker',
+    'datepicker',
+    'datetimepickerCN',
 ], function (require, $, Backbone) {
     "use strict";
 
@@ -14,14 +21,13 @@ define([
         events:{
             'click .dropdownItem':'dropdownItem_click',
             'click #btnReturn':'return_to_prev_page',
-            'click #btnSave':'save'
+            'click #btnAdd':'save'
         },
 
         initialize:function () {
-            //var ru = $('#redirect_url');
-            //if (ru && ru.val() === '') {
-            //    $('#btnReturn').hide();
-            //}
+            $('#red_date').datepicker().on('changeDate', function(event) {
+                $(event.target).datepicker('hide');
+            });
         },
 
         save:function() {
@@ -30,13 +36,13 @@ define([
                 return;
             }
             this.in_syncing = true;
-            var txtPassword = $('#txtPassword');
+            var txtPassword = $('#regName');
             if (txtPassword.val() === '') {
                 txtPassword.prop('disabled', true);
             }
-            $('#btnSave').prop('disabled', true);
+            $('#btnAdd').prop('disabled', true);
 
-            $('#frmEditUser').submit();
+            $('#IncomeAdd').submit();
         },
 
         // 返回用户一览
@@ -44,7 +50,7 @@ define([
             var ru = $('#redirect_url');
             var url;
             if (!ru || ru.length === 0 || !ru.val()) {
-                url = '/user_account/list/';
+                url = '/income/list/';
             }else {
                 url = ru.val();
             }

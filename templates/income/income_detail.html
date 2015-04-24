@@ -36,7 +36,7 @@
                 <div class="span4">
                     <div class="btn-toolbar">
                         <div class="btn-group">
-                            <a class="btn" id="btnNew" href="/income/add/{{ user.id }}/" title="添加"><i class="icon-plus"></i></a>
+                            <a class="btn" id="btnNew" href="/income/edit/{{ user.id }}/" title="添加"><i class="icon-plus"></i></a>
                             <a class="btn disabled" id="btnEdit" title="修改"><i class="icon-edit"></i></a>、
                             <a class="btn disabled" id="btnDelete" title="删除"><i class="icon-trash"></i></a>
                         </div>
@@ -58,15 +58,21 @@
                                 <th><a href="#" class="data_column" sort_key="tm">添加时间</a></th>
                                 <th><a href="#" class="data_column" sort_key="hl">操作人员</a></th>
                                 <th><a href="#" class="data_column" sort_key="mk">备&nbsp;&nbsp;注</a></th>
-
                             </tr>
                             </thead>
                             <tbody>
                             {% for income in incomes %}
                                 <tr>
                                     <td class="cell_center"><input type="checkbox" class="list_selector" pk="{{ income.id }}"/></td>
-                                    <td>{{ income.income_type }}</td>
-                                    <td>{{ income.income_amount }}</td>
+                                    <td>
+                                        <a href="/income/edit/{{ user.id }}/" class="btn-link edit_link">{{ income.income_type }}</a>
+                                    </td>
+{#                                    <td>{{ income.income_amount }}</td>#}
+                                    <td class="cell_center">
+                                        <a href="javascript: void(0);" class="password_reset" data-type="password"
+                                            data-original-title="重置密码" data-placeholder="新密码..." data-pk="{{ income.income_amount }}">
+                                        </a>
+                                    </td>
                                     <td>{{ income.create_datetime|date:"Y/m/d H:i:s" }}</td>
                                     <td>{{ income.handler }}</td>
                                     <td>
@@ -94,7 +100,7 @@
             </div>
         {% endif %}
     </div>
-    <form action="/account/delete/action/" method="post" id="frmDeleteUser">
+    <form action="/income/delete/action/" method="post" id="frmDeleteUser">
         {% csrf_token %}
         <input type="hidden" name="pk" id="pk"/>
         <input type="hidden" name="redirect_url" id="redirect_url" value="{{ url_path }}"/>

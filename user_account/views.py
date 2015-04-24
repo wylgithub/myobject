@@ -221,9 +221,6 @@ def user_view_view(request, id):
     """
     查看用户视图
     """
-    if not check_permission_allowed(request, id):
-        raise PermissionDeniedError
-
     user = get_object_or_404(User, id=id)
     role_name = None
     if user.groups.count() > 0:
@@ -246,8 +243,6 @@ def user_delete_action(request):
     if check_role(request, ROLE_FAMILY_COMMON_USER):
         raise PermissionDeniedError
 
-    # if not request.POST.has_key('pk'):
-    #     raise InvalidPostDataError()
     pk = request.POST["pk"]
     pks = []
     for key in pk.split(','):
@@ -264,9 +259,6 @@ def user_edit_view(request, id):
     """
     编辑用户视图
     """
-    if not check_permission_allowed(request, id):
-        raise PermissionDeniedError
-
     user = get_object_or_404(User, id=id)
 
     form = UserForm(instance=user)
@@ -279,7 +271,6 @@ def user_edit_view(request, id):
         "id": id,
         "role": get_role_id(role_name),
         "role_name": role_name,
-        # "update_timestamp": crypt.encryt(unicode(user.update_datetime))
     })
 
 
@@ -292,12 +283,9 @@ def user_edit_action(request):
     #     raise InvalidPostDataError()
     id = request.POST['id']
 
-    if not check_permission_allowed(request, id):
-        raise PermissionDeniedError
-
     user = get_object_or_404(User, id=id)
 
-    if request.POST.has_key('password'):
+    if request.POST. has_key('password'):
         form = UserForm(request.POST, instance=user)
     else:
         form = UserEditForm(request.POST, instance=user)
