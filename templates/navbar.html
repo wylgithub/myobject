@@ -30,14 +30,12 @@
                         <li active-by-url="\/income\/add\/"><a href="/income/add/{{ user.id }}/">收入记录</a></li>
                         <li active-by-url="\/expend\/add\/"><a href="/income/expend/add/{{ user.id }}/">支出记录</a></li>
                         <li class="divider"></li>
-{#                        <li active-by-url="\/income\/add\/"><a href="/income/add/">转账取款记录</a></li>#}
                         <li active-by-url="\/borrow\/add\/"><a href="/income/borrow/add/{{ user.id }}/">借入记录</a></li>
                         <li active-by-url="\/lend\/add\/"><a href="/income/lend/add/{{ user.id }}/">借出记录</a></li>
                     </ul>
                 </li>
             {% endif %}
             </ul>
-
             <ul class="nav nav-pills">
             {% if not user.is_superuser %}
                 <li class="dropdown" id="menuPay" active-by-url="\/income\/">
@@ -46,26 +44,30 @@
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
-                        <li active-by-url="\/income\/add\/"><a href="/income/list/">收入历史查询</a></li>
-                        <li active-by-url="\/income\/add\/"><a href="/income/expend/list/">支出历史查询</a></li>
-{#                        <li active-by-url="\/income\/add\/"><a href="/income/add/">转账历史查询</a></li>#}
+                        <li active-by-url="\/income\/add\/"><a href="/income/list/">收入历史一览</a></li>
+                        <li active-by-url="\/income\/add\/"><a href="/income/expend/list/">支出历史一览</a></li>
                         <li class="divider"></li>
-                        <li active-by-url="\/borrow\/add\/"><a href="/income/borrow/list/">借入历史查询</a></li>
-                        <li active-by-url="\/income\/add\/"><a href="/income/lend/list/">借出历史查询</a></li>
+                        <li active-by-url="\/borrow\/add\/"><a href="/income/borrow/list/">借入历史一览</a></li>
+                        <li active-by-url="\/lend\/add\/"><a href="/income/lend/list/">借出历史一览</a></li>
                     </ul>
                 </li>
             {% endif %}
             </ul>
             <ul class="nav nav-pills">
             {% if not user.is_superuser %}
-                <li class="dropdown" id="menuInvest" active-by-url="\/income\/">
+                <li class="dropdown" id="menuInvest" active-by-url="\/plan\/">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#menuInvest">
                         家庭流水计划
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
-                        <li active-by-url="\/income\/add\/"><a href="/income/add/">添加投资明细</a></li>
-                        <li active-by-url="\/income\/list\/"><a href="/income/list/">投资明细一览</a></li>
+{#                        <li active-by-url="\/plan/week\/"><a href="/plan/week/add/{{ user.id }}/">周流水计划</a></li>#}
+                        <li active-by-url="\/plan/month\/"><a href="/plan/month/add/{{ user.id }}/">月流水计划</a></li>
+                        <li active-by-url="\/plan/year\/"><a href="/plan/year/add/{{ user.id }}/">年流水计划</a></li>
+                        <li class="divider"></li>
+{#                        <li active-by-url="\/plan/week\/"><a href="/plan/week/list/">周流水计划查询</a></li>#}
+                        <li active-by-url="\/plan/month\/"><a href="/plan/month/list/">月流水计划一览</a></li>
+                        <li active-by-url="\/plan/year\/"><a href="/plan/year/list/">年流水计划一览</a></li>
                     </ul>
                 </li>
             {% endif %}
