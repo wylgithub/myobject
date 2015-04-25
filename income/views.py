@@ -214,7 +214,7 @@ def add_expend_view(request, user_id):
         'user_id': id,
         'username': username,
         'identity': user_identity,
-        'current_now': get_today().strftime(DATE_INPUT_FORMAT_SLASH),
+        'current_now': get_today().strftime(DATE_INPUT_FORMAT_HYPHEN),
     })
 
 
@@ -247,7 +247,7 @@ def add_expend_action(request, user_id):
             'form': form,
             'user_id': id,
             'username': username,
-            'current_now': get_today().strftime(DATE_INPUT_FORMAT_SLASH),
+            'current_now': get_today().strftime(DATE_INPUT_FORMAT_HYPHEN),
         })
 
 
