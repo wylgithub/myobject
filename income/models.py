@@ -15,7 +15,7 @@ class Income(models.Model):
     """
     user = models.ForeignKey(User, verbose_name=u"家庭收入管理信息登记人", blank=True, null=True, related_name='user_income')
     income_type = models.CharField(u"家庭收入类型", max_length=10)  # 家庭收入类型字段,也就是收入来源
-    create_datetime = models.DateTimeField(auto_now_add=True)  # 添加时间
+    create_datetime = models.DateTimeField()  # 添加时间
     update_datetime = models.DateTimeField(auto_now=True)  # 更新日期
     income_amount = models.DecimalField(u'收入金额', max_digits=8, decimal_places=2, default=0)  #收入金额
     remarks = models.TextField(u"备注")  # 备注的添加用于描述这笔收入的具体来源和数量描述
@@ -65,8 +65,8 @@ class IncomeForm(ModelForm):
                 del cleaned_data['income_amount']
 
         # 日期是否合适:
-        if 'recode_date' in cleaned_data:
-            r_date = cleaned_data['recode_date']
+        if 'create_datetime' in cleaned_data:
+            r_date = cleaned_data['create_datetime']
             # 获取当前时间date类型
             today = datetime.date.today()
 
@@ -74,9 +74,9 @@ class IncomeForm(ModelForm):
             todate = r_date.date()
             if r_date is u'' or todate > today:
                 msg = u'请填写记录撰写时间(时间必须小于等于当前日期)!'
-                self._errors['recode_date'] = self.error_class([msg])
+                self._errors['create_datetime'] = self.error_class([msg])
 
-                del cleaned_data['recode_date']
+                del cleaned_data['create_datetime']
 
         # 判断是否有备注:这个备注可有可无,因为不是每一笔收入有要写入备注,
         # if 'remark' in cleaned_data:
@@ -95,7 +95,7 @@ class IncomeForm(ModelForm):
 
     class Meta:
         model = Income
-        fields = ('income_type', 'income_amount', 'remarks', 'handler')
+        fields = ('income_type', 'income_amount', 'remarks', 'handler', 'create_datetime')
 
 
 class IncomeEditForm(ModelForm):
@@ -115,7 +115,7 @@ class Expend(models.Model):
     expend_account = models.CharField(u"家庭支出交易账户", max_length=50)  # 家庭支出交易账户
     expend_amount = models.DecimalField(u'支出金额', max_digits=8, decimal_places=2, default=0)  #支出金额
     balance = models.DecimalField(u'账户余额', max_digits=10, decimal_places=2, default=0)  #账户余额
-    create_datetime = models.DateTimeField(u'录入时间', auto_now_add=True)  # 添加支出信息时间
+    create_datetime = models.DateTimeField(u'录入时间')  # 添加支出信息时间
     update_datetime = models.DateTimeField(u'更新时间', auto_now=True)  # 支出信息更新日期
     remarks = models.TextField(u"备注", max_length=500)  # 备注的添加用于描述这笔收入的具体来源和数量描述
     handler = models.CharField(u"添加支出信息的处理者", max_length=255)  # 处理者:添加支出信息的人
@@ -129,8 +129,6 @@ class ExpendForm(ModelForm):
     """
     家庭支出信息表单提交Form
     """
-    expend_datetime = models.DateTimeField()
-
     def clean(self):
         cleaned_data = super(ExpendForm, self).clean()
 
@@ -160,6 +158,18 @@ class ExpendForm(ModelForm):
                 self._errors['expend_account'] = self.error_class([msg])
 
                 del cleaned_data['expend_account']
+
+        if 'create_datetime' in cleaned_data:
+            create_datetime = cleaned_data['create_datetime']
+
+            c_date = create_datetime.date()
+            n_date = datetime.date.today()
+            if create_datetime is u"" or c_date > n_date:
+                msg = u"请填写正确的支出时间(支出时间必须小于当前时间!)!"
+
+                self._errors['create_datetime'] = self.error_class([msg])
+
+                del cleaned_data['create_datetime']
         # 家庭支出信息后端check结束
         return cleaned_data
 
@@ -168,7 +178,7 @@ class ExpendForm(ModelForm):
 
     class Meta:
         model = Expend
-        fields = ('expend_type', 'expend_account', 'expend_amount', 'balance', 'remarks', 'handler',)
+        fields = ('expend_type', 'expend_account', 'expend_amount', 'balance', 'remarks', 'handler', 'create_datetime')
 
 
 class Borrow(models.Model):
@@ -234,25 +244,29 @@ class BorrowForm(ModelForm):
 
         if 'borrow_datetime' in cleaned_data:
             borrow_datetime = cleaned_data['borrow_datetime']
-            if borrow_datetime is u"":
-                msg = u"borrow_datetime!"
+            # 前端传过来的时间,将其格式化为日期格式
+            b_date = borrow_datetime.date()
+
+            # 获取当前日期
+            n_date = datetime.date.today()
+
+            if borrow_datetime is u"" or b_date > n_date:
+                msg = u"请选择有效的借入时间(借入时间不可以大于当前时间)!!"
                 self._errors['borrow_datetime'] = self.error_class([msg])
 
                 del cleaned_data['borrow_datetime']
 
         if 'repay_datetime' in cleaned_data:
             repay_datetime = cleaned_data['repay_datetime']
-            if repay_datetime is u"":
-                msg = u"预计还款日期不可以为空!"
+            # 将前端传过来的时间格式化为日期类型
             r_date = repay_datetime.date()
-            if 'borrow_datetime' in cleaned_data:
-                borrow_datetime = cleaned_data['borrow_datetime']
-                b_date = borrow_datetime.date()
 
-                if b_date <= r_date:
-                    msg = u"还款日期必须比借款日期晚!"
+            # 获取当前时间
+            now_date = datetime.date.today()
+            if repay_datetime is u"" or r_date <= now_date:
+                msg = u"还款日期必须比借款日期晚!"
+                self._errors['repay_datetime'] = self.error_class([msg])
 
-                    self._errors['repay_datetime'] = self.error_class([msg])
                 del cleaned_data['repay_datetime']
 
         return cleaned_data
@@ -286,5 +300,83 @@ class Lend(models.Model):
     class Meta:
         db_table = 'graduation_design_lend'
 
+
+class LendForm(ModelForm):
+    """
+    家庭借出信息表单提交Form
+    """
+    def clean(self):
+        cleaned_data = super(LendForm, self).clean()
+        # 家庭借入信息后端check开始
+        if 'borrow_person' in cleaned_data:
+            borrow_person = cleaned_data['borrow_person']
+            if borrow_person is u"":
+                msg = u"借款人不可以为空,默认为当前登录用户!"
+                self._errors['borrow_person'] = self.error_class([msg])
+
+                del cleaned_data['borrow_person']
+
+        if 'lend_person' in cleaned_data:
+            lend_person = cleaned_data['lend_person']
+            if lend_person is u"" or lend_person.isdigit():
+                msg = u"借出款人不可以为空,且必须为有效的名字!!"
+                self._errors['lend_person'] = self.error_class([msg])
+
+                del cleaned_data['lend_person']
+
+        if 'lend_amount' in cleaned_data:
+            lend_amount = cleaned_data['lend_amount']
+            amount = float(lend_amount)
+            if lend_amount is u"" or amount <= 0:
+                msg = u"请填入有效的借出金额(例如:100,单位默认为元)!!"
+                self._errors['borrow_amount'] = self.error_class([msg])
+
+                del cleaned_data['lend_amount']
+
+        if 'balance' in cleaned_data:
+            balance = cleaned_data['balance']
+            amount = float(balance)
+            if balance is u"" or amount < 0:
+                msg = u"余额再怎么少,也不可能小雨0吧!"
+                self._errors['balance'] = self.error_class([msg])
+
+                del cleaned_data['balance']
+
+        if 'lend_datetime' in cleaned_data:
+            lend_datetime = cleaned_data['lend_datetime']
+            # 前端传过来的时间,将其格式化为日期格式
+            b_date = lend_datetime.date()
+            # 获取当前日期
+            n_date = datetime.date.today()
+
+            if lend_datetime is u"" or b_date > n_date:
+                msg = u"请选择有效的借入时间(借出时间不可以大于当前时间)!!"
+                self._errors['lend_datetime'] = self.error_class([msg])
+
+                del cleaned_data['lend_datetime']
+
+        if 'pay_datetime' in cleaned_data:
+            pay_datetime = cleaned_data['pay_datetime']
+            p_date = pay_datetime.date()
+
+            # 获取当前时间
+            n_date = datetime.date.today()
+
+            if pay_datetime is u"" or p_date <= n_date:
+                msg = u"请填写合理的还款日期(还款日期必须小于等于当前时间!)!!"
+                self._errors['pay_datetime'] = self.error_class([msg])
+
+                del cleaned_data['pay_datetime']
+
+        return cleaned_data
+        # 家庭借入信息后端check结束
+
+    def __init__(self, *args, **kwargs):
+        super(LendForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Lend
+        fields = ('lend_amount', 'balance', 'borrow_person', 'lend_person', 'pay_datetime',
+                  'lend_datetime', 'remarks')
 
 

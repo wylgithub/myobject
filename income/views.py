@@ -4,7 +4,7 @@ from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, render_to_response, get_object_or_404
 from django.template import RequestContext
-from income.models import IncomeForm, Income, ExpendForm, Expend, IncomeEditForm, BorrowForm, Borrow
+from income.models import IncomeForm, Income, ExpendForm, Expend, IncomeEditForm, BorrowForm, Borrow, LendForm, Lend
 from user_account.models import User, UserForm
 from utility.base_view import back_to_original_page, get_list_params
 
@@ -56,7 +56,7 @@ def add_income_action(request, user_id):
 
     if form.is_valid():
         form.instance.user_id = id
-        form.instance.create_datetime = request.POST['recode_date']
+        # form.instance.create_datetime = request.POST['recode_date']
         form.save()
 
         return back_to_original_page(request, "/income/list/")
@@ -372,7 +372,7 @@ def add_borrow_action(request, user_id):
             'form': form,
             'user_id': id,
             'username': username,
-            'current_now': get_today().strftime(DATE_INPUT_FORMAT_SLASH),
+            'current_now': get_today().strftime(DATE_INPUT_FORMAT_HYPHEN),
         })
 
 
@@ -446,3 +446,133 @@ def borrow_delete_action(request):
     return back_to_original_page(request, '/income/borrow/list/')
 
 # 家庭借入信息模块结束
+
+
+# 家庭借出信息模块开始
+@login_required
+def add_lend_view(request, user_id):
+    """
+    添加借出明细view
+    :param request:
+    :param user_id:
+    :return:
+    """
+    id = int(user_id)
+    user = User.objects.filter(id=id).get()
+
+    user_name = u''
+    if user.groups.count() > 0:
+        user_name = user.groups.get().name
+
+    return render(request, "income/add_lend.html", {
+        'user_id': id,
+        'username': user.full_name,
+        'user_type': user_name,
+        'current_now': get_today().strftime(DATE_INPUT_FORMAT_HYPHEN),
+    })
+
+
+
+@login_required
+def add_lend_action(request, user_id):
+    """
+    添加借出信息action
+    :param request:
+    :param user_id:
+    :return:
+    """
+    # 将登录用户id进行格式化
+    id = int(user_id)
+    user = User.objects.filter(id=id).get()
+
+    # 获取登录人姓名
+    username = user.full_name
+    # 获取前端提交的信息
+    form = LendForm(request.POST, instance=Lend())
+
+    if form.is_valid():
+        # 将用户id保存到user_id字段
+        form.instance.user_id = id
+        form.instance.handler = username
+        form.save()
+
+        return back_to_original_page(request, "/income/lend/list/")
+    else:
+        return render(request, "income/add_lend.html", {
+            'form': form,
+            'user_id': id,
+            'username': username,
+            'current_now': get_today().strftime(DATE_INPUT_FORMAT_HYPHEN),
+        })
+
+
+@login_required
+def lend_list_view(request):
+    """
+    收入明细一览表
+    :param request:
+    :return:
+    """
+    # 获取收入信息的queryset
+    queryset = Lend.objects.filter().exclude(delete_flg=True)
+
+    # 获取收入信息实例
+    lends = queryset
+
+    # 排序
+    params = get_list_params(request)
+
+    order_dict = {
+        u"op": "handler",
+        u"jr": "lend_person",
+        u"jc": "borrow_person",
+        u"jj": "lend_amount",
+        u"ky": "balance",
+        u"jq": "lend_datetime",
+        u"hq": "pay_datetime",
+        u"mk": "remarks",
+    }
+
+    # 搜索条件
+    if params['query']:
+        queryset = queryset.filter(lend_amount__contains=params['query'])
+
+    # 排序
+    if not params['order_field'] or not order_dict. has_key(params['order_field']):
+        params['order_field'] = 'jj'
+        params['order_direction'] = ''
+
+    queryset = queryset.order_by("%s%s" % (params['order_direction'], order_dict[params['order_field']]))
+    total_count = queryset.count()
+
+    return render(request, "income/lend_list.html", {
+        'lends': queryset[params['from']: params['to']],
+        'query_params': params,
+        'need_pagination': params['limit'] < total_count,
+        'total_count': total_count,
+        'lend': lends,
+
+    })
+
+
+@login_required
+def lend_delete_action(request):
+    """
+    家庭借入信息删除action
+    :param request:
+    :return:
+    """
+    # 如果是家庭普通成员则报错
+    if check_role(request, ROLE_FAMILY_COMMON_USER):
+        raise PermissionDeniedError
+
+    pk = request.POST["pk"]
+    pks = []
+    for key in pk.split(','):
+        if key:
+            pks.append(int(key))
+
+    Lend.objects.filter(id__in=pks).update(delete_flg=True, update_datetime=datetime.now())
+    return back_to_original_page(request, '/income/lend/list/')
+
+# 家庭借出信息模块结束
