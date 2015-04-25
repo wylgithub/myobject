@@ -5,7 +5,7 @@ from django import forms
 from django.db import models
 import datetime
 
-from django.forms import Form, ModelForm
+from django.forms import ModelForm
 from user_account.models import User
 
 
@@ -254,7 +254,6 @@ class BorrowForm(ModelForm):
 
                     self._errors['repay_datetime'] = self.error_class([msg])
                 del cleaned_data['repay_datetime']
-
 
         return cleaned_data
         # 家庭借入信息后端check结束
