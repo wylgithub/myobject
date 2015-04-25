@@ -131,6 +131,7 @@ INSTALLED_APPS = (
     'user_account',
     'income',   # 收入app
     'stock',    # 股票交易
+    'plan',     # 流水计划
     # 'deposit',
     # 'Transfer_withdrawal',
 

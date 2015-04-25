@@ -15,4 +15,5 @@ urlpatterns = patterns('',
 
     url(r'^user_account/', include('user_account.urls')),
     url(r'^income/', include('income.urls')),
+    url(r'^plan/', include('plan.urls')),
 )
