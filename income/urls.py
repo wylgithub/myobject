@@ -35,4 +35,13 @@ urlpatterns = patterns('income.views',
     url(r'^borrow/list/$', 'borrow_list_view'),  # 借入信息一览view
     url(r'^borrow/delete/action/$', 'borrow_delete_action'),  # 删除明细一览view
     # 家庭借入信息模块结束:
+
+
+    # 家庭借出信息模块开始
+    url(r'^lend/add/(\d+)/$', 'add_lend_view'),  # 添加借出明细view
+    url(r'^lend/(\d+)/add/action/$', 'add_lend_action'),  # 添加借出明细action
+    url(r'^lend/list/$', 'lend_list_view'),  # 借出信息一览view
+    url(r'^lend/delete/action/$', 'lend_delete_action'),  # 删除明细一览view
+    # 家庭借出信息模块结束
+
 )

@@ -58,11 +58,11 @@
                     <div class="controls">
                         <div class="input-append date" id="red_date" data-date="{{ current_now }}" data-date-format="yyyy-mm-dd">
                             <input class="span2 highlight" id="r_date"
-                                  size="16" type="text" name="recode_date" value="{{ current_now }}" maxlength="10" readonly/>
+                                  size="16" type="text" name="create_datetime" value="{{ current_now }}" maxlength="10" readonly/>
                             <span class="add-on"><i class="icon-calendar"></i></span>
                         </div>
-                        {% if form.recode_date.errors %}
-                            {% with form.recode_date.errors|first as error %}
+                        {% if form.create_datetime.errors %}
+                            {% with form.create_datetime.errors|first as error %}
                                 <br/>
                                 <span class="error_message">{{ error }}</span>
                             {% endwith %}
