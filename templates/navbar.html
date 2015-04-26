@@ -91,17 +91,17 @@
 
              <ul class="nav nav-pills">
             {% if not user.is_superuser %}
-                <li class="dropdown" id="menuLend" active-by-url="\/income\/">
+                <li class="dropdown" id="menuLend" active-by-url="\/stock\/">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#menuLend">
                         个人理财管理
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
-                        <li active-by-url="\/income\/add\/"><a href="/income/add/">股票交易记录</a></li>
-                        <li active-by-url="\/income\/add\/"><a href="/income/add/">基金交易记录</a></li>
-                        <li active-by-url="\/income\/add\/"><a href="/income/add/">债券交易记录</a></li>
-                        <li active-by-url="\/income\/add\/"><a href="/income/add/">白银交易记录</a></li>
-                        <li active-by-url="\/income\/add\/"><a href="/income/add/">黄金交易记录</a></li>
+                        <li active-by-url="\/stock\/personal\/"><a href="/stock/personal/financial/{{ user.id }}/">股票交易记录</a></li>
+{#                        <li active-by-url="\/income\/add\/"><a href="/income/add/">基金交易记录</a></li>#}
+{#                        <li active-by-url="\/income\/add\/"><a href="/income/add/">债券交易记录</a></li>#}
+{#                        <li active-by-url="\/income\/add\/"><a href="/income/add/">白银交易记录</a></li>#}
+{#                        <li active-by-url="\/income\/add\/"><a href="/income/add/">黄金交易记录</a></li>#}
                     </ul>
                 </li>
             {% endif %}

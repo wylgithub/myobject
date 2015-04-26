@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% load extfilters %}
+{% load staticfiles %}
+{% block title %} - 个人理财{% endblock %}
+{% block include_css %}
+    <link href="{{ STATIC_URL }}css/bootstrap-datetimepicker.min.css" rel="stylesheet"/>
+{% endblock %}
+{% block content %}
+    <input type="hidden" id="amd_module" value="{% static "js/views/stock.js" %}"/>
+    <div class="container" style="margin-top:60px;">
+        <div class="page_header">
+            <ul class="bc">
+                <li><a href="/">主页</a> <span class="divider">/</span></li>
+                <li class="active">个人理财</li>
+            </ul>
+        </div>
+        <div class="row">
+            <div class="span12">
+                    <div class="well well-large">
+                        <div class="tabbable tabs-left" id="id_tabs">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="#tab_info" data-toggle="tab">个人理财概述<i class="icon-chevron-right"></i></a></li>
+                                <li><a href="#tab_job" data-toggle="tab">股票信息添加<i class="icon-chevron-right"></i></a></li>
+                            </ul>
+
+                            <div class="tab-content" id="id_contents">
+                                <div class="tab-pane fade active in" id="tab_info">
+
+                                </div>
+                                <div class="tab-pane fade " id="tab_job">
+                                    <div id="jobList">
+                                    {% if stock_count == 0 %}
+                                        <div class="row">
+                                            <div class="span8 alert alert-block" style="margin-left: 120px">
+                                                <h4>注意!</h4>
+                                                还未添加任何工作经历
+                                                    <br />
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1), 添加： 逐条添加，每一次只能生成一条工作经历信息；
+                                            </div>
+                                            <div class="span8" style="margin-left: 120px">
+                                                <a class="btn btn-primary btn-small job_edit" href="#" data-form="/stock/personal/{{ id }}/stock/add/">添加</a>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <div class="row">
+                                            <div class="span4" style="margin-left: 120px">
+                                                <div class="btn-toolbar">
+                                                    <div class="btn-group">
+                                                        <a class="btn" id="btnNew" data-toggle="dropdown" href="#"><i class="icon-plus"></i></a>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a class="job_edit" href="#" data-form="/stock/personal/{{ id }}/stock/add/">添加</a></li>
+                                                        </ul>
+                                                        <a class="btn disabled" id="btnDelete"><i class="icon-trash"></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="span4" style="text-align: right;padding-top: 20px;">
+                                                <span class="label">共{{ stock_count }}条信息</span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="span8" style="margin-left: 120px">
+                                                <div class="search_result_list">
+                                                    <table class="table table-bordered table-hover">
+                                                        <thead>
+                                                        <tr>
+                                                            <th class="check_column" style="vertical-align:middle"><input type="checkbox" id="checkSelectAll"/></th>
+                                                            <th style="vertical-align:middle">操作人员</th>
+                                                            <th style="vertical-align:middle">股票名称</th>
+                                                            <th style="vertical-align:middle">股票代号</th>
+                                                            <th style="vertical-align:middle">买入手数</th>
+                                                            <th style="vertical-align:middle">买入价格</th>
+                                                            <th style="vertical-align:middle">预卖价格</th>
+                                                            <th style="vertical-align:middle">止损价格</th>
+                                                            <th style="vertical-align:middle">预计收益</th>
+                                                            <th style="vertical-align:middle">买入日期</th>
+                                                            <th style="vertical-align:middle">卖出日期</th>
+                                                            <th style="vertical-align:middle">备注信息</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {% for s in stock_list %}
+                                                            <tr>
+                                                                <td class="cell_center"><input type="checkbox" class="list_selector" pk="{{ s.id }}"/></td>
+                                                                <td class="cell_center">{{ s.handler }}</td>
+                                                                <td class="cell_center">{{ s.stock_name }}</td>
+                                                                <td class="cell_center">{{ s.stock_label }}</td>
+                                                                <td class="cell_center">{{ s.buy_amount }}</td>
+                                                                <td class="cell_center">{{ s.buy_price }}</td>
+                                                                <td class="cell_center">{{ s.sold_price }}</td>
+                                                                <td class="cell_center">{{ s.stop_lose_price }}</td>
+                                                                <td class="cell_center">{{ s.earn }}</td>
+                                                                <td class="cell_center">{{ s.buy_date }}</td>
+                                                                <td class="cell_center">{{ s.sold_date }}</td>
+{#                                                                <td class="cell_center">#}
+{#                                                                    <a class="btn-link job_edit" href="#" data-form="/information/personal/{{ id }}/job/edit/{{ job.id }}/">{{ job.company }}</a>#}
+{#                                                                </td>#}
+                                                                <td class="cell_center">{{ s.remarks }}</td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+        <div class="modal hide fade" id="jobFormModal"></div>
+    </div>
+    <form action="/information/personal/{{ id }}/job/delete/action/" method="post" id="frm_jobList">
+        {% csrf_token %}
+        <input type="hidden" name="job_pks" id="id_job_pks" value=""/>
+    </form>
+{% endblock %}
