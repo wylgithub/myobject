@@ -175,3 +175,5 @@ LOGIN_URL = '/user_account/login/'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 DATE_INPUT_FORMATS = ('%Y/%m/%d',)
 DATE_FORMAT = 'Y/m/d'
+# DATETIME_INPUT_FORMATS = ('%Y/%m/%d %H:%M', '%Y/%m/%d %H:%M:%S', '%Y-%m-%d %H:%M', '%Y-%m-%d %H:%M:%S')
+# DATETIME_FORMAT = 'Y-m-d hh:mm'

@@ -20,7 +20,10 @@
                 <div class="control-group">
                     <label class="control-label" for="regName">操作人员</label>
                     <div class="controls">
-                        <input type="text" id="regName" name="handler" class="highlight" maxlength="30" value="{{ username }}" readonly/>
+                        <div class="input-prepend">
+                            <span class="add-on"><i class="icon-user"></i></span>
+                            <input type="text" id="regName" name="handler" class="highlight span2" maxlength="30" value="{{ username }}" readonly/>
+                        </div>
                     </div>
                     {% if form.handler.errors %}
                         {% with form.handler.errors|first as error %}
@@ -32,7 +35,10 @@
                 <div class="control-group">
                     <label class="control-label" for="incomeType">支出类型</label>
                     <div class="controls">
-                        <input type="text" class="highlight" name="expend_type" id="incomeType" maxlength="20" value="{{ form.expend_type.value }}"/>
+                        <div class="input-prepend">
+                            <span class="add-on"><i class="icon-star-empty"></i></span>
+                            <input type="text" class="highlight span2" name="expend_type" id="incomeType" maxlength="20" value="{{ form.expend_type.value }}"/>
+                        </div>
                         {% if form.expend_type.errors %}
                             {% with form.expend_type.errors|first as error %}
                                 <br/>
@@ -44,7 +50,10 @@
                 <div class="control-group">
                     <label class="control-label" for="incomeAmount">支出金额</label>
                     <div class="controls">
-                        <input type="text" class="highlight" name="expend_amount" id="incomeAmount" maxlength="20" value="{{ form.expend_amount.value }}"/>
+                        <div class="input-prepend">
+                            <span class="add-on">￥</span>
+                            <input type="text" class="highlight span2" name="expend_amount" id="incomeAmount" maxlength="20" value="{{ form.expend_amount.value }}"/>
+                        </div>
                         {% if form.expend_amount.errors %}
                             {% with form.expend_amount.errors|first as error %}
                                 <br/>
@@ -56,7 +65,11 @@
                 <div class="control-group">
                     <label class="control-label" for="incomeType">支出账户</label>
                     <div class="controls">
-                        <input type="text" class="highlight" name="expend_account" id="incomeType" maxlength="20" value="{{ form.expend_account.value }}"/>
+                        <div class="input-prepend">
+                            <span class="add-on"><i class="icon-home"></i></span>
+                            <input type="text" class="highlight span2" name="expend_account" id="incomeType" maxlength="20" value="{{ form.expend_account.value }}"/>
+                        </div>
+
                         {% if form.expend_account.errors %}
                             {% with form.expend_account.errors|first as error %}
                                 <br/>
@@ -68,7 +81,10 @@
                 <div class="control-group">
                     <label class="control-label" for="incomeType">账户余额</label>
                     <div class="controls">
-                        <input type="text" class="highlight" name="balance" id="incomeType" maxlength="20" value="{{ form.balance.value }}"/>
+                        <div class="input-prepend">
+                            <span class="add-on">￥</span>
+                            <input type="text" class="highlight span2" name="balance" id="incomeType" maxlength="20" value="{{ form.balance.value }}"/>
+                        </div>
                         {% if form.balance.errors %}
                             {% with form.balance.errors|first as error %}
                                 <br/>

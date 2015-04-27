@@ -1,5 +1,6 @@
 # !/usr/bin/env python
 # -*- coding: utf-8 -*-
+from datetime import date, datetime
 
 from django import template
 from django.db import connection
@@ -30,3 +31,19 @@ def in_group(user, groups):
     """
     group_list = force_unicode(groups).split(',')
     return bool(user.groups.filter(name__in=group_list).values('name'))
+
+
+@register.filter(name='format_date')
+def format_date(value):
+    if isinstance(value, date):
+        return value.strftime(settings.DATE_INPUT_FORMATS[1])
+    else:
+        return value
+
+
+@register.filter(name='format_datetime')
+def format_datetime(value):
+    if isinstance(value, datetime):
+        return value.strftime(settings.DATETIME_INPUT_FORMATS[1])
+    else:
+        return value

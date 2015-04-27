@@ -6,7 +6,8 @@ define([
     'jquery',
     'backbone',
     'datepicker',
-    'datetimepicker'
+    'datetimepicker',
+    'datetimepickerCN'
 ], function (require, $, Backbone) {
     "use strict";
     return Backbone.View.extend({
@@ -16,8 +17,8 @@ define([
             'click .dropdownItem': 'dropdownItem_click',
             //'click #btnReturn': 'return_to_prev_page',
             'click #btnSave': 'save_click',
-            'click .job_edit': 'onJobEditClicked',
-            'click .btn-job-edit': 'onJobEditEnterClicked',  //job
+            'click .job_edit': 'onStockEditClicked',
+            'click .btn-job-edit': 'onStockEditEnterClicked',  //job
             'click #checkSelectAll':'selectAll',
             'change .list_selector':'selectorChanged',
             'click #btnDelete':'remove_click'  //删除
@@ -31,9 +32,11 @@ define([
                 delay: {show:1000, hide:100},
                 content: "保存个人信息的修改。"
             });
-            $('.personal_birthday').datepicker({
-                format: 'yyyy-mm-dd',
-                language: 'zh-CN'
+            $('#start_date').datepicker().on('changeDate', function(event) {
+                $(event.target).datepicker('hide');
+            });
+            $('#end_date').datepicker().on('changeDate', function(event) {
+                $(event.target).datepicker('hide');
             });
 
             $(document).ready(function() {
@@ -41,7 +44,7 @@ define([
             });
         },
 
-        onJobEditClicked: function(event) {
+        onStockEditClicked: function(event) {
             event.preventDefault(); // prevent navigation
             //防止两重提交
             if (this.in_syncing) {
@@ -60,13 +63,11 @@ define([
                     }else {
                         var jobForm = $("#frmEditJob", data);
                         $('#jobFormModal').html(jobForm);
-                        $('.job_start_date').datepicker({
-                            format: 'yyyy-mm-dd',
-                            language: 'zh-CN'
+                        $('#start_date').datepicker().on('changeDate', function(event) {
+                        $(event.target).datepicker('hide');
                         });
-                        $('.job_end_date').datepicker({
-                            format: 'yyyy-mm-dd',
-                            language: 'zh-CN'
+                        $('#end_date').datepicker().on('changeDate', function(event) {
+                            $(event.target).datepicker('hide');
                         });
                         $("#jobFormModal").modal('show');
                     }
@@ -84,7 +85,7 @@ define([
             return false; // prevent the click propagation
         },
 
-        onJobEditEnterClicked: function(){
+        onStockEditEnterClicked: function(){
             event.preventDefault(); // prevent navigation
             //防止两重提交
             if (this.in_syncing) {
@@ -124,13 +125,11 @@ define([
                             });
                             $("#jobFormModal").modal('hide');
                         }else {
-                            $('.job_start_date').datepicker({
-                                format: 'yyyy-mm-dd',
-                                language: 'zh-CN'
+                            $('#start_date').datepicker().on('changeDate', function(event) {
+                            $(event.target).datepicker('hide');
                             });
-                            $('.job_end_date').datepicker({
-                                format: 'yyyy-mm-dd',
-                                language: 'zh-CN'
+                            $('#end_date').datepicker().on('changeDate', function(event) {
+                                $(event.target).datepicker('hide');
                             });
                         }
                     }

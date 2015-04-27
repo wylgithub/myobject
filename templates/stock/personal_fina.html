@@ -22,10 +22,21 @@
                                 <li class="active"><a href="#tab_info" data-toggle="tab">个人理财概述<i class="icon-chevron-right"></i></a></li>
                                 <li><a href="#tab_job" data-toggle="tab">股票信息添加<i class="icon-chevron-right"></i></a></li>
                             </ul>
-
                             <div class="tab-content" id="id_contents">
                                 <div class="tab-pane fade active in" id="tab_info">
+                                    <input type="hidden" name="id" id="pk" value="{{ id }}"/>
+                                        <div class="alert alert-success" style="margin-left: 120px">
+                                            <h5>个人理财小贴士:</h5>
+                                            <br />
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;个人理财是指根据财务状况，建立合理的个人财务规划，并适当参与投资活动。个人理财的投资包括：股票、基金、国债、
+                                            储蓄等八个内容。现代意义的个人理财，
+                                            不同于单纯的储蓄或投资，它不仅包括财富的积累，而且还囊括了财富的保障和安排。财富保障的核心是对风险的管理和控制，
+                                            也就是当自己的生命和健康出现了意外，或个人所处的经济环境发生了重大不利变化，如恶性通货膨胀、汇率大幅降低等问题时，
+                                            自己和家人的生活水平不致于受到严重的影响。
+                                            <br />
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在这里,您不但可以实现家庭理财的梦想,也可以完成个人理财的需求,赶快体验一下吧!
 
+                                        </div>
                                 </div>
                                 <div class="tab-pane fade " id="tab_job">
                                     <div id="jobList">
@@ -33,9 +44,7 @@
                                         <div class="row">
                                             <div class="span8 alert alert-block" style="margin-left: 120px">
                                                 <h4>注意!</h4>
-                                                还未添加任何工作经历
-                                                    <br />
-                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1), 添加： 逐条添加，每一次只能生成一条工作经历信息；
+                                                您目前尚未添加任何股票记录信息,请点击"添加"按钮完成股票信息的添加.
                                             </div>
                                             <div class="span8" style="margin-left: 120px">
                                                 <a class="btn btn-primary btn-small job_edit" href="#" data-form="/stock/personal/{{ id }}/stock/add/">添加</a>
@@ -92,9 +101,6 @@
                                                                 <td class="cell_center">{{ s.earn }}</td>
                                                                 <td class="cell_center">{{ s.buy_date }}</td>
                                                                 <td class="cell_center">{{ s.sold_date }}</td>
-{#                                                                <td class="cell_center">#}
-{#                                                                    <a class="btn-link job_edit" href="#" data-form="/information/personal/{{ id }}/job/edit/{{ job.id }}/">{{ job.company }}</a>#}
-{#                                                                </td>#}
                                                                 <td class="cell_center">{{ s.remarks }}</td>
                                                             </tr>
                                                         {% endfor %}
@@ -113,7 +119,7 @@
         </div>
         <div class="modal hide fade" id="jobFormModal"></div>
     </div>
-    <form action="/information/personal/{{ id }}/job/delete/action/" method="post" id="frm_jobList">
+    <form action="/stock/personal/{{ id }}/stock/delete/action/" method="post" id="frm_jobList">
         {% csrf_token %}
         <input type="hidden" name="job_pks" id="id_job_pks" value=""/>
     </form>
