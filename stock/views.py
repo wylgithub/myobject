@@ -62,6 +62,30 @@ def stock_add_view(request, user_pk):
     }, context_instance=RequestContext(request))
 
 
+
+@login_required
+def stock_edit_view(request, user_pk, stock_id):
+    """
+    编辑工作view
+    """
+    # 取得用户id
+    user_id = int(user_pk)
+
+    # 取得股票记录信息id
+    stock_id = int(stock_id)
+    # 取得股票信息
+    stock = Stock.objects.filter(id=stock_id, delete_flg=False)
+
+    # 生成工作信息对应的Form实例
+    jobForm = StockForm(instance=stock)
+
+    return render_to_response("stock/stock_add.html", {
+        'result': 'OK',
+        'user_pk': user_pk,
+        'job': jobForm,
+    }, context_instance=RequestContext(request))
+
+
 @login_required
 def stock_edit_action(request, user_pk):
     """
