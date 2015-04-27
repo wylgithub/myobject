@@ -50,7 +50,9 @@
                     {% for s in stock_list %}
                         <tr>
                             <td class="cell_center"><input type="checkbox" class="list_selector" pk="{{ s.id }}"/></td>
-                            <td class="cell_center">{{ s.handler }}</td>
+                            <td class="cell_center">
+                                <a class="btn-link job_edit" href="#" data-form="/stock/personal/{{ id }}/stock/edit/">{{ s.handler }}</a>
+                            </td>
                             <td class="cell_center">{{ s.stock_name }}</td>
                             <td class="cell_center">{{ s.stock_label }}</td>
                             <td class="cell_center">{{ s.buy_amount }}</td>
@@ -60,9 +62,6 @@
                             <td class="cell_center">{{ s.earn }}</td>
                             <td class="cell_center">{{ s.buy_date }}</td>
                             <td class="cell_center">{{ s.sold_date }}</td>
-{#                            <td class="cell_center">#}
-{#                                <a class="btn-link job_edit" href="#" data-form="/information/personal/{{ id }}/job/edit/{{ job.id }}/">{{ job.company }}</a>#}
-{#                            </td>#}
                             <td>
                                 <a href="javascript: void(0);" class="tip" data-toggle="tooltip" title="{{ s.remarks }}">
                                     <div style="width: 140px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{ s.remarks }}</div>
