@@ -2,7 +2,6 @@
 {% load staticfiles %}
 {% block title %} - 收入明细一览{% endblock %}
 {% block content %}
-
     <input type="hidden" id="amd_module" value="{% static "js/views/income_list.js" %}"/>
     <input type="hidden" id="total_count" value="{{ total_count }}"/>
 {% for key,value in query_params.items %}
