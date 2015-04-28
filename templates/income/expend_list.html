@@ -67,7 +67,10 @@
                             {% for expend in expends %}
                                 <tr>
                                     <td class="cell_center"><input type="checkbox" class="list_selector" pk="{{ expend.id }}"/></td>
-                                    <td>{{ expend.expend_type }}</td>
+                                    <td>
+                                        <a href="/income/expend/edit/{{ user.id }}/expend/{{ expend.id }}/" class="btn-link edit_link">{{ expend.expend_type }}</a>
+
+                                    </td>
                                     <td>{{ expend.expend_account }}</td>
                                     <td>{{ expend.expend_amount }}</td>
                                     <td>{{ expend.balance }}</td>
