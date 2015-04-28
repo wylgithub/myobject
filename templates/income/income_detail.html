@@ -63,9 +63,10 @@
                             <tbody>
                             {% for income in incomes %}
                                 <tr>
-                                    <td class="cell_center"><input type="checkbox" class="list_selector" pk="{{ income.id }}"/></td>
+                                    <td class="cell_center"><input type="checkbox" class="list_selector" pk="{{ income.id }}" ik="{{ user.id }}"/></td>
                                     <td>
-                                        {{ income.income_type }}
+                                        <a href="/income/edit/{{ user.id }}/income/{{ income.id }}/" class="btn-link edit_link">{{ income.income_type }}</a>
+
                                     </td>
                                     <td>{{ income.income_amount }}</td>
                                     <td>{{ income.create_datetime|format_date }}</td>
