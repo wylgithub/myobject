@@ -117,21 +117,27 @@ def income_list_view(request):
 
 # 用户信息编辑模块开始
 @login_required
-def income_edit_view(request, id):
+def income_edit_view(request, id, income_id):
     """
     用户信息编辑view
     :param requrst:
     :param id:
     :return:
     """
-    id = int(id)
+    # 用户id
+    user_id = int(id)
+
+    # 获取当前收入条目id
+    income_id= int(income_id)
+
     user_income = get_object_or_404(Income, id=id)
 
     form = IncomeForm(instance=user_income)
 
     return render(request, "income/income_edit.html", {
         "form": form,
-        "id": id,
+        "income_id": income_id,
+        'user_id': user_id,
         "current_now": get_today().strftime(DATE_INPUT_FORMAT_HYPHEN),
     })
 
@@ -139,27 +145,53 @@ def income_edit_view(request, id):
 @login_required
 def income_edit_action(request):
     """
-    用户信息action
+    用户信息编辑action
     :param request:
     :return:
     """
+    # 当前修改的收入信息
     id = request.POST['id']
 
-    income = get_object_or_404(Income, id=id)
+    # 当前用户的id
+    user_id = request.POST['user_id']
 
+    income = get_object_or_404(Income, id=int(id))
     form = IncomeForm(request.POST, instance=income)
+
+    # 获取用户名保存到数据库
+    user = User.objects.filter(id=user_id).get()
+    # 信息登记人
+    mark_name = user.full_name
+
     if form.is_valid():
-        # 获取更新时间
-        form.instance.update_datetime = request.POST['cleaned_data']
-        if not isinstance(form, IncomeEditForm):
-            income.save(update_fields=('income_type', 'income_amount', 'remarks', 'handler'))
+        # form.instance.user_id = id
+        form.save()
+
         return back_to_original_page(request, "/income/list/")
     else:
-        return render(request, "income/income_edit.html", {
-            "form": form,
-            "id": id,
-            "current_now": get_today().strftime(DATE_INPUT_FORMAT_HYPHEN),
-        })
+        return render_to_response("income/add_income.html", {
+            'user_id': id,
+            'form': form,
+            'username': mark_name,
+        }, context_instance=RequestContext(request))
+
+    #
+    # income = get_object_or_404(Income, id=id)
+    #
+    # form = IncomeForm(request.POST, instance=income)
+    # if form.is_valid():
+    #     if id == "":
+    #         # 获取更新时间
+    #         form.instance.update_datetime = request.POST['cleaned_data']
+    #         if not isinstance(form, IncomeEditForm):
+    #             income.save(update_fields=('income_type', 'income_amount', 'remarks', 'handler'))
+    #         return back_to_original_page(request, "/income/list/")
+    # else:
+    #     return render(request, "income/income_edit.html", {
+    #         "form": form,
+    #         "id": id,
+    #         "current_now": get_today().strftime(DATE_INPUT_FORMAT_HYPHEN),
+    #     })
 
 
 @login_required
