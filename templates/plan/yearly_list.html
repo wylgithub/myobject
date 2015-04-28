@@ -68,7 +68,10 @@
                             {% for y in years %}
                                 <tr>
                                     <td class="cell_center"><input type="checkbox" class="list_selector" pk="{{ y.id }}"/></td>
-                                    <td>{{ y.handler }}</td>
+                                    <td>
+                                        <a href="/plan/year/edit/{{ user.id }}/year/{{ y.id }}/" class="btn-link edit_link">{{ y.handler }}</a>
+
+                                    </td>
                                     <td>{{ y.work_income }}</td>
                                     <td>{{ y.investment_income }}</td>
                                     <td>{{ y.life_spend }}</td>

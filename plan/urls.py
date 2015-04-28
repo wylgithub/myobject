@@ -27,8 +27,8 @@ urlpatterns = patterns('plan.views',
     url(r'^year/(\d+)/add/action/$', 'year_add_action'),
     url(r'^year/list/$', 'year_list_view'),
     url(r'^year/delete/list/$', 'year_delete_action'),
-    # url(r'^year/edit/(\d+)/year/(\d+)/$', 'year_edit_view'),
-    # url(r'^year/edit/action/$', 'year_edit_action'),
+    url(r'^year/edit/(\d+)/year/(\d+)/$', 'year_edit_view'),
+    url(r'^year/edit/action/$', 'year_edit_action'),
     # 年流水计划结束
 
     )
