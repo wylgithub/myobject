@@ -155,7 +155,7 @@ def income_edit_action(request):
     # 当前用户的id
     user_id = request.POST['user_id']
 
-    income = get_object_or_404(Income, id=int(id))
+    income = get_object_or_404(Income, id=id)
     form = IncomeForm(request.POST, instance=income)
 
     # 获取用户名保存到数据库
@@ -520,6 +520,68 @@ def borrow_delete_action(request):
 
     Borrow.objects.filter(id__in=pks).update(delete_flg=True, update_datetime=datetime.now())
     return back_to_original_page(request, '/income/borrow/list/')
+
+
+@login_required
+def borrow_edit_view(request, id, borrow_id):
+    """
+    流水借入一览修改view
+    :param request:
+    :param id:
+    :param borrow_id:
+    :return:
+    """
+    # 用户id
+    user_id = int(id)
+
+    # 获取当前支出条目id
+    borrow_id=int(borrow_id)
+
+    user_borrow = get_object_or_404(Borrow, id=borrow_id)
+
+    form = BorrowForm(instance=user_borrow)
+
+    return render(request, "income/borrow_edit.html", {
+        "form": form,
+        "borrow_id": borrow_id,
+        'user_id': user_id,
+        "current_now": get_today().strftime(DATE_INPUT_FORMAT_HYPHEN),
+    })
+
+
+@login_required
+def borrow_edit_action(request):
+    """
+    修改支出信息action
+    :param request:
+    :return:
+    """
+    # 当前修改的收入信息
+    id = request.POST['id']
+
+    # 当前用户的id
+    user_id = request.POST['user_id']
+
+    borrow = get_object_or_404(Borrow, id=int(id))
+    form = BorrowForm(request.POST, instance=borrow)
+
+    # 获取用户名保存到数据库
+    user = User.objects.filter(id=user_id).get()
+    # 信息登记人
+    mark_name = user.full_name
+
+    if form.is_valid():
+        # form.instance.user_id = id
+        form.save()
+
+        return back_to_original_page(request, "/income/borrow/list/")
+    else:
+        return render_to_response("income/borrow_edit.html", {
+            'user_id': user_id,
+            'id': id,
+            'form': form,
+            'username': mark_name,
+        }, context_instance=RequestContext(request))
 
 # 家庭借入信息模块结束
 
