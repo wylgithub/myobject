@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% load extfilters %}
 {% block title %} - 年流水计划一览{% endblock %}
 {% block content %}
 
@@ -72,8 +73,8 @@
                                     <td>{{ y.investment_income }}</td>
                                     <td>{{ y.life_spend }}</td>
                                     <td>{{ y.other_spend }}</td>
-                                    <td>{{ y.start_date|date:"Y/m/d H:i:s" }}</td>
-                                    <td>{{ y.end_date|date:"Y/m/d H:i:s" }}</td>
+                                    <td>{{ y.start_date|format_date }}</td>
+                                    <td>{{ y.end_date|format_date }}</td>
                                     <td>
                                         <a href="javascript: void(0);" class="tip" data-toggle="tooltip" title="{{ y.remarks }}">
                                             <div style="width: 140px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{ y.remarks }}</div>

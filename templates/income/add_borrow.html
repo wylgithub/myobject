@@ -26,7 +26,7 @@
                 <div class="control-group">
                     <label class="control-label" for="regName">借出款人</label>
                     <div class="controls">
-                        <input type="text" id="regName" name="lend_person" class="highlight" maxlength="30" value="{{ form.lend_person.value }}"/>
+                        <input type="text" id="regName" name="lend_person" class="highlight" maxlength="30" value="{{ form.lend_person.value|default_if_none:"" }}"/>
                         {% if form.lend_person.errors %}
                         {% with form.lend_person.errors|first as error %}
                             <br/>
@@ -38,7 +38,7 @@
                 <div class="control-group">
                     <label class="control-label" for="incomeAmount">借入金额</label>
                     <div class="controls">
-                        <input type="text" class="highlight" name="borrow_amount" id="incomeAmount" maxlength="20" value="{{ form.borrow_amount.value }}"/>
+                        <input type="text" class="highlight" name="borrow_amount" id="incomeAmount" maxlength="20" value="{{ form.borrow_amount.value|default_if_none:"" }}"/>
                         {% if form.borrow_amount.errors %}
                             {% with form.borrow_amount.errors|first as error %}
                                 <br/>
@@ -50,7 +50,7 @@
                 <div class="control-group">
                     <label class="control-label" for="incomeAmount">卡内余额</label>
                     <div class="controls">
-                        <input type="text" class="highlight" name="balance" id="incomeAmount" maxlength="20" value="{{ form.balance.value }}"/>
+                        <input type="text" class="highlight" name="balance" id="incomeAmount" maxlength="20" value="{{ form.balance.value|default_if_none:"" }}"/>
                         {% if form.balance.errors %}
                             {% with form.balance.errors|first as error %}
                                 <br/>
@@ -64,7 +64,7 @@
                     <div class="controls">
                         <div class="input-append date" id="borrow_date" data-date="{{ current_now }}" data-date-format="yyyy-mm-dd">
                             <input class="span2 highlight" id="r_date"
-                                  size="16" type="text" name="borrow_datetime" value="{{ current_now }}" maxlength="10" readonly/>
+                                  size="16" type="text" name="borrow_datetime" value="{{ current_now|default_if_none:"" }}" maxlength="10" readonly/>
                             <span class="add-on"><i class="icon-calendar"></i></span>
                         </div>
                         {% if form.borrow_datetime.errors %}
@@ -80,7 +80,7 @@
                     <div class="controls">
                         <div class="input-append date" id="repay_date" data-date="{{ current_now }}" data-date-format="yyyy-mm-dd">
                             <input class="span2 highlight" id="r_date"
-                                  size="16" type="text" name="repay_datetime" value="{{ current_now }}" maxlength="10" readonly/>
+                                  size="16" type="text" name="repay_datetime" value="{{ current_now|default_if_none:"" }}" maxlength="10" readonly/>
                             <span class="add-on"><i class="icon-calendar"></i></span>
                         </div>
                         {% if form.repay_datetime.errors %}

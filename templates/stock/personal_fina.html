@@ -101,8 +101,8 @@
                                                                 <td class="cell_center">{{ s.sold_price }}</td>
                                                                 <td class="cell_center">{{ s.stop_lose_price }}</td>
                                                                 <td class="cell_center">{{ s.earn }}</td>
-                                                                <td class="cell_center">{{ s.buy_date }}</td>
-                                                                <td class="cell_center">{{ s.sold_date }}</td>
+                                                                <td class="cell_center">{{ s.buy_date|format_date }}</td>
+                                                                <td class="cell_center">{{ s.sold_date|format_date }}</td>
                                                                 <td>
                                                                     <a href="javascript: void(0);" class="tip" data-toggle="tooltip" title="{{ s.remarks }}">
                                                                         <div style="width: 140px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{ s.remarks }}</div>

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% load extfilters %}
 {% block title %} - 收入明细一览{% endblock %}
 {% block content %}
     <input type="hidden" id="amd_module" value="{% static "js/views/income_list.js" %}"/>
@@ -67,7 +68,7 @@
                                         {{ income.income_type }}
                                     </td>
                                     <td>{{ income.income_amount }}</td>
-                                    <td>{{ income.create_datetime|date:"Y/m/d H:i:s" }}</td>
+                                    <td>{{ income.create_datetime|format_date }}</td>
                                     <td>{{ income.handler }}</td>
                                     <td>
                                         <a href="javascript: void(0);" class="tip" data-toggle="tooltip" title="{{ income.remarks }}">

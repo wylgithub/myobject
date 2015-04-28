@@ -3,7 +3,6 @@
 from datetime import date, datetime
 
 from django import template
-from django.db import connection
 from django.template.defaulttags import register
 from django.utils.encoding import force_unicode
 from django.conf import settings
