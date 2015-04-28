@@ -713,4 +713,65 @@ def lend_delete_action(request):
     Lend.objects.filter(id__in=pks).update(delete_flg=True, update_datetime=datetime.now())
     return back_to_original_page(request, '/income/lend/list/')
 
+
+@login_required
+def lend_edit_view(request, id, lend_id):
+    """
+    流水借入一览修改view
+    :param request:
+    :param id:
+    :param borrow_id:
+    :return:
+    """
+    # 用户id
+    user_id = int(id)
+
+    # 获取当前支出条目id
+    lend_id=int(lend_id)
+
+    user_lend = get_object_or_404(Lend, id=lend_id)
+
+    form = LendForm(instance=user_lend)
+
+    return render(request, "income/lend_edit.html", {
+        "form": form,
+        "lend_id": lend_id,
+        'user_id': user_id,
+        "current_now": get_today().strftime(DATE_INPUT_FORMAT_HYPHEN),
+    })
+
+
+@login_required
+def lend_edit_action(request):
+    """
+    修改支出信息action
+    :param request:
+    :return:
+    """
+    # 当前修改的收入信息
+    id = request.POST['id']
+
+    # 当前用户的id
+    user_id = request.POST['user_id']
+
+    lend = get_object_or_404(Lend, id=int(id))
+    form = LendForm(request.POST, instance=lend)
+
+    # 获取用户名保存到数据库
+    user = User.objects.filter(id=user_id).get()
+    # 信息登记人
+    mark_name = user.full_name
+
+    if form.is_valid():
+        # form.instance.user_id = id
+        form.save()
+
+        return back_to_original_page(request, "/income/lend/list/")
+    else:
+        return render_to_response("income/lend_edit.html", {
+            'user_id': user_id,
+            'id': id,
+            'form': form,
+            'username': mark_name,
+        }, context_instance=RequestContext(request))
 # 家庭借出信息模块结束

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% load extfilters %}
 {% block title %} - 添加支出明细{% endblock %}
 {% block content %}
     <input type="hidden" id="amd_module" value="{% static "js/views/expend_edit.js" %}" />
@@ -98,7 +99,7 @@
                     <div class="controls">
                         <div class="input-append date" id="expend_date" data-date="{{ current_now }}" data-date-format="yyyy-mm-dd">
                             <input class="span2 highlight" id="r_date"
-                                  size="16" type="text" name="create_datetime" value="{{ form.create_datetime.value|default_if_none:"" }}" maxlength="10" readonly/>
+                                  size="16" type="text" name="create_datetime" value="{{ form.create_datetime.value|default_if_none:""|format_date }}" maxlength="10" readonly/>
                             <span class="add-on"><i class="icon-calendar"></i></span>
                         </div>
                         {% if form.create_datetime.errors %}
