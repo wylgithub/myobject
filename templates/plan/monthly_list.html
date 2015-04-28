@@ -68,7 +68,10 @@
                             {% for m in months %}
                                 <tr>
                                     <td class="cell_center"><input type="checkbox" class="list_selector" pk="{{ m.id }}"/></td>
-                                    <td>{{ m.handler }}</td>
+                                    <td>
+                                        <a href="/plan/month/edit/{{ user.id }}/month/{{ m.id }}/" class="btn-link edit_link">{{ m.handler }}</a>
+
+                                    </td>
                                     <td>{{ m.work_income }}</td>
                                     <td>{{ m.investment_income }}</td>
                                     <td>{{ m.life_spend }}</td>
