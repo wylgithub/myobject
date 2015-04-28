@@ -63,6 +63,45 @@ def stock_add_view(request, user_pk):
 
 
 @login_required
+def stock_edit_view(request, user_pk, stock_id):
+    """
+    编辑工作view
+    """
+    # 取得用户id
+    user_id = int(user_pk)
+    # 取得用户信息
+    user = User.objects.filter(id=user_id).get()
+
+    # 取得用户信息
+    user_type = u''
+    if user.groups.count():
+        user_type = user.groups.get().name
+
+    # 取得登录用户的全名
+    username = user.full_name
+
+    # 取得股票记录信息id
+    stock_id = int(stock_id)
+    # 取得股票信息
+    stock = Stock.objects.filter(id=stock_id, delete_flg=False)
+
+    # 取得股票信息实例
+    sto = stock.get()
+
+    # 生成工作信息对应的Form实例
+    stockForm = StockForm(instance=sto)
+
+    return render_to_response("stock/stock_add.html", {
+        'result': 'OK',
+        'stock_id': stock_id,
+        'username': username,
+        'user_name': user_type,
+        'user_pk': user_pk,
+        'form': stockForm,
+    }, context_instance=RequestContext(request))
+
+
+@login_required
 def stock_edit_action(request, user_pk):
     """
     编辑工作action
@@ -83,15 +122,19 @@ def stock_edit_action(request, user_pk):
         form = StockForm(request.POST, instance=Stock())
     else:
         # 取得股票信息
-        queryset = Stock.objects.filter(id__exact=int(id), delete_flg=False)
-        job = queryset.get()
+        queryset = Stock.objects.filter(id__exact=int(id), user_id=user_id,  delete_flg=False)
+        sto = queryset.get()
         # 生成股票对应的Form实例
-        form = StockForm(request.POST, instance=job)
+        form = StockForm(request.POST, instance=sto)
 
     if form.is_valid():
-        # 如果通过判断,保存数据到数据库
-        form.instance.user_id = user_id
-        form.save()
+        if id == "":
+            # 如果通过判断,保存数据到数据库
+            form.instance.user_id = user_id
+            form.save()
+        else:
+
+            form.save()
 
         return render_to_response("stock/stock_add.html", {
             'result': 'OK',
