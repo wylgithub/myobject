@@ -69,7 +69,8 @@
                                 <tr>
                                     <td class="cell_center"><input type="checkbox" class="list_selector" pk="{{ lend.id }}"/></td>
                                     <td>
-                                        {{ lend.handler }}
+                                        <a href="/income/lend/edit/{{ user.id }}/lend/{{ lend.id }}/" class="btn-link edit_link">{{ lend.handler }}</a>
+
                                     </td>
                                     <td>{{ lend.lend_person }}</td>
                                     <td>{{ lend.borrow_person }}</td>
