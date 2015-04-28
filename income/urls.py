@@ -36,6 +36,8 @@ urlpatterns = patterns('income.views',
     url(r'^borrow/(\d+)/add/action/$', 'add_borrow_action'),  # 添加借入明细action
     url(r'^borrow/list/$', 'borrow_list_view'),  # 借入信息一览view
     url(r'^borrow/delete/action/$', 'borrow_delete_action'),  # 删除明细一览view
+    url(r'^borrow/edit/(\d+)/borrow/(\d+)/$', 'borrow_edit_view'),
+    url(r'^borrow/edit/action/$', 'borrow_edit_action'),
     # 家庭借入信息模块结束:
 
 
