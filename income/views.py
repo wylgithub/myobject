@@ -130,7 +130,7 @@ def income_edit_view(request, id, income_id):
     # 获取当前收入条目id
     income_id= int(income_id)
 
-    user_income = get_object_or_404(Income, id=id)
+    user_income = get_object_or_404(Income, id=income_id)
 
     form = IncomeForm(instance=user_income)
 
@@ -174,24 +174,6 @@ def income_edit_action(request):
             'form': form,
             'username': mark_name,
         }, context_instance=RequestContext(request))
-
-    #
-    # income = get_object_or_404(Income, id=id)
-    #
-    # form = IncomeForm(request.POST, instance=income)
-    # if form.is_valid():
-    #     if id == "":
-    #         # 获取更新时间
-    #         form.instance.update_datetime = request.POST['cleaned_data']
-    #         if not isinstance(form, IncomeEditForm):
-    #             income.save(update_fields=('income_type', 'income_amount', 'remarks', 'handler'))
-    #         return back_to_original_page(request, "/income/list/")
-    # else:
-    #     return render(request, "income/income_edit.html", {
-    #         "form": form,
-    #         "id": id,
-    #         "current_now": get_today().strftime(DATE_INPUT_FORMAT_HYPHEN),
-    #     })
 
 
 @login_required
@@ -346,6 +328,68 @@ def expend_delete_action(request):
 
     Expend.objects.filter(id__in=pks).update(delete_flg=True, update_datetime=datetime.now())
     return back_to_original_page(request, '/income/expend/list/')
+
+
+@login_required
+def expend_edit_view(request, id, expend_id):
+    """
+    流水支出一览修改view
+    :param request:
+    :param id:
+    :param expend_id:
+    :return:
+    """
+    # 用户id
+    user_id = int(id)
+
+    # 获取当前支出条目id
+    # expend_id=int(expend_id)
+
+    user_expend = get_object_or_404(Expend, id=expend_id)
+
+    form = ExpendForm(instance=user_expend)
+
+    return render(request, "income/expend_edit.html", {
+        "form": form,
+        "expend_id": expend_id,
+        'user_id': user_id,
+        "current_now": get_today().strftime(DATE_INPUT_FORMAT_HYPHEN),
+    })
+
+
+@login_required
+def expend_edit_action(request):
+    """
+    修改支出信息action
+    :param request:
+    :return:
+    """
+    # 当前修改的收入信息
+    id = request.POST['id']
+
+    # 当前用户的id
+    user_id = request.POST['user_id']
+
+    expend = get_object_or_404(Expend, id=int(id))
+    form = ExpendForm(request.POST, instance=expend)
+
+    # 获取用户名保存到数据库
+    user = User.objects.filter(id=user_id).get()
+    # 信息登记人
+    mark_name = user.full_name
+
+    if form.is_valid():
+        # form.instance.user_id = id
+        form.save()
+
+        return back_to_original_page(request, "/income/expend/list/")
+    else:
+        return render_to_response("income/expend_edit.html", {
+            'user_id': user_id,
+            'id': id,
+            'form': form,
+            'username': mark_name,
+        }, context_instance=RequestContext(request))
 
 # 支出模块结束
 
