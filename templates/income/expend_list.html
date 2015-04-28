@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% load extfilters %}
 {% block title %} - 收入明细一览{% endblock %}
 {% block content %}
 
@@ -70,7 +71,7 @@
                                     <td>{{ expend.expend_account }}</td>
                                     <td>{{ expend.expend_amount }}</td>
                                     <td>{{ expend.balance }}</td>
-                                    <td>{{ expend.create_datetime|date:"Y/m/d H:i:s" }}</td>
+                                    <td>{{ expend.create_datetime|format_date }}</td>
                                     <td>{{ expend.handler }}</td>
                                     <td>
                                         <a href="javascript: void(0);" class="tip" data-toggle="tooltip" title="{{ expend.remarks }}">

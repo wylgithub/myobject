@@ -131,6 +131,7 @@ def stock_edit_action(request, user_pk):
         if id == "":
             # 如果通过判断,保存数据到数据库
             form.instance.user_id = user_id
+
             form.save()
         else:
 

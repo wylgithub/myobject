@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% load extfilters %}
 {% block title %} - 借入明细一览{% endblock %}
 {% block content %}
 
@@ -72,8 +73,8 @@
                                     <td>{{ m.investment_income }}</td>
                                     <td>{{ m.life_spend }}</td>
                                     <td>{{ m.other_spend }}</td>
-                                    <td>{{ m.start_date|date:"Y/m/d H:i:s" }}</td>
-                                    <td>{{ m.end_date|date:"Y/m/d H:i:s" }}</td>
+                                    <td>{{ m.start_date|format_date }}</td>
+                                    <td>{{ m.end_date|format_date }}</td>
                                     <td>
                                         <a href="javascript: void(0);" class="tip" data-toggle="tooltip" title="{{ m.remarks }}">
                                             <div style="width: 140px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{ m.remarks }}</div>

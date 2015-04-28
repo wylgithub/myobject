@@ -22,7 +22,7 @@
                     <div class="controls">
                         <div class="input-prepend">
                             <span class="add-on"><i class="icon-user"></i></span>
-                            <input type="text" id="regName" name="handler" class="highlight span2" maxlength="30" value="{{ username }}"/>
+                            <input type="text" id="regName" name="handler" class="highlight span2" maxlength="30" value="{{ username|default_if_none:"" }}"/>
                         </div>
                     </div>
                 </div>
@@ -37,7 +37,7 @@
                     <div class="controls">
                         <div class="input-prepend">
                             <span class="add-on"><i class="icon-star-empty"></i></span>
-                            <input type="text" class="highlight span2" name="income_type" id="incomeType" maxlength="20" value="{{ form.income_type.value }}"/>
+                            <input type="text" class="highlight span2" name="income_type" id="incomeType" maxlength="20" value="{{ form.income_type.value|default_if_none:"" }}"/>
                         </div>
                         {% if form.income_type.errors %}
                             {% with form.income_type.errors|first as error %}
@@ -52,7 +52,7 @@
                     <div class="controls">
                         <div class="input-prepend">
                             <span class="add-on">￥</span>
-                            <input type="text" class="highlight span2" name="income_amount" id="incomeAmount" maxlength="20" value="{{ form.income_amount.value }}"/>
+                            <input type="text" class="highlight span2" name="income_amount" id="incomeAmount" maxlength="20" value="{{ form.income_amount.value|default_if_none:"" }}"/>
                         </div>
                         {% if form.income_amount.errors %}
                             {% with form.income_amount.errors|first as error %}
@@ -67,7 +67,7 @@
                     <div class="controls">
                         <div class="input-append date" id="red_date" data-date="{{ current_now }}" data-date-format="yyyy-mm-dd">
                             <input class="span2 highlight" id="r_date"
-                                  size="16" type="text" name="create_datetime" value="{{ current_now }}" maxlength="10" readonly/>
+                                  size="16" type="text" name="create_datetime" value="{{ current_now|default_if_none:"" }}" maxlength="10" readonly/>
                             <span class="add-on"><i class="icon-calendar"></i></span>
                         </div>
                         {% if form.create_datetime.errors %}

@@ -64,7 +64,7 @@
                     <div class="controls">
                         <div class="input-append date" id="borrow_date" data-date="{{ current_now }}" data-date-format="yyyy-mm-dd">
                             <input class="span2 highlight" id="r_date"
-                                  size="16" type="text" name="lend_datetime" value="{{ current_now }}" maxlength="10" readonly/>
+                                  size="16" type="text" name="lend_datetime" value="{{ current_now|default_if_none:"" }}" maxlength="10" readonly/>
                             <span class="add-on"><i class="icon-calendar"></i></span>
                         </div>
                         {% if form.lend_datetime.errors %}
@@ -80,7 +80,7 @@
                     <div class="controls">
                         <div class="input-append date" id="repay_date" data-date="{{ current_now }}" data-date-format="yyyy-mm-dd">
                             <input class="span2 highlight" id="r_date"
-                                  size="16" type="text" name="pay_datetime" value="{{ current_now }}" maxlength="10" readonly/>
+                                  size="16" type="text" name="pay_datetime" value="{{ current_now|default_if_none:"" }}" maxlength="10" readonly/>
                             <span class="add-on"><i class="icon-calendar"></i></span>
                         </div>
                         {% if form.pay_datetime.errors %}

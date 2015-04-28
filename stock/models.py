@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import datetime
 
 from django.db import models
 from django.forms import ModelForm
@@ -36,7 +37,27 @@ class StockForm(ModelForm):
     """
 
     def clean(self):
+
         cleaned_data = super(StockForm, self).clean()
+        if 'buy_date' in cleaned_data:
+            buy_date = cleaned_data['buy_date'].date()
+            # 获取当前时间
+            get_today = datetime.date.today()
+            if buy_date is u"" or buy_date > get_today:
+                msg = u"请输入有效的日期(购买日期应当小于等于当前)!"
+                self._errors['buy_date'] = self.error_class([msg])
+
+                del cleaned_data['buy_date']
+
+        if 'sold_date' in cleaned_data:
+            sold_date = cleaned_data['sold_date'].date()
+            # 获取当前时间
+            get_today = datetime.date.today()
+            if sold_date is u"" or sold_date < get_today:
+                msg = u"请输入有效的日期(卖出日期应当大于等于当前)!"
+                self._errors['sold_date'] = self.error_class([msg])
+
+                del cleaned_data['sold_date']
 
         return cleaned_data
 
