@@ -4,7 +4,7 @@
     <form class="form-horizontal" action="/stock/personal/{{ user_pk }}/stock/edit/action/" id="frmEditJob" method="post">
         {% csrf_token %}
         <input type="hidden" name="user_pk" id="id_user_pk" value="{{ user_pk|default_if_none:"" }}"/>
-        <input type="hidden" name="id" id="pk" value="{{ from.instance.id|default_if_none:"" }}"/>
+        <input type="hidden" name="id" id="pk" value="{{ stock_id|default_if_none:"" }}"/>
         <input type="hidden" name="job_validation" id="id_job_validation" value="{{ job_validation }}">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -23,7 +23,7 @@
                 <div class="controls">
                     <div class="input-prepend">
                         <span class="add-on"><i class="icon-user"></i></span>
-                        <input type="text" id="regName" name="handler" class="highlight span2" maxlength="30" value="{{ username|default_if_none:"" }}"/>
+                        <input type="text" id="regName" name="handler" class="highlight span2" maxlength="30" value="{{ username|default_if_none:"" }}" readonly/>
                     </div>
                     {% if form.handler.errors %}
                         {% with form.handler.errors|first as error %}
@@ -143,7 +143,7 @@
                 <div class="controls">
                     <div class="input-append date" id="start_date" data-date="{{ current_now }}" data-date-format="yyyy-mm-dd">
                         <input class="span2 highlight" id="buy_date"
-                              size="16" type="text" name="buy_date" value="{{ current_now|default_if_none:"" }}" maxlength="10" readonly/>
+                              size="16" type="text" name="buy_date" value="{{ form.buy_date.value|default_if_none:"" }}" maxlength="10" readonly/>
                         <span class="add-on"><i class="icon-calendar"></i></span>
                         {% if form.buy_date.errors %}
                             {% with form.buy_date.errors|first as error %}
@@ -159,7 +159,7 @@
                 <div class="controls">
                     <div class="input-append date" id="end_date" data-date="{{ current_now }}" data-date-format="yyyy-mm-dd">
                         <input class="span2 highlight" id="sold_date"
-                              size="16" type="text" name="sold_date" value="{{ current_now|default_if_none:"" }}" maxlength="10" readonly/>
+                              size="16" type="text" name="sold_date" value="{{ form.sold_date.value|default_if_none:"" }}" maxlength="10" readonly/>
                         <span class="add-on"><i class="icon-calendar"></i></span>
                         {% if form.sold_date.errors %}
                             {% with form.sold_date.errors|first as error %}
@@ -174,6 +174,7 @@
                 <label class="control-label" for="addRemarks">撰写备注</label>
                 <div class="controls">
                     <textarea rows="5" class="highlight" id="addRemarks" name="remarks">
+                        {{ form.remarks.value|default_if_none:"" }}
                     </textarea>
                 </div>
             </div>
