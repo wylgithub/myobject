@@ -59,11 +59,7 @@ def logout_action(request):
 
 # 用户这侧模块开始
 def register_view(request):
-    """
-    注册初期话View
-    author:ganfeng
-    added by 2013/04/23
-    """
+    # 用户注册view
 
     form = UserRegisterForm()
 
@@ -76,43 +72,30 @@ def register_action(request):
     """
     用户注册
     """
-    response_data = {}
-    try:
-        form = UserRegisterForm(request.POST, instance=User())
-        if form.is_valid():
+    form = UserRegisterForm(request.POST, instance=User())
 
-            role = form.cleaned_data['role']
-            form.instance.username = request.POST['username']
-            form.instance.password = request.POST['password']
-            form.instance.full_name = request.POST['full_name']
-            form.instance.email = request.POST['email']
-            form.instance.mobile = request.POST['mobile']
+    if form.is_valid():
+        role = form.cleaned_data['role']
+        form.instance.username = request.POST['username']
+        form.instance.password = request.POST['password']
+        form.instance.full_name = request.POST['full_name']
+        form.instance.email = request.POST['email']
+        form.instance.mobile = request.POST['mobile']
 
-            user = form.save()
-            user.set_password(form.instance.password)
-            group = role_manager.get_role(role)
+        user = form.save()
+        user.set_password(form.instance.password)
+        group = role_manager.get_role(role)
 
-            if group:
-                user.groups.add(group)
-            user.save()
-            return render_to_response("user_account/register.html", {
-                'result': 'OK',
-                'error_code': JSON_ERROR_CODE_NO_ERROR,
-                'validation': True,
-                'form': form,
-            }, context_instance=RequestContext(request))
+        if group:
+            user.groups.add(group)
+        user.save()
 
-        else:
-            return render_to_response("user_account/register.html", {
-                'result': 'OK',
-                'error_code': JSON_ERROR_CODE_NO_ERROR,
-                'validation': False,
-                'goods': form,
-            }, context_instance=RequestContext(request))
+        return back_to_original_page(request, "/user_account/login/")
 
-    except:
-        response_data['validate'] = True
-        return HttpResponse(json.dumps(response_data), mimetype="application/json")
+    else:
+        return render(request, "user_account/register.html", {
+            'goods': form,
+        })
 #  用户注册模块结束
 
 

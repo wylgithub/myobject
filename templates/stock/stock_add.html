@@ -143,7 +143,7 @@
                 <div class="controls">
                     <div class="input-append date" id="start_date" data-date="{{ current_now }}" data-date-format="yyyy-mm-dd">
                         <input class="span2 highlight" id="buy_date"
-                              size="16" type="text" name="buy_date" value="{{ form.buy_date.value|default_if_none:"" }}" maxlength="10" readonly/>
+                              size="16" type="text" name="buy_date" value="{{ form.buy_date.value|default_if_none:""|format_date }}" maxlength="10" readonly/>
                         <span class="add-on"><i class="icon-calendar"></i></span>
                     </div>
                     {% if form.buy_date.errors %}
@@ -159,7 +159,7 @@
                 <div class="controls">
                     <div class="input-append date" id="end_date" data-date="{{ current_now }}" data-date-format="yyyy-mm-dd">
                         <input class="span2 highlight" id="sold_date"
-                              size="16" type="text" name="sold_date" value="{{ form.sold_date.value|default_if_none:"" }}" maxlength="10" data-date-format="yyyy-mm-dd" readonly/>
+                              size="16" type="text" name="sold_date" value="{{ form.sold_date.value|default_if_none:""|format_date }}" maxlength="10" data-date-format="yyyy-mm-dd" readonly/>
                         <span class="add-on"><i class="icon-calendar"></i></span>
                     </div>
                     {% if form.sold_date.errors %}
