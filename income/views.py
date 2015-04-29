@@ -56,7 +56,6 @@ def add_income_action(request, user_id):
 
     if form.is_valid():
         form.instance.user_id = id
-        # form.instance.create_datetime = request.POST['recode_date']
         form.save()
 
         return back_to_original_page(request, "/income/list/")
@@ -111,7 +110,6 @@ def income_list_view(request):
         'need_pagination': params['limit'] < total_count,
         'total_count': total_count,
         'income': incomes,
-
     })
 
 
@@ -169,7 +167,7 @@ def income_edit_action(request):
 
         return back_to_original_page(request, "/income/list/")
     else:
-        return render_to_response("income/add_income.html", {
+        return render_to_response("income/income_edit.html", {
             'user_id': id,
             'form': form,
             'username': mark_name,
@@ -370,7 +368,7 @@ def expend_edit_action(request):
     # 当前用户的id
     user_id = request.POST['user_id']
 
-    expend = get_object_or_404(Expend, id=int(id))
+    expend = get_object_or_404(Expend, id=id)
     form = ExpendForm(request.POST, instance=expend)
 
     # 获取用户名保存到数据库

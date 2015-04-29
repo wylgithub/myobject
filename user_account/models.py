@@ -171,10 +171,7 @@ class UserForm(ModelForm):
 
 class UserRegisterForm(ModelForm):
     role = forms.IntegerField()
-
-    class Meta:
-        model = User
-        fields = ('username', 'password', 'full_name', 'email', 'mobile')
+    check_password = models.CharField()  # 用户的密码验证
 
     def clean(self):
         cleaned_data = super(UserRegisterForm, self).clean()
@@ -215,6 +212,13 @@ class UserRegisterForm(ModelForm):
         #             del cleaned_data['email']
 
         return cleaned_data
+
+    def __init__(self, *args, **kwargs):
+        super(UserRegisterForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = User
+        fields = ('username', 'password', 'full_name', 'email', 'mobile')
 
 
 class UserEditForm(UserForm):

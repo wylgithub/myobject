@@ -19,7 +19,7 @@
                     <div class="controls">
                         <div class="input-prepend">
                             <span class="add-on"><i class="icon-user"></i></span>
-                            <input type="text" id="regName" name="handler" class="highlight span2" maxlength="30" value="{{ username|default_if_none:"" }}"/>
+                            <input type="text" id="regName" name="handler" class="highlight span2" maxlength="30" value="{{ username|default_if_none:"" }}" readonly/>
                         </div>
                         {% if form.recode_name.errors %}
                             {% with form.recode_name.errors|first as error %}

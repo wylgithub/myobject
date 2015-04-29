@@ -82,7 +82,7 @@ define([
                     current_view.in_syncing = false;
                 }
             });
-            return false; // prevent the click propagation
+            return true; // prevent the click propagation
         },
 
         onStockEditEnterClicked: function(){
