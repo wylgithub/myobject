@@ -23,6 +23,14 @@ define([
         },
 
         btn_register:function() {
+            //if(!this.check_register(event)){
+            //    return;
+            //}
+            if(this.in_syncing)
+            {
+                return;
+            }
+            this.in_syncing = true;
             $('#registerForm').submit();
         },
 
@@ -74,6 +82,7 @@ define([
             var password = $('#txtPassword').val();
             var full_name = $('#txtFullName').val();
             var email = $('#txtEmail').val();
+            var check_password = $("#txtPassword_check").val();
             var mobile = $('#txtMobile').val();
             var checkusername=/^[a-zA-Z0-9\u4e00-\u9fa5\_]+$/;
 

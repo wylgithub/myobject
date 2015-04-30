@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from datetime import datetime
+from pydoc import html
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render, render_to_response, get_object_or_404
 from django.template import RequestContext
 from stock.models import Stock, StockForm
 from user_account.models import User
@@ -83,11 +84,9 @@ def stock_edit_view(request, user_pk, stock_id):
     # 取得股票记录信息id
     stock_id = int(stock_id)
     # 取得股票信息
-    stock = Stock.objects.filter(id=stock_id, delete_flg=False)
+    sto = get_object_or_404(Stock, id=stock_id, delete_flg=False)
 
-    # 取得股票信息实例
-    sto = stock.get()
-
+    stock_count = Stock.objects.filter(id=stock_id, delete_flg=False)
     # 生成工作信息对应的Form实例
     stockForm = StockForm(instance=sto)
 
@@ -95,6 +94,7 @@ def stock_edit_view(request, user_pk, stock_id):
         'result': 'OK',
         'stock_id': stock_id,
         'username': username,
+        'stock_count': stock_count,
         'user_name': user_type,
         'user_pk': user_pk,
         'form': stockForm,
@@ -199,9 +199,14 @@ def stock_delete_action(request, user_pk):
     # 取得信息
     queryset = Stock.objects.filter(id__in=pks, delete_flg=False)
 
+    # 获取当信息条数
+    stock_count = queryset.count()
+
+
     # 将工作信息逻辑删除
     queryset.update(delete_flg=True, update_date=datetime.now())
     return render_to_response("stock/stock_list.html", {
         'result': 'OK',
         'user_pk': user_id,
+        'stock_count': stock_count,
     }, context_instance=RequestContext(request))
