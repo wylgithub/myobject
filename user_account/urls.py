@@ -24,6 +24,6 @@ urlpatterns = patterns('user_account.views',
 
     #  用户注册模块
     url(r'^register/$', 'register_view'),  # 显示登录页面
-    url(r'^register/action/$', 'register_action'),  # 进行登录提交
+    url(r'^register/action/$', 'register_action'),  # 进行注册提交
 
 )
