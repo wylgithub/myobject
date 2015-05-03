@@ -3,6 +3,7 @@
 import json
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.http import HttpResponse
 
 from django.shortcuts import render, redirect, get_object_or_404, render_to_response
@@ -13,8 +14,7 @@ from django.contrib.auth import authenticate, login, logout
 from utility.base_view import back_to_original_page, get_list_params
 from utility.constant import JSON_ERROR_CODE_NO_ERROR
 from utility.exception import PermissionDeniedError
-from utility.role_manager import check_role, ROLE_FAMILY_SUPER_USER, ROLES, ROLE_FAMILY_COMMON_USER, ROLE_SYSADMIN, \
-    ROLE_MEMBER, check_permission_allowed, get_role_id
+from utility.role_manager import check_role, ROLE_FAMILY_SUPER_USER, ROLES, ROLE_FAMILY_COMMON_USER, ROLE_SYSADMIN, get_role_id
 from utility import role_manager
 
 
@@ -169,7 +169,12 @@ def user_list_view(request):
 
     # 搜索条件
     if params['query']:
-        queryset = queryset.filter(username__contains=params['query'])
+        queryset = queryset.filter(Q(username__contains=params['query'])
+                                   # Q(full_name__contains=params['query']) |
+                                   # Q(email__contains=params['query']) |
+                                   # Q(mobile__contains=params['query']) |
+                                   # Q(create_datetime__contains=params['query'])
+    )
 
     # 如果是超级管理员,那么显示所有的用户信息
     if check_role(request, ROLE_SYSADMIN):
@@ -178,10 +183,6 @@ def user_list_view(request):
     # 如果是家庭管理员,那么只显示家庭普通成员的信息
     elif check_role(request, ROLE_FAMILY_SUPER_USER):
         queryset = queryset.filter(groups__name=ROLES[ROLE_FAMILY_COMMON_USER])
-
-    # 如果是注册会员,那么可以看到一些付费功能
-    # elif check_role(request, ROLE_MEMBER):
-    #     queryset = queryset
 
     # 排序
     if not params['order_field'] or not order_dict. has_key(params['order_field']):

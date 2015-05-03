@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load extfilters %}
 {% load staticfiles %}
 {% block title %} - 用户一览{% endblock %}
 {% block content %}
@@ -24,7 +25,7 @@
             <div class="row">
                 <div class="span12 alert alert-block">
                     <h4>注意!</h4>
-                    您搜索的结果不存在，请确认后重试。
+                    您搜索的结果不存在(默认以用户名搜索)，请确认后重试。
                 </div>
                 <div class="span12">
                     <a class="btn btn-primary" href="/user_account/add/">添加用户</a>
@@ -52,12 +53,12 @@
                             <thead>
                             <tr>
                                 <th class="check_column"><input type="checkbox" id="checkSelectAll"/></th>
-                                <th><a href="#" class="data_column" sort_key="un">帐号</a></th>
-                                <th><a href="#" class="data_column" sort_key="fn">姓名</a></th>
+                                <th>帐号</th>
+                                <th>姓名</th>
                                 <th><a href="#" class="data_column" sort_key="cd">创建日期</a></th>
-                                <th><a href="#" class="data_column" sort_key="gr">身份</a></th>
-                                <th><a href="#" class="data_column" sort_key="mb">手机</a></th>
-                                <th><a href="#" class="data_column" sort_key="em">邮箱</a></th>
+                                <th>身份</th>
+                                <th>手机</th>
+                                <th>邮箱</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -68,7 +69,7 @@
                                         <a href="/user_account/edit/{{ user.id }}/" class="btn-link edit_link">{{ user.username }}</a>
                                     </td>
                                     <td>{{ user.get_full_name }}</td>
-                                    <td>{{ user.create_datetime|date:"Y/m/d H:i:s" }}</td>
+                                    <td>{{ user.create_datetime|format_date}}</td>
                                     <td>{{ user.groups.all|first }}</td>
                                     <td>{{ user.mobile }}</td>
                                     <td>{{ user.email }}</td>
