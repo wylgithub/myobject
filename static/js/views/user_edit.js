@@ -16,12 +16,7 @@ define([
             'click #btnReturn':'return_to_prev_page',
             'click #btnSave':'save'
         },
-
         initialize:function () {
-            //var ru = $('#redirect_url');
-            //if (ru && ru.val() === '') {
-            //    $('#btnReturn').hide();
-            //}
         },
 
         save:function() {
@@ -38,7 +33,6 @@ define([
 
             $('#frmEditUser').submit();
         },
-
         // 返回用户一览
         return_to_prev_page:function() {
             var ru = $('#redirect_url');
@@ -50,7 +44,6 @@ define([
             }
             window.location.href = url;
         },
-
         // 选择人员角色
         dropdownItem_click:function(event) {
             var element = $(event.target);

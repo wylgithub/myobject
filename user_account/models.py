@@ -176,7 +176,7 @@ class UserRegisterForm(ModelForm):
     def clean(self):
         cleaned_data = super(UserRegisterForm, self).clean()
         #  检查用户的唯一性
-        if 'username' in cleaned_data and 'mode' in cleaned_data:
+        if 'username' in cleaned_data:
             username = cleaned_data['username']
             if User.objects.filter(username=username).count() > 0:
                 msg = u"用户名已存在。"
