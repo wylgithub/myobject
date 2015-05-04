@@ -4,6 +4,7 @@ import datetime
 
 from django.db import models
 from django.forms import ModelForm
+import re
 
 from user_account.models import User
 
@@ -48,6 +49,35 @@ class StockForm(ModelForm):
                 self._errors['buy_date'] = self.error_class([msg])
 
                 del cleaned_data['buy_date']
+
+        if 'stock_name' in cleaned_data:
+            stock_name = cleaned_data['stock_name']
+
+            if stock_name is u'' or stock_name.isdigit():
+                msg = u'请输入正确的股票名称!(例如: 全通教育)'
+
+                self._errors['stock_name'] = self.error_class([msg])
+
+                del cleaned_data['stock_name']
+
+        if 'stock_label' in cleaned_data:
+            stock_label = cleaned_data['stock_label']
+
+            if stock_label is u'' or (not stock_label.isdigit()):
+                msg = u"请输入正确的股票代码!(例如: 300359)"
+                self._errors['stock_label'] = self.error_class([msg])
+
+                del cleaned_data['stock_label']
+
+        if 'remarks' in cleaned_data:
+            remarks = cleaned_data['remarks']
+            check_null = re.search(r'\S', remarks)
+
+            if not check_null:
+                msg = u"请填写本次交易的详细信息,以备日后查看!"
+                self._errors['remarks'] = self.error_class([msg])
+
+                del cleaned_data['remarks']
 
         if 'sold_date' in cleaned_data:
             sold_date = cleaned_data['sold_date'].date()

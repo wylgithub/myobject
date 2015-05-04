@@ -38,7 +38,7 @@
                 <div class="controls">
                     <div class="input-prepend">
                         <span class="add-on"><i class="icon-star-empty"></i></span>
-                        <input type="text" id="stock_name" name="stock_name" class="highlight span2" maxlength="30" value="{{ form.stock_name.value|default_if_none:"" }}"/>
+                        <input type="text" id="stock_name" name="stock_name" placeholder="例如: 全通教育" class="highlight span2" maxlength="30" value="{{ form.stock_name.value|default_if_none:"" }}"/>
                     </div>
                     {% if form.stock_name.errors %}
                         {% with form.stock_name.errors|first as error %}
@@ -53,7 +53,7 @@
                 <div class="controls">
                     <div class="input-prepend">
                         <span class="add-on"><i class="icon-star"></i></span>
-                        <input type="text" id="stock_label" name="stock_label" class="highlight span2" maxlength="30" value="{{ form.stock_label.value|default_if_none:"" }}"/>
+                        <input type="text" id="stock_label" name="stock_label" placeholder="例如: 300359" class="highlight span2" maxlength="30" value="{{ form.stock_label.value|default_if_none:"" }}"/>
                     </div>
                     {% if form.stock_label.errors %}
                         {% with form.stock_label.errors|first as error %}
@@ -68,7 +68,7 @@
                 <div class="controls">
                     <div class="input-prepend">
                         <span class="add-on"><i class="icon-shopping-cart"></i></span>
-                        <input type="text" id="buy_amount" name="buy_amount" class="highlight span2" maxlength="30" value="{{ form.buy_amount.value|default_if_none:"" }}"/>
+                        <input type="text" id="buy_amount" name="buy_amount" placeholder="例如: 1000(1手 = 100股)"class="highlight span2" maxlength="30" value="{{ form.buy_amount.value|default_if_none:"" }}"/>
                     </div>
                     {% if form.buy_amount.errors %}
                         {% with form.buy_amount.errors|first as error %}
@@ -83,7 +83,7 @@
                 <div class="controls">
                     <div class="input-prepend">
                         <span class="add-on">￥</span>
-                        <input type="text" id="buy_price" name="buy_price" class="highlight span2" maxlength="30" value="{{ form.buy_price.value|default_if_none:"" }}"/>
+                        <input type="text" id="buy_price" name="buy_price" placeholder="例如: 200.88"class="highlight span2" maxlength="30" value="{{ form.buy_price.value|default_if_none:"" }}"/>
                     </div>
                     {% if form.buy_price.errors %}
                         {% with form.buy_price.errors|first as error %}
@@ -98,7 +98,7 @@
                 <div class="controls">
                     <div class="input-prepend">
                         <span class="add-on">￥</span>
-                        <input type="text" id="sold_price" name="sold_price" class="highlight span2" maxlength="30" value="{{ form.sold_price.value|default_if_none:"" }}"/>
+                        <input type="text" id="sold_price" name="sold_price" placeholder="例如: 250.89" class="highlight span2" maxlength="30" value="{{ form.sold_price.value|default_if_none:"" }}"/>
                     </div>
                     {% if form.sold_price.errors %}
                         {% with form.sold_price.errors|first as error %}
@@ -113,7 +113,7 @@
                     <div class="controls">
                     <div class="input-prepend">
                         <span class="add-on">￥</span>
-                        <input type="text" id="stop_lose_price" name="stop_lose_price" class="highlight span2" maxlength="30" value="{{ form.stop_lose_price.value|default_if_none:"" }}"/>
+                        <input type="text" id="stop_lose_price" name="stop_lose_price" placeholder="例如: 180.88"class="highlight span2" maxlength="30" value="{{ form.stop_lose_price.value|default_if_none:"" }}"/>
                     </div>
                     {% if form.stop_lose_price.errors %}
                         {% with form.stop_lose_price.errors|first as error %}
@@ -128,7 +128,7 @@
                 <div class="controls">
                     <div class="input-prepend">
                         <span class="add-on">￥</span>
-                        <input type="text" id="earn" name="earn" class="highlight span2" maxlength="30" value="{{ form.earn.value|default_if_none:"" }}"/>
+                        <input type="text" id="earn" name="earn" class="highlight span2" placeholder="例如: 200000" maxlength="30" value="{{ form.earn.value|default_if_none:"" }}"/>
                     </div>
                     {% if form.earn.errors %}
                         {% with form.earn.errors|first as error %}
@@ -142,7 +142,7 @@
                 <label class="control-label" for="buy_date">买入日期</label>
                 <div class="controls">
                     <div class="input-append date" id="start_date" data-date="{{ current_now }}" data-date-format="yyyy-mm-dd">
-                        <input class="span2 highlight" id="buy_date"
+                        <input class="span2 highlight" id="buy_date" placeholder="例如: 2015-2-32"
                               size="16" type="text" name="buy_date" value="{{ form.buy_date.value|default_if_none:""|format_date }}" maxlength="10" readonly/>
                         <span class="add-on"><i class="icon-calendar"></i></span>
                     </div>
@@ -158,7 +158,7 @@
                 <label class="control-label" for="sold_date">卖出日期</label>
                 <div class="controls">
                     <div class="input-append date" id="end_date" data-date="{{ current_now }}" data-date-format="yyyy-mm-dd">
-                        <input class="span2 highlight" id="sold_date"
+                        <input class="span2 highlight" id="sold_date" placeholder="例如: 2015-2-31"
                               size="16" type="text" name="sold_date" value="{{ form.sold_date.value|default_if_none:""|format_date }}" maxlength="10" data-date-format="yyyy-mm-dd" readonly/>
                         <span class="add-on"><i class="icon-calendar"></i></span>
                     </div>
@@ -176,6 +176,12 @@
                     <textarea rows="5" class="highlight" id="addRemarks" name="remarks">
                         {{ form.remarks.value|default_if_none:"" }}
                     </textarea>
+                    {% if form.remarks.errors %}
+                        {% with form.remarks.errors|first as error %}
+                            <br/>
+                            <span class="error_message">{{ error }}</span>
+                        {% endwith %}
+                    {% endif %}
                 </div>
             </div>
         </div>
