@@ -9,7 +9,7 @@
             <ul class="bc">
                 <li><a href="/">主页</a><span class="divider">/</span></li>
                 <li><a href="/income/expend/list/">支出一览修改</a> <span class="divider">/</span></li>
-                <li class="active">添加明细</li>
+                <li class="active">{{ form.instance.expend_type }}</li>
             </ul>
         </div>
         <form class="form-horizontal" action="/income/expend/edit/action/" id="Expend" method="post">
