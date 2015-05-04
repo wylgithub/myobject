@@ -1,18 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import json
+
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from django.http import HttpResponse
 
-from django.shortcuts import render, redirect, get_object_or_404, render_to_response
-from django.template import RequestContext
 
+from django.shortcuts import render, redirect, get_object_or_404
 from user_account.models import UserLoginForm, UserForm, User, UserEditForm, UserRegisterForm
 from django.contrib.auth import authenticate, login, logout
 from utility.base_view import back_to_original_page, get_list_params
-from utility.constant import JSON_ERROR_CODE_NO_ERROR
 from utility.exception import PermissionDeniedError
 from utility.role_manager import check_role, ROLE_FAMILY_SUPER_USER, ROLES, ROLE_FAMILY_COMMON_USER, ROLE_SYSADMIN, get_role_id
 from utility import role_manager

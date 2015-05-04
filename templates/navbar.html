@@ -124,7 +124,7 @@
             <ul class="nav pull-right">
                 {% if user.is_authenticated %}
                     <li>
-                        {% if  user.is_superuser %}
+                        {% if not user.is_superuser %}
                             <a href="/user_account/edit/{{ user.id }}/?next=/">
                         {% else %}
                             <a href="#">
