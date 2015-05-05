@@ -12,7 +12,6 @@ define([
         in_syncing:false,  //防止两重提交标志位
 
         events:{
-            'click #btnSave':'save',
             'click .dropdownItem':'dropdownItem_click',
             'click #btnReturn':'return_to_prev_page',
             'click #btnRegister': 'btn_register'
@@ -31,6 +30,7 @@ define([
                 return;
             }
             this.in_syncing = true;
+            $('#btnRegister').prop('disabled', true);
             $('#registerForm').submit();
         },
 

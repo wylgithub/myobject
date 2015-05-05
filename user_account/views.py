@@ -91,7 +91,7 @@ def register_action(request):
 
     else:
         return render(request, "user_account/register.html", {
-            'goods': form,
+            'form': form,
         })
 #  用户注册模块结束
 

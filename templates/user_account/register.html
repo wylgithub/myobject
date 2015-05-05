@@ -23,16 +23,15 @@
                 <ul class="nav nav-pills">
                     <li class="active">
                         <span class="">
-                        <a style="width: 2500px;" class="btn btn-link" id="lnkLogin" href="/user_account/login/">立即登录</a>
+                        <a style="width: 3000px;" class="btn btn-link" id="lnkLogin" href="/user_account/login/">已经账号,立即登录</a>
                         </span>
                     </li>
                 </ul>
             </div>
             <div class="container" style="margin-top:60px;">
                 <form class="form-horizontal" action="/user_account/register/action/" id="registerForm" method="post">
+                <button class="btn btn-large btn-block btn-primary" type="button">欢迎注册!</button>
                     {% csrf_token %}
-{#                    <input type="hidden" name="validation" id="id_validation" value="{{ validation }}">#}
-{#                    <input type="hidden" name="redirect_url" id="redirect_url" value="{{ redirect_url|default_if_none:"" }}"/>#}
                     <div class="well well-large">
                         <div class="control-group">
                             <label class="control-label" for="txtUserName">用户名</label>
@@ -125,37 +124,10 @@
                             </div>
                         </div>
                         <div class="control-group">
-                            <label class="control-label" for="role">注册身份</label>
                             <div class="controls">
-                                <input type="hidden" name="role" id="id_role" value="{% if form.role.value %}{{ form.role.value }}{% else %}10{% endif %}"/>
-                                <div class="btn-group">
-                                    <button class="btn span2" type="button" data-toggle="dropdown" id="btnRoleDisplay">
-                                        {% if form.role.value == "10" %}
-                                            家庭管理员
-                                        {% elif form.role.value == "20" %}
-                                            会员
-                                        {% else %}
-                                            家庭普通成员
-                                        {% endif %}
-                                    </button>
-                                    <button class="btn dropdown-toggle" data-toggle="dropdown">
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="#" class="dropdownItem" for="id_role" value="10">家庭管理员</a></li>
-                                        <li><a href="#" class="dropdownItem" for="id_role" value="20">会员</a></li>
-                                        <li><a href="#" class="dropdownItem" for="id_role" value="50">家庭普通成员</a></li>
-
-                                    </ul>
-                                </div>
-                                {% if form.role.errors %}
-                                    {% with form.role.errors|first as error %}
-                                        <br/><span class="error_message">{{ error }}</span>
-                                    {% endwith %}
-                                {% endif %}
+                                <input type="hidden" name="role" id="id_role" value="10"/>
                             </div>
                         </div>
-
                         <div class="control-group">
                             <div class="controls">
                                 <button type="button" id="btnRegister" class="btn btn-success">注册</button>
