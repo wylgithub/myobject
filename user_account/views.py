@@ -167,10 +167,6 @@ def user_list_view(request):
     # 搜索条件
     if params['query']:
         queryset = queryset.filter(Q(username__contains=params['query'])
-                                   # Q(full_name__contains=params['query']) |
-                                   # Q(email__contains=params['query']) |
-                                   # Q(mobile__contains=params['query']) |
-                                   # Q(create_datetime__contains=params['query'])
     )
 
     # 如果是超级管理员,那么显示所有的用户信息
