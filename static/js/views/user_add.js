@@ -10,17 +10,14 @@ define([
         role:$('#id_role'),
         btnRoleDisplay:$('#btnRoleDisplay'),
         in_syncing:false,  //防止两重提交标志位
-
         events:{
             'click #btnSave':'save',
             'click .dropdownItem':'dropdownItem_click',
             'click #btnReturn':'return_to_prev_page'
         },
-
         initialize:function () {
 
         },
-
         save:function() {
             //防止两重提交
             if (this.in_syncing) {
@@ -30,7 +27,6 @@ define([
             $('#btnSave').prop('disabled', true);
             $('#frmAddUser').submit();
         },
-
         // 返回用户一览
         return_to_prev_page:function() {
             var ru = $('#redirect_url');
@@ -42,7 +38,6 @@ define([
             }
             window.location.href = url;
         },
-
         // 选择人员角色
         dropdownItem_click:function(event) {
             var element = $(event.target);

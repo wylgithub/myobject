@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import datetime
 
 from django.db import models
 from django.forms import ModelForm
+import re
 
 from user_account.models import User
 
@@ -36,7 +38,56 @@ class StockForm(ModelForm):
     """
 
     def clean(self):
+
         cleaned_data = super(StockForm, self).clean()
+        if 'buy_date' in cleaned_data:
+            buy_date = cleaned_data['buy_date'].date()
+            # 获取当前时间
+            get_today = datetime.date.today()
+            if buy_date is u"" or buy_date > get_today:
+                msg = u"请输入有效的日期(购买日期应当小于等于当前)!"
+                self._errors['buy_date'] = self.error_class([msg])
+
+                del cleaned_data['buy_date']
+
+        if 'stock_name' in cleaned_data:
+            stock_name = cleaned_data['stock_name']
+
+            if stock_name is u'' or stock_name.isdigit():
+                msg = u'请输入正确的股票名称!(例如: 全通教育)'
+
+                self._errors['stock_name'] = self.error_class([msg])
+
+                del cleaned_data['stock_name']
+
+        if 'stock_label' in cleaned_data:
+            stock_label = cleaned_data['stock_label']
+
+            if stock_label is u'' or (not stock_label.isdigit()):
+                msg = u"请输入正确的股票代码!(例如: 300359)"
+                self._errors['stock_label'] = self.error_class([msg])
+
+                del cleaned_data['stock_label']
+
+        if 'remarks' in cleaned_data:
+            remarks = cleaned_data['remarks']
+            check_null = re.search(r'\S', remarks)
+
+            if not check_null:
+                msg = u"请填写本次交易的详细信息,以备日后查看!"
+                self._errors['remarks'] = self.error_class([msg])
+
+                del cleaned_data['remarks']
+
+        if 'sold_date' in cleaned_data:
+            sold_date = cleaned_data['sold_date'].date()
+            # 获取当前时间
+            get_today = datetime.date.today()
+            if sold_date is u"" or sold_date < get_today:
+                msg = u"请输入有效的日期(卖出日期应当大于等于当前)!"
+                self._errors['sold_date'] = self.error_class([msg])
+
+                del cleaned_data['sold_date']
 
         return cleaned_data
 

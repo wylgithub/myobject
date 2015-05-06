@@ -6,7 +6,6 @@ define([
     'datetimepicker',
     'datepicker',
     'datetimepickerCN',
-    //'jqueryuiprogressbar'
 ], function (require, $, Backbone) {
     "use strict";
 
@@ -15,7 +14,6 @@ define([
         in_syncing:false,  //防止两重提交标志位
 
         events:{
-            //'click #btnAdd': 'btnAdd',
             'click #btnAdd': 'btnAdd'
         },
 

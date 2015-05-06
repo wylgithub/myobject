@@ -1,20 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import json
+
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.db.models import Q
 
-from django.shortcuts import render, redirect, get_object_or_404, render_to_response
-from django.template import RequestContext
 
+from django.shortcuts import render, redirect, get_object_or_404
 from user_account.models import UserLoginForm, UserForm, User, UserEditForm, UserRegisterForm
 from django.contrib.auth import authenticate, login, logout
 from utility.base_view import back_to_original_page, get_list_params
-from utility.constant import JSON_ERROR_CODE_NO_ERROR
 from utility.exception import PermissionDeniedError
-from utility.role_manager import check_role, ROLE_FAMILY_SUPER_USER, ROLES, ROLE_FAMILY_COMMON_USER, ROLE_SYSADMIN, \
-    ROLE_MEMBER, check_permission_allowed, get_role_id
+from utility.role_manager import check_role, ROLE_FAMILY_SUPER_USER, ROLES, ROLE_FAMILY_COMMON_USER, ROLE_SYSADMIN, get_role_id
 from utility import role_manager
 
 
@@ -59,11 +56,7 @@ def logout_action(request):
 
 # 用户这侧模块开始
 def register_view(request):
-    """
-    注册初期话View
-    author:ganfeng
-    added by 2013/04/23
-    """
+    # 用户注册view
 
     form = UserRegisterForm()
 
@@ -76,43 +69,30 @@ def register_action(request):
     """
     用户注册
     """
-    response_data = {}
-    try:
-        form = UserRegisterForm(request.POST, instance=User())
-        if form.is_valid():
+    form = UserRegisterForm(request.POST, instance=User())
 
-            role = form.cleaned_data['role']
-            form.instance.username = request.POST['username']
-            form.instance.password = request.POST['password']
-            form.instance.full_name = request.POST['full_name']
-            form.instance.email = request.POST['email']
-            form.instance.mobile = request.POST['mobile']
+    if form.is_valid():
+        role = form.cleaned_data['role']
+        form.instance.username = request.POST['username']
+        form.instance.password = request.POST['password']
+        form.instance.full_name = request.POST['full_name']
+        form.instance.email = request.POST['email']
+        form.instance.mobile = request.POST['mobile']
 
-            user = form.save()
-            user.set_password(form.instance.password)
-            group = role_manager.get_role(role)
+        user = form.save()
+        user.set_password(form.instance.password)
+        group = role_manager.get_role(role)
 
-            if group:
-                user.groups.add(group)
-            user.save()
-            return render_to_response("user_account/register.html", {
-                'result': 'OK',
-                'error_code': JSON_ERROR_CODE_NO_ERROR,
-                'validation': True,
-                'form': form,
-            }, context_instance=RequestContext(request))
+        if group:
+            user.groups.add(group)
+        user.save()
 
-        else:
-            return render_to_response("user_account/register.html", {
-                'result': 'OK',
-                'error_code': JSON_ERROR_CODE_NO_ERROR,
-                'validation': False,
-                'goods': form,
-            }, context_instance=RequestContext(request))
+        return back_to_original_page(request, "/user_account/login/")
 
-    except:
-        response_data['validate'] = True
-        return HttpResponse(json.dumps(response_data), mimetype="application/json")
+    else:
+        return render(request, "user_account/register.html", {
+            'form': form,
+        })
 #  用户注册模块结束
 
 
@@ -186,7 +166,8 @@ def user_list_view(request):
 
     # 搜索条件
     if params['query']:
-        queryset = queryset.filter(username__contains=params['query'])
+        queryset = queryset.filter(Q(username__contains=params['query'])
+    )
 
     # 如果是超级管理员,那么显示所有的用户信息
     if check_role(request, ROLE_SYSADMIN):
@@ -195,10 +176,6 @@ def user_list_view(request):
     # 如果是家庭管理员,那么只显示家庭普通成员的信息
     elif check_role(request, ROLE_FAMILY_SUPER_USER):
         queryset = queryset.filter(groups__name=ROLES[ROLE_FAMILY_COMMON_USER])
-
-    # 如果是注册会员,那么可以看到一些付费功能
-    # elif check_role(request, ROLE_MEMBER):
-    #     queryset = queryset
 
     # 排序
     if not params['order_field'] or not order_dict. has_key(params['order_field']):

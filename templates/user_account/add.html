@@ -18,7 +18,11 @@
                 <div class="control-group">
                     <label class="control-label" for="txtUserName">用户名</label>
                     <div class="controls">
-                        <input type="text" id="txtUserName" name="username" class="highlight first_focus{% if form.username.errors %} error_flg{% endif %}" maxlength="30" value="{{ form.username.value|default_if_none:"" }}"/>
+                        <div class="input-prepend">
+                            <span class="add-on"><i class="icon-user"></i></span>
+                            <input type="text" id="txtUserName" name="username" class="highlight span2 first_focus{% if form.username.errors %} error_flg{% endif %}" maxlength="30" value="{{ form.username.value|default_if_none:"" }}"/>
+                        </div>
+
                         {% if form.username.errors %}
                             {% with form.username.errors|first as error %}
                                 <br/><span class="error_message">{{ error }}</span>{% endwith %}
@@ -28,7 +32,10 @@
                 <div class="control-group">
                     <label class="control-label" for="txtPassword">密码</label>
                     <div class="controls">
-                        <input type="password" id="txtPassword" name="password" maxlength="20" class="highlight{% if form.password.errors %} error_flg{% endif %}">
+                        <div class="input-prepend">
+                            <span class="add-on"><i class="icon-eye-open"></i></span>
+                            <input type="password" id="txtPassword" name="password" maxlength="20" class=" span2 highlight{% if form.password.errors %} error_flg{% endif %}">
+                        </div>
                         {% if form.password.errors %}
                             {% with form.password.errors|first as error %}
                                 <br/><span class="error_message">{{ error }}</span>
@@ -39,7 +46,10 @@
                 <div class="control-group">
                     <label class="control-label" for="txtFullName">姓名</label>
                     <div class="controls">
-                        <input type="text" class="highlight input{% if form.last_name.errors %} error_flg{% endif %}" name="full_name" id="txtFullName" maxlength="20" value="{{ form.full_name.value|default_if_none:"" }}"/>
+                        <div class="input-prepend">
+                            <span class="add-on"><i class="icon-pencil"></i></span>
+                            <input type="text" class="highlight span2 input{% if form.last_name.errors %} error_flg{% endif %}" name="full_name" id="txtFullName" maxlength="20" value="{{ form.full_name.value|default_if_none:"" }}"/>
+                        </div>
                         {% if form.full_name.errors %}
                             {% with form.full_name.errors|first as error %}
                                 <br/><span class="error_message">{{ error }}</span>
@@ -50,7 +60,10 @@
                 <div class="control-group">
                     <label class="control-label" for="txtEmail">邮箱</label>
                     <div class="controls">
-                        <input type="text" class="highlight input{% if form.email.errors %} error_flg{% endif %}" name="email" id="txtEmail" maxlength="20" value="{{ form.email.value|default_if_none:"" }}"/>
+                        <div class="input-prepend">
+                            <span class="add-on"><i class="icon-envelope"></i></span>
+                            <input type="text" class="highlight span2 input{% if form.email.errors %} error_flg{% endif %}" name="email" id="txtEmail" maxlength="20" value="{{ form.email.value|default_if_none:"" }}"/>
+                        </div>
                         {% if form.email.errors %}
                             {% with form.email.errors|first as error %}
                                 <br/><span class="error_message">{{ error }}</span>
@@ -61,7 +74,10 @@
                 <div class="control-group">
                     <label class="control-label" for="txtMobile">手机号码</label>
                     <div class="controls">
-                        <input type="text" class="highlight input{% if form.mobile.errors %} error_flg{% endif %}" name="mobile" id="txtMobile" maxlength="20" value="{{ form.mobile.value|default_if_none:"" }}"/>
+                        <div class="input-prepend">
+                            <span class="add-on"><i class="icon-signal"></i></span>
+                            <input type="text" class="highlight span2 input{% if form.mobile.errors %} error_flg{% endif %}" name="mobile" id="txtMobile" maxlength="20" value="{{ form.mobile.value|default_if_none:"" }}"/>
+                        </div>
                         {% if form.mobile.errors %}
                             {% with form.mobile.errors|first as error %}
                                 <br/><span class="error_message">{{ error }}</span>
@@ -77,8 +93,6 @@
                             <button class="btn" type="button" data-toggle="dropdown" id="btnRoleDisplay">
                                 {% if form.role.value == "10" %}
                                     家庭管理员
-                                {% elif form.role.value == "20" %}
-                                    会员
                                 {% else %}
                                     家庭普通成员
                                 {% endif %}
@@ -88,9 +102,7 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a href="#" class="dropdownItem" for="id_role" value="10">家庭管理员</a></li>
-                                <li><a href="#" class="dropdownItem" for="id_role" value="20">会员</a></li>
-                                <li><a href="#" class="dropdownItem" for="id_role" value="50">家庭普通成员</a></li>
-
+                                <li><a href="#" class="dropdownItem" for="id_role" value="30">家庭普通成员</a></li>
                             </ul>
                         </div>
                         {% if form.role.errors %}
@@ -100,7 +112,6 @@
                         {% endif %}
                     </div>
                 </div>
-
                 <div class="control-group">
                     <div class="controls">
                         <button type="button" id="btnSave" class="btn btn-primary default_button">保存</button>

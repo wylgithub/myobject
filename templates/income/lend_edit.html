@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load extfilters %}
+{% block title %} - 添加支出明细{% endblock %}
+{% block content %}
+    <input type="hidden" id="amd_module" value="{% static "js/views/lend_edit.js" %}" />
+    <div class="container" style="margin-top:60px;">
+        <div class="page_header">
+            <ul class="bc">
+                <li><a href="/">主页</a><span class="divider">/</span></li>
+                <li><a href="/income/lend/list/">借出明细一览</a> <span class="divider">/</span></li>
+                <li class="active">{{ form.instance.lend_person }}</li>
+            </ul>
+        </div>
+        <form class="form-horizontal" action="/income/lend/edit/action/" id="LendForm" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="redirect_url" id="redirect_url" value="" />
+            <input type="hidden" name="id" id="pk" value="{{ lend_id }}"/>
+            <input type="hidden" name="user_id" value="{{ user_id }}"/>
+            <div class="well well-large">
+                <div class="control-group">
+                    <label class="control-label" for="regName">借出款人</label>
+                    <div class="controls">
+                        <div class="input-prepend">
+                            <span class="add-on"><i class="icon-user"></i></span>
+                            <input type="text" id="regName" name="lend_person" class="highlight span2" maxlength="30" value="{{ form.lend_person.value|default_if_none:"" }}" readonly/>
+                        </div>
+                        {% if form.lend_person.errors %}
+                            {% with form.lend_person.errors|first as error %}
+                                <br/>
+                                <span class="error_message">{{ error }}</span>
+                            {% endwith %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="regName">借入款人</label>
+                    <div class="controls">
+                        <div class="input-prepend">
+                            <span class="add-on"><i class="icon-user"></i></span>
+                            <input type="text" id="regName" name="borrow_person" class="highlight span2" maxlength="30" value="{{ form.borrow_person.value|default_if_none:"" }}"/>
+                        </div>
+                    </div>
+                    {% if form.borrow_person.errors %}
+                        {% with form.borrow_person.errors|first as error %}
+                            <br/>
+                            <span class="error_message">{{ error }}</span>
+                        {% endwith %}
+                    {% endif %}
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="incomeAmount">借出金额</label>
+                    <div class="controls">
+                        <div class="input-prepend">
+                            <span class="add-on">￥</span>
+                            <input type="text" class="highlight span2" name="lend_amount" id="incomeAmount" maxlength="20" value="{{ form.lend_amount.value|default_if_none:"" }}"/>
+                        </div>
+                    </div>
+                    {% if form.lend_amount.errors %}
+                        {% with form.lend_amount.errors|first as error %}
+                            <br/>
+                            <span class="error_message">{{ error }}</span>
+                        {% endwith %}
+                    {% endif %}
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="incomeAmount">账户余额</label>
+                    <div class="controls">
+                        <div class="input-prepend">
+                            <span class="add-on">￥</span>
+                            <input type="text" class="highlight span2" name="balance" id="incomeAmount" maxlength="20" value="{{ form.balance.value }}"/>
+                        </div>
+                    </div>
+                    {% if form.balance.errors %}
+                        {% with form.balance.errors|first as error %}
+                            <br/>
+                            <span class="error_message">{{ error }}</span>
+                        {% endwith %}
+                    {% endif %}
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="id_style">借出日期</label>
+                    <div class="controls">
+                        <div class="input-append date" id="borrow_date" data-date="{{ current_now }}" data-date-format="yyyy-mm-dd">
+                            <input class="span2 highlight" id="r_date"
+                                  size="16" type="text" name="lend_datetime" value="{{ form.lend_datetime.value|default_if_none:""|format_date }}" maxlength="10" readonly/>
+                            <span class="add-on"><i class="icon-calendar"></i></span>
+                        </div>
+                        {% if form.lend_datetime.errors %}
+                            {% with form.lend_datetime.errors|first as error %}
+                                <br/>
+                                <span class="error_message">{{ error }}</span>
+                            {% endwith %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="id_style">预还日期</label>
+                    <div class="controls">
+                        <div class="input-append date" id="repay_date" data-date="{{ current_now }}" data-date-format="yyyy-mm-dd">
+                            <input class="span2 highlight" id="r_date"
+                                  size="16" type="text" name="pay_datetime" value="{{ form.pay_datetime.value|default_if_none:""|format_date }}" maxlength="10" readonly/>
+                            <span class="add-on"><i class="icon-calendar"></i></span>
+                        </div>
+                        {% if form.pay_datetime.errors %}
+                            {% with form.pay_datetime.errors|first as error %}
+                                <br/>
+                                <span class="error_message">{{ error }}</span>
+                            {% endwith %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="addRemarks">撰写备注</label>
+                    <div class="controls">
+                        <textarea rows="5" class="highlight" id="addRemarks" name="remarks">
+                            {{ form.remarks.value|default_if_none:"" }}
+                        </textarea>
+                    </div>
+                    {% if form.remarks.errors %}
+                        {% with form.remarks.errors|first as error %}
+                            <br/>
+                            <span class="error_message">{{ error }}</span>
+                        {% endwith %}
+                    {% endif %}
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <button type="button" id="btnSave" class="btn btn-primary">保存</button>
+                    </div>
+                </div>
+                {% if form.non_field_errors %}
+                    {% with form.non_field_errors|first as error %}
+                        <div class="control-group">
+                            <div class="controls"><span class="error_message">{{ error }}</span></div>
+                        </div>
+                    {% endwith %}
+                {% endif %}
+            </div>
+        </form>
+    </div>
+{% endblock %}

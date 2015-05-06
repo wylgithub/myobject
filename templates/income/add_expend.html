@@ -22,7 +22,7 @@
                     <div class="controls">
                         <div class="input-prepend">
                             <span class="add-on"><i class="icon-user"></i></span>
-                            <input type="text" id="regName" name="handler" class="highlight span2" maxlength="30" value="{{ username }}" readonly/>
+                            <input type="text" id="regName" name="handler" class="highlight span2" maxlength="30" value="{{ username|default_if_none:"" }}" readonly/>
                         </div>
                     </div>
                     {% if form.handler.errors %}
@@ -37,7 +37,7 @@
                     <div class="controls">
                         <div class="input-prepend">
                             <span class="add-on"><i class="icon-star-empty"></i></span>
-                            <input type="text" class="highlight span2" name="expend_type" id="incomeType" maxlength="20" value="{{ form.expend_type.value }}"/>
+                            <input type="text" class="highlight span2" name="expend_type" id="incomeType" maxlength="20" value="{{ form.expend_type.value|default_if_none:"" }}"/>
                         </div>
                         {% if form.expend_type.errors %}
                             {% with form.expend_type.errors|first as error %}
@@ -52,7 +52,7 @@
                     <div class="controls">
                         <div class="input-prepend">
                             <span class="add-on">￥</span>
-                            <input type="text" class="highlight span2" name="expend_amount" id="incomeAmount" maxlength="20" value="{{ form.expend_amount.value }}"/>
+                            <input type="text" class="highlight span2" name="expend_amount" id="incomeAmount" maxlength="20" value="{{ form.expend_amount.value|default_if_none:"" }}"/>
                         </div>
                         {% if form.expend_amount.errors %}
                             {% with form.expend_amount.errors|first as error %}
@@ -67,7 +67,7 @@
                     <div class="controls">
                         <div class="input-prepend">
                             <span class="add-on"><i class="icon-home"></i></span>
-                            <input type="text" class="highlight span2" name="expend_account" id="incomeType" maxlength="20" value="{{ form.expend_account.value }}"/>
+                            <input type="text" class="highlight span2" name="expend_account" id="incomeType" maxlength="20" value="{{ form.expend_account.value|default_if_none:"" }}"/>
                         </div>
 
                         {% if form.expend_account.errors %}
@@ -83,7 +83,7 @@
                     <div class="controls">
                         <div class="input-prepend">
                             <span class="add-on">￥</span>
-                            <input type="text" class="highlight span2" name="balance" id="incomeType" maxlength="20" value="{{ form.balance.value }}"/>
+                            <input type="text" class="highlight span2" name="balance" id="incomeType" maxlength="20" value="{{ form.balance.value|default_if_none:"" }}"/>
                         </div>
                         {% if form.balance.errors %}
                             {% with form.balance.errors|first as error %}
@@ -98,7 +98,7 @@
                     <div class="controls">
                         <div class="input-append date" id="expend_date" data-date="{{ current_now }}" data-date-format="yyyy-mm-dd">
                             <input class="span2 highlight" id="r_date"
-                                  size="16" type="text" name="create_datetime" value="{{ current_now }}" maxlength="10" readonly/>
+                                  size="16" type="text" name="create_datetime" value="{{ current_now|default_if_none:"" }}" maxlength="10" readonly/>
                             <span class="add-on"><i class="icon-calendar"></i></span>
                         </div>
                         {% if form.create_datetime.errors %}

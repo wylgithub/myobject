@@ -73,7 +73,7 @@ define([
                     }
                 },
                 error: function(){
-                    window.alert('与服务器通讯发生错误，请稍后重试。');
+                    window.alert('与服务器通讯发生错误，请稍后重试0。');
                 },
                 complete: function(){
                     //防止两重提交
@@ -82,7 +82,7 @@ define([
                     current_view.in_syncing = false;
                 }
             });
-            return false; // prevent the click propagation
+            return true; // prevent the click propagation
         },
 
         onStockEditEnterClicked: function(){
@@ -207,7 +207,6 @@ define([
             var element = $(event.target);
             var tab = "#" + element.parents('.tab-pane').attr('id');
             var name = tab.split('_');
-            //console.log(name[1]);
 
             $(tab+' #btnDelete').addClass('disabled');
 
@@ -282,18 +281,6 @@ define([
                     $(tab+' #btnDelete').addClass('disabled');
                 }
             }
-        },
-
-        // 通讯录使用 start
-        // 搜索
-        search:function() {
-            var queryKey = $('#queryKey').val();
-            queryKey = $.trim(queryKey);
-            var url = '/information/contacts/?';
-            url = url + 'q=' + encodeURIComponent(queryKey);
-            window.location.href = url;
         }
-        // 通讯录使用 end
-
     });
 });

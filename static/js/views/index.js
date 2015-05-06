@@ -12,6 +12,7 @@ define([
 
         initialize:function(parent) {
             this.parentView = parent;
+            $('#myCarousel').carousel()
         }
     });
 });

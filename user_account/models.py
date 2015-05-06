@@ -149,16 +149,6 @@ class UserForm(ModelForm):
 
                     del cleaned_data['mobile']
 
-        # 用户注册邮箱验证试用Django的认证方式
-        # if 'email' in cleaned_data:
-        #     email = cleaned_data['email']
-        #     if len(email) > 7:
-        #         if re.match("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$", email) == None:
-        #             msg = u"请输入正确的邮箱地址,例如：xxxxxx@163.com"
-        #             self._errors = self.error_class([msg])
-        #
-        #             del cleaned_data['email']
-
         return cleaned_data
 
     def __init__(self, *args, **kwargs):
@@ -171,29 +161,37 @@ class UserForm(ModelForm):
 
 class UserRegisterForm(ModelForm):
     role = forms.IntegerField()
-
-    class Meta:
-        model = User
-        fields = ('username', 'password', 'full_name', 'email', 'mobile')
+    check_password = forms.CharField(required=False)  # 用户的密码验证
 
     def clean(self):
         cleaned_data = super(UserRegisterForm, self).clean()
         #  检查用户的唯一性
-        if 'username' in cleaned_data and 'mode' in cleaned_data:
+        if 'username' in cleaned_data:
             username = cleaned_data['username']
             if User.objects.filter(username=username).count() > 0:
-                msg = u"用户名已存在。"
+                msg = u"此用户已被注册!!。"
                 self._errors["username"] = self.error_class([msg])
 
                 del cleaned_data["username"]
 
-        if 'password' in cleaned_data:
+        if 'password' in cleaned_data and 'check_password' in cleaned_data:
             password = cleaned_data['password']
-            if len(password) < 6:
-                msg = u"为了您的账户安全，请您将密码位数设置的复杂点，尽量不要讲生日设置为个人密码！"
-                self._errors['password'] = self.error_class([msg])
+            check_password = cleaned_data['check_password']
+            msg = u''
+            if password != check_password:
+                msg = u'两次输入的密码不配配!'
 
-                del cleaned_data["password"]
+            if password is u'' or check_password is u'':
+                msg = u'密码不可以为空!'
+
+            if len(password) < 6 or len(check_password) < 6:
+                msg = u'密码太简单!(建议密码长度为6-18位!)'
+
+                self._errors['password'] = self.error_class([msg])
+                self._errors['check_password'] = self.error_class([msg])
+
+                del cleaned_data['password']
+                del cleaned_data['check_password']
 
         if 'mobile' in cleaned_data:
             mobile = cleaned_data['mobile']
@@ -215,6 +213,13 @@ class UserRegisterForm(ModelForm):
         #             del cleaned_data['email']
 
         return cleaned_data
+
+    def __init__(self, *args, **kwargs):
+        super(UserRegisterForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = User
+        fields = ('username', 'password', 'full_name', 'email', 'mobile')
 
 
 class UserEditForm(UserForm):

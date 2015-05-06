@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, render_to_response
+from django.template import RequestContext
 from plan.models import Weekly, Monthly, Yearly, MonthlyForm, YearlyForm
 from user_account.models import User
 from utility.base_view import back_to_original_page, get_list_params
@@ -180,6 +181,67 @@ def month_delete_action(request):
     Monthly.objects.filter(id__in=pks).update(delete_flg=True, update_datetime=datetime.now())
     return back_to_original_page(request, '/plan/month/list/')
 
+
+@login_required
+def month_edit_view(request, id, month_id):
+    """
+    流水借入一览修改view
+    :param request:
+    :param id:
+    :param month_id:
+    :return:
+    """
+    # 用户id
+    user_id = int(id)
+
+    # 获取当前支出条目id
+    month_id=int(month_id)
+
+    user_month = get_object_or_404(Monthly, id=month_id)
+
+    form = MonthlyForm(instance=user_month)
+
+    return render(request, "plan/month_edit.html", {
+        "form": form,
+        "month_id": month_id,
+        'user_id': user_id,
+        "current_now": get_today().strftime(DATE_INPUT_FORMAT_HYPHEN),
+    })
+
+
+@login_required
+def month_edit_action(request):
+    """
+    修改支出信息action
+    :param request:
+    :return:
+    """
+    # 当前修改的收入信息
+    id = request.POST['id']
+
+    # 当前用户的id
+    user_id = request.POST['user_id']
+
+    month = get_object_or_404(Monthly, id=int(id))
+    form = MonthlyForm(request.POST, instance=month)
+
+    # 获取用户名保存到数据库
+    user = User.objects.filter(id=user_id).get()
+    # 信息登记人
+    mark_name = user.full_name
+
+    if form.is_valid():
+        # form.instance.user_id = id
+        form.save()
+
+        return back_to_original_page(request, "/plan/month/list/")
+    else:
+        return render_to_response("plan/month_edit.html", {
+            'user_id': user_id,
+            'id': id,
+            'form': form,
+            'username': mark_name,
+        }, context_instance=RequestContext(request))
 # 月预算信息添加结束
 
 # 年预算信息添加开始
@@ -308,4 +370,54 @@ def year_delete_action(request):
     Yearly.objects.filter(id__in=pks).update(delete_flg=True, update_datetime=datetime.now())
     return back_to_original_page(request, '/plan/year/list/')
 
+
+@login_required
+def year_edit_view(request, id, year_id):
+
+    # 用户id
+    user_id = int(id)
+
+    # 获取当前支出条目id
+    year_id=int(year_id)
+
+    user_year = get_object_or_404(Yearly, id=year_id)
+
+    form = YearlyForm(instance=user_year)
+
+    return render(request, "plan/year_edit.html", {
+        "form": form,
+        "year_id": year_id,
+        'user_id': user_id,
+        "current_now": get_today().strftime(DATE_INPUT_FORMAT_HYPHEN),
+    })
+
+
+@login_required
+def year_edit_action(request):
+    # 当前修改的收入信息
+    id = request.POST['id']
+
+    # 当前用户的id
+    user_id = request.POST['user_id']
+
+    year = get_object_or_404(Yearly, id=int(id))
+    form = YearlyForm(request.POST, instance=year)
+
+    # 获取用户名保存到数据库
+    user = User.objects.filter(id=user_id).get()
+    # 信息登记人
+    mark_name = user.full_name
+
+    if form.is_valid():
+        # form.instance.user_id = id
+        form.save()
+
+        return back_to_original_page(request, "/plan/year/list/")
+    else:
+        return render_to_response("plan/year_edit.html", {
+            'user_id': user_id,
+            'id': id,
+            'form': form,
+            'username': mark_name,
+        }, context_instance=RequestContext(request))
 # 月预算信息添加结束

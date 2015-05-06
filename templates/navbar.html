@@ -6,7 +6,7 @@
                 <img src="{{ STATIC_URL }}img/logo.png" alt="logo" style="margin:0;padding:0;height:20px;"/>理财宝
                 </a>
             <ul class="nav nav-pills">
-            {% if user.is_superuser %}
+            {% if user|in_group:"家庭管理员" or user.is_superuser %}
                 <li class="dropdown" id="menuAccount" active-by-url="\/user_account\/">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#menuAccount">
                         用户管理
@@ -73,21 +73,21 @@
             {% endif %}
             </ul>
 
-            <ul class="nav nav-pills">
-            {% if not user.is_superuser %}
-                <li class="dropdown" id="menuBorrow" active-by-url="\/income\/">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#menuBorrow">
-                        家庭流水报表
-                        <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li active-by-url="\/income\/add\/"><a href="/income/add/">周汇总统计</a></li>
-                        <li active-by-url="\/income\/add\/"><a href="/income/add/">月汇总统计</a></li>
-                        <li active-by-url="\/income\/add\/"><a href="/income/add/">年汇总统计</a></li>
-                    </ul>
-                </li>
-            {% endif %}
-            </ul>
+{#            <ul class="nav nav-pills">#}
+{#            {% if not user.is_superuser %}#}
+{#                <li class="dropdown" id="menuBorrow" active-by-url="\/income\/">#}
+{#                    <a class="dropdown-toggle" data-toggle="dropdown" href="#menuBorrow">#}
+{#                        家庭流水报表#}
+{#                        <b class="caret"></b>#}
+{#                    </a>#}
+{#                    <ul class="dropdown-menu">#}
+{#                        <li active-by-url="\/income\/add\/"><a href="/income/add/">周汇总统计</a></li>#}
+{#                        <li active-by-url="\/income\/add\/"><a href="/income/add/">月汇总统计</a></li>#}
+{#                        <li active-by-url="\/income\/add\/"><a href="/income/add/">年汇总统计</a></li>#}
+{#                    </ul>#}
+{#                </li>#}
+{#            {% endif %}#}
+{#            </ul>#}
 
              <ul class="nav nav-pills">
             {% if not user.is_superuser %}
@@ -107,24 +107,24 @@
             {% endif %}
             </ul>
 
-             <ul class="nav nav-pills">
-            {% if not user.is_superuser %}
-                <li class="dropdown" id="menuDeposit" active-by-url="\/income\/">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#menuDeposit">
-                        时事热点
-                        <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li active-by-url="\/income\/add\/"><a href="/income/add/">股市相关</a></li>
-                        <li active-by-url="\/income\/add\/"><a href="/income/add/">新闻热点</a></li>
-                    </ul>
-                </li>
-            {% endif %}
-            </ul>
+{#             <ul class="nav nav-pills">#}
+{#            {% if not user.is_superuser %}#}
+{#                <li class="dropdown" id="menuDeposit" active-by-url="\/income\/">#}
+{#                    <a class="dropdown-toggle" data-toggle="dropdown" href="#menuDeposit">#}
+{#                        时事热点#}
+{#                        <b class="caret"></b>#}
+{#                    </a>#}
+{#                    <ul class="dropdown-menu">#}
+{#                        <li active-by-url="\/income\/add\/"><a href="/income/add/">股市相关</a></li>#}
+{#                        <li active-by-url="\/income\/add\/"><a href="/income/add/">新闻热点</a></li>#}
+{#                    </ul>#}
+{#                </li>#}
+{#            {% endif %}#}
+{#            </ul>#}
             <ul class="nav pull-right">
                 {% if user.is_authenticated %}
                     <li>
-                        {% if  user.is_superuser %}
+                        {% if not user.is_superuser %}
                             <a href="/user_account/edit/{{ user.id }}/?next=/">
                         {% else %}
                             <a href="#">

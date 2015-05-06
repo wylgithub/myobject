@@ -8,33 +8,38 @@
         <div class="page_header">
             <ul class="bc">
                 <li><a href="/">主页</a> <span class="divider">/</span></li>
-                <li><a href="/income/list/">用户一览</a> <span class="divider">/</span></li>
+                <li><a href="/income/list/">收入一览修改</a> <span class="divider">/</span></li>
                 <li class="active">{{ form.instance.income_type }}</li>
             </ul>
         </div>
         <form class="form-horizontal" action="/income/edit/action/" id="IncomeAdd" method="post">
             {% csrf_token %}
             <input type="hidden" name="redirect_url" id="redirect_url" value="{{ redirect_url|default_if_none:"" }}"/>
-            <input type="hidden" name="mode" value="1"/>
-            <input type="hidden" name="id" value="{{ id }}"/>
-            <input type="hidden" name="username" value="{{ form.handler.value }}"/>
+            <input type="hidden" name="id" value="{{ income_id }}"/>
+            <input type="hidden" name="user_id" value="{{ user_id }}"/>
             <div class="well well-large">
                 <div class="control-group">
                     <label class="control-label" for="regName">操作人员</label>
                     <div class="controls">
-                        <input type="text" id="regName" name="recode_name" class="highlight" maxlength="30" value="{{ form.handler.value }}" readonly/>
+                        <div class="input-prepend">
+                            <span class="add-on"><i class="icon-user"></i></span>
+                            <input type="text" id="regName" name="handler" class="highlight span2" maxlength="30" value="{{ form.handler.value|default_if_none:"" }}" readonly/>
+                        </div>
+                        {% if form.handler.errors %}
+                            {% with form.handler.errors|first as error %}
+                                <br/>
+                                <span class="error_message">{{ error }}</span>
+                            {% endwith %}
+                        {% endif %}
                     </div>
                 </div>
-                {% if form.recode_name.errors %}
-                    {% with form.recode_name.errors|first as error %}
-                        <br/>
-                        <span class="error_message">{{ error }}</span>
-                    {% endwith %}
-                {% endif %}
                 <div class="control-group">
                     <label class="control-label" for="incomeType">收入类型</label>
                     <div class="controls">
-                        <input type="text" class="highlight" name="income_type" id="incomeType" maxlength="20" value="{{ form.income_type.value }}"/>
+                        <div class="input-prepend">
+                            <span class="add-on"><i class="icon-star-empty"></i></span>
+                            <input type="text" class="highlight span2" name="income_type" id="incomeType" maxlength="20" value="{{ form.income_type.value|default_if_none:"" }}"/>
+                        </div>
                         {% if form.income_type.errors %}
                             {% with form.income_type.errors|first as error %}
                                 <br/>
@@ -46,7 +51,10 @@
                 <div class="control-group">
                     <label class="control-label" for="incomeAmount">收入金额</label>
                     <div class="controls">
-                        <input type="text" class="highlight" name="income_amount" id="incomeAmount" maxlength="20" value="{{ form.income_amount.value }}"/>
+                        <div class="input-prepend">
+                            <span class="add-on">￥</span>
+                            <input type="text" class="highlight span2" name="income_amount" id="incomeAmount" maxlength="20" value="{{ form.income_amount.value|default_if_none:"" }}"/>
+                        </div>
                         {% if form.income_amount.errors %}
                             {% with form.income_amount.errors|first as error %}
                                 <br/>
@@ -58,13 +66,13 @@
                 <div class="control-group">
                     <label class="control-label" for="id_style">记录日期</label>
                     <div class="controls">
-                        <div class="input-append date" id="red_date" data-date="{{ current_now }}" data-date-format="yyyy-mm-dd">
+                        <div class="input-append date" id="red_date" data-date="{{ form.create_datetime.value|default_if_none:""|format_date  }}" data-date-format="yyyy-mm-dd">
                             <input class="span2 highlight" id="r_date"
-                                  size="16" type="text" name="recode_date" value="{{ current_now }}" maxlength="10" readonly/>
+                                  size="16" type="text" name="create_datetime" value="{{ form.create_datetime.value|default_if_none:""|format_date }}" maxlength="10" readonly/>
                             <span class="add-on"><i class="icon-calendar"></i></span>
                         </div>
-                        {% if form.recode_date.errors %}
-                            {% with form.recode_date.errors|first as error %}
+                        {% if form.create_datetime.errors %}
+                            {% with form.create_datetime.errors|first as error %}
                                 <br/>
                                 <span class="error_message">{{ error }}</span>
                             {% endwith %}
@@ -74,15 +82,16 @@
                 <div class="control-group">
                     <label class="control-label" for="addRemarks">撰写备注</label>
                     <div class="controls">
-                        <textarea rows="5" class="highlight" id="addRemarks" name="remark">
+                        <textarea rows="5" class="highlight" id="addRemarks" name="remarks">
+                            {{ form.remarks.value|default_if_none:"" }}
                         </textarea>
-                        {% if form.remark.errors %}
-                            {% with form.remark.errors|first as error %}
-                                <br/>
-                                <span class="error_message">{{ error }}</span>
-                            {% endwith %}
-                        {% endif %}
                     </div>
+                    {% if form.remarks.errors %}
+                        {% with form.remarks.errors|first as error %}
+                            <br/>
+                            <span class="error_message">{{ error }}</span>
+                        {% endwith %}
+                    {% endif %}
                 </div>
                 <div class="control-group">
                     <div class="controls">

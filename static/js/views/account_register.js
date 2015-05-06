@@ -12,7 +12,6 @@ define([
         in_syncing:false,  //防止两重提交标志位
 
         events:{
-            'click #btnSave':'save',
             'click .dropdownItem':'dropdownItem_click',
             'click #btnReturn':'return_to_prev_page',
             'click #btnRegister': 'btn_register'
@@ -23,53 +22,67 @@ define([
         },
 
         btn_register:function() {
-            if(!this.check_register(event)){
+            //if(!this.check_register(event)){
+            //    return;
+            //}
+            if(this.in_syncing)
+            {
                 return;
             }
-
-            if (this.in_syncing) {
-                return;
-            }
-
-            var current_view = this;
             this.in_syncing = true;
-            this.options.parentView.trigger('start_ajax_sync');
-            var form = $('#registerForm');
-            $.ajax({
-                type: "POST",
-                url: form.attr('action'),
-                data: form.serialize(),
-                success: function(data){
-                    if (data.error_code > 0) {
-                        window.alert(data.error_msg);
-                    }else {
-                        var validation = Boolean($('#id_validation').val());
-                        //var validation = data.validation;
-                        if (validation === false) {             // 此处有逻辑错误,待修正
-                            window.alert("恭喜您注册成功！");
-                        }else {
-                            window.alert("发生未知错误，请联系管理员！");
-                        }
-                    }
-                },
-                error: function(){
-                    window.alert('与服务器通讯发生错误，请稍后重试。');
-                },
-                complete: function(){
-                    //防止两重提交
-                    //恢复现场
-                    current_view.options.parentView.trigger('finish_ajax_sync');
-                    current_view.in_syncing = false;
-                }
-            });
-            return true;
+            $('#btnRegister').prop('disabled', true);
+            $('#registerForm').submit();
         },
+
+        //btn_register:function() {
+        //    if(!this.check_register(event)){
+        //        return;
+        //    }
+        //
+        //    if (this.in_syncing) {
+        //        return;
+        //    }
+        //
+        //    var current_view = this;
+        //    this.in_syncing = true;
+        //    this.options.parentView.trigger('start_ajax_sync');
+        //    var form = $('#registerForm');
+        //    $.ajax({
+        //        type: "POST",
+        //        url: form.attr('action'),
+        //        data: form.serialize(),
+        //        success: function(data){
+        //            if (data.error_code > 0) {
+        //                window.alert(data.error_msg);
+        //            }else {
+        //                var validation = Boolean($('#id_validation').val());
+        //                //var validation = data.validation;
+        //                if (validation === false) {             // 此处有逻辑错误,待修正
+        //                    window.alert("恭喜您注册成功！");
+        //                }else {
+        //                    window.alert("发生未知错误，请联系管理员！");
+        //                }
+        //            }
+        //        },
+        //        error: function(){
+        //            window.alert('与服务器通讯发生错误，请稍后重试。');
+        //        },
+        //        complete: function(){
+        //            //防止两重提交
+        //            //恢复现场
+        //            current_view.options.parentView.trigger('finish_ajax_sync');
+        //            current_view.in_syncing = false;
+        //        }
+        //    });
+        //    return true;
+        //},
 
         check_register:function(event){
             var username = $('#txtUserName').val();
             var password = $('#txtPassword').val();
             var full_name = $('#txtFullName').val();
             var email = $('#txtEmail').val();
+            var check_password = $("#txtPassword_check").val();
             var mobile = $('#txtMobile').val();
             var checkusername=/^[a-zA-Z0-9\u4e00-\u9fa5\_]+$/;
 

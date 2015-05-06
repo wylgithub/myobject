@@ -20,13 +20,15 @@ urlpatterns = patterns('income.views',
     # 支出信息记录完成
 
     # 家庭收入编辑开始
-    url(r'^edit/(\d+)/$', 'income_edit_view'),
+    url(r'^edit/(\d+)/income/(\d+)/$', 'income_edit_view'),
     url(r'^edit/action/$', 'income_edit_action'),
     url(r'^delete/action/$', 'income_delete_action'),
     # 家庭编辑完成
 
     # 家庭支出信息编辑开始(只增加删除功能,编辑功能等有时间再做)
-    url(r'expend/delete/action/', 'expend_delete_action'),
+    url(r'^expend/edit/(\d+)/expend/(\d+)/$', 'expend_edit_view'),
+    url(r'^expend/edit/action/$', 'expend_edit_action'),
+    url(r'^expend/delete/action/', 'expend_delete_action'),
     # 家庭支出信息编辑结束
 
     # 家庭借入信息模块开始:
@@ -34,6 +36,8 @@ urlpatterns = patterns('income.views',
     url(r'^borrow/(\d+)/add/action/$', 'add_borrow_action'),  # 添加借入明细action
     url(r'^borrow/list/$', 'borrow_list_view'),  # 借入信息一览view
     url(r'^borrow/delete/action/$', 'borrow_delete_action'),  # 删除明细一览view
+    url(r'^borrow/edit/(\d+)/borrow/(\d+)/$', 'borrow_edit_view'),
+    url(r'^borrow/edit/action/$', 'borrow_edit_action'),
     # 家庭借入信息模块结束:
 
 
@@ -42,6 +46,8 @@ urlpatterns = patterns('income.views',
     url(r'^lend/(\d+)/add/action/$', 'add_lend_action'),  # 添加借出明细action
     url(r'^lend/list/$', 'lend_list_view'),  # 借出信息一览view
     url(r'^lend/delete/action/$', 'lend_delete_action'),  # 删除明细一览view
+    url(r'^lend/edit/(\d+)/lend/(\d+)/$', 'lend_edit_view'),
+    url(r'^lend/edit/action/$', 'lend_edit_action'),
     # 家庭借出信息模块结束
 
 )

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% load extfilters %}
 {% block title %} - 借入明细一览{% endblock %}
 {% block content %}
 
@@ -68,14 +69,15 @@
                                 <tr>
                                     <td class="cell_center"><input type="checkbox" class="list_selector" pk="{{ lend.id }}"/></td>
                                     <td>
-                                        {{ lend.handler }}
+                                        <a href="/income/lend/edit/{{ user.id }}/lend/{{ lend.id }}/" class="btn-link edit_link">{{ lend.handler }}</a>
+
                                     </td>
                                     <td>{{ lend.lend_person }}</td>
                                     <td>{{ lend.borrow_person }}</td>
                                     <td>{{ lend.lend_amount }}</td>
                                     <td>{{ lend.balance }}</td>
-                                    <td>{{ lend.lend_datetime|date:"Y/m/d H:i:s" }}</td>
-                                    <td>{{ lend.pay_datetime|date:"Y/m/d H:i:s" }}</td>
+                                    <td>{{ lend.lend_datetime|format_date }}</td>
+                                    <td>{{ lend.pay_datetime|format_date }}</td>
                                     <td>
                                         <a href="javascript: void(0);" class="tip" data-toggle="tooltip" title="{{ lend.remarks }}">
                                             <div style="width: 140px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{ lend.remarks }}</div>

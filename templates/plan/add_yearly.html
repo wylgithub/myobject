@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% load extfilters %}
 {% block title %} - 添加年流水计划{% endblock %}
 {% block content %}
     <input type="hidden" id="amd_module" value="{% static "js/views/year_add.js" %}" />
@@ -20,13 +21,19 @@
                 <div class="control-group">
                     <label class="control-label" for="regName">操作人员</label>
                     <div class="controls">
-                        <input type="text" id="regName" name="handler" class="highlight" maxlength="30" value="{{ username }}" readonly/>
+                        <div class="input-prepend">
+                            <span class="add-on"><i class="icon-user"></i></span>
+                            <input type="text" id="regName" name="handler" class="highlight span2" maxlength="30" value="{{ username }}" readonly/>
+                        </div>
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="regName">工作收入</label>
                     <div class="controls">
-                        <input type="text" id="regName" name="work_income" class="highlight" maxlength="30" value="{{ form.work_income.value }}"/>
+                        <div class="input-prepend">
+                            <span class="add-on">￥</span>
+                            <input type="text" id="regName" name="work_income" class="highlight span2" maxlength="30" value="{{ form.work_income.value }}"/>
+                        </div>
                         {% if form.work_income.errors %}
                         {% with form.work_income.errors|first as error %}
                             <br/>
@@ -38,7 +45,10 @@
                 <div class="control-group">
                     <label class="control-label" for="incomeAmount">投资收入</label>
                     <div class="controls">
-                        <input type="text" class="highlight" name="investment_income" id="incomeAmount" maxlength="20" value="{{ form.investment_income.value }}"/>
+                        <div class="input-prepend">
+                            <span class="add-on">￥</span>
+                            <input type="text" class="highlight span2" name="investment_income" id="incomeAmount" maxlength="20" value="{{ form.investment_income.value }}"/>
+                        </div>
                         {% if form.investment_income.errors %}
                             {% with form.investment_income.errors|first as error %}
                                 <br/>
@@ -50,7 +60,10 @@
                 <div class="control-group">
                     <label class="control-label" for="incomeAmount">生活支出</label>
                     <div class="controls">
-                        <input type="text" class="highlight" name="life_spend" id="incomeAmount" maxlength="20" value="{{ form.life_spend.value }}"/>
+                        <div class="input-prepend">
+                            <span class="add-on">￥</span>
+                            <input type="text" class="highlight span2" name="life_spend" id="incomeAmount" maxlength="20" value="{{ form.life_spend.value }}"/>
+                        </div>
                         {% if form.life_spend.errors %}
                             {% with form.life_spend.errors|first as error %}
                                 <br/>
@@ -62,7 +75,10 @@
                 <div class="control-group">
                     <label class="control-label" for="incomeAmount">其它支出</label>
                     <div class="controls">
-                        <input type="text" class="highlight" name="other_spend" id="incomeAmount" maxlength="20" value="{{ form.other_spend.value }}"/>
+                        <div class="input-prepend">
+                            <span class="add-on">￥</span>
+                            <input type="text" class="highlight span2" name="other_spend" id="incomeAmount" maxlength="20" value="{{ form.other_spend.value }}"/>
+                        </div>
                         {% if form.other_spend.errors %}
                             {% with form.other_spend.errors|first as error %}
                                 <br/>
