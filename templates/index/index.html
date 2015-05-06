@@ -15,6 +15,20 @@
     <div>
         <div id="myCarousel" class="carousel slide">
           <div class="carousel-inner">
+            {% if user_count == 0 %}
+            <div class="active item">
+                <a href="/user_account/list/">
+                <div class="active item">
+                    <div class="row">
+                        <div class="span12 alert alert-block">
+                            <h4>注意!</h4>
+                            用户信息不存在,请点击添加!。
+                        </div>
+                    </div>
+                </div>
+                </a>
+            </div>
+            {% else %}
             <div class="active item">
                 <a href="/user_account/list/">
                     <div class="row">
@@ -53,6 +67,19 @@
                     </div>
                 </a>
             </div>
+            {% endif %}
+            {% if income_count == 0 %}
+            <div class="item">
+                <a href="/income/list/">
+                    <div class="row">
+                        <div class="span12 alert alert-block">
+                            <h4>注意!</h4>
+                            目前没有收入信息,请点击添加!。
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% else %}
             <div class="item">
                 <div class="row">
                     <a href="/income/list/">
@@ -93,6 +120,19 @@
                     </a>
                 </div>
             </div>
+            {% endif %}
+            {% if expend_count == 0 %}
+            <div class="item">
+                <a href="/income/expend/list/">
+                    <div class="row">
+                        <div class="span12 alert alert-block">
+                            <h4>注意!</h4>
+                            目前没有支出信息,请点击添加!。
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% else %}
             <div class="item">
                 <a href="/income/expend/list/">
                     <div class="row">
@@ -137,6 +177,19 @@
                     </div>
                 </a>
             </div>
+            {% endif %}
+            {% if lend_count == 0 %}
+            <div class="item">
+                <a href="/income/lend/list/">
+                    <div class="row">
+                        <div class="span12 alert alert-block">
+                            <h4>注意!</h4>
+                            目前没有借出信息,请点击添加!。
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% else %}
             <div class="item">
                 <a href="/income/lend/list/">
                     <div class="row">
@@ -183,6 +236,19 @@
                     </div>
                 </a>
             </div>
+            {% endif %}
+            {% if borrow_count == 0 %}
+            <div class="item">
+                <a href="/income/borrow/list/">
+                    <div class="row">
+                        <div class="span12 alert alert-block">
+                            <h4>注意!</h4>
+                            目前没有借入信息,请点击添加!。
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% else %}
             <div class="item">
                 <a href="/income/borrow/list/">
                     <div class="row">
@@ -230,6 +296,19 @@
                    </div>
                 </a>
             </div>
+            {% endif %}
+            {% if month_count == 0 %}
+            <div class="item">
+                <a href="/plan/month/list/">
+                    <div class="row">
+                        <div class="span12 alert alert-block">
+                            <h4>注意!</h4>
+                            目前没有月收入信息,请点击添加!。
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% else %}
             <div class="item">
                 <a href="/plan/month/list/">
                     <div class="row">
@@ -277,6 +356,19 @@
                     </div>
                 </a>
             </div>
+            {% endif %}
+            {% if year_count == 0 %}
+            <div class="item">
+                <a href="/plan/year/list/">
+                    <div class="row">
+                        <div class="span12 alert alert-block">
+                            <h4>注意!</h4>
+                            目前没有年收入信息,请点击添加!。
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% else %}
             <div class="item">
                 <a href="/plan/year/list/">
                     <div class="row">
@@ -323,8 +415,7 @@
                     </div>
                 </a>
             </div>
-{#            <div class="item">hehe</div>#}
-{#            <div class="item">hehe</div>#}
+            {% endif %}
           </div>
       </div>
       <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>

@@ -187,11 +187,11 @@ class UserRegisterForm(ModelForm):
             if len(password) < 6 or len(check_password) < 6:
                 msg = u'密码太简单!(建议密码长度为6-18位!)'
 
-            self._errors['password'] = self.error_class([msg])
-            self._errors['check_password'] = self.error_class([msg])
+                self._errors['password'] = self.error_class([msg])
+                self._errors['check_password'] = self.error_class([msg])
 
-            del cleaned_data['password']
-            del cleaned_data['check_password']
+                del cleaned_data['password']
+                del cleaned_data['check_password']
 
         if 'mobile' in cleaned_data:
             mobile = cleaned_data['mobile']
