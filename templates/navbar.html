@@ -73,21 +73,21 @@
             {% endif %}
             </ul>
 
-{#            <ul class="nav nav-pills">#}
-{#            {% if not user.is_superuser %}#}
-{#                <li class="dropdown" id="menuBorrow" active-by-url="\/income\/">#}
-{#                    <a class="dropdown-toggle" data-toggle="dropdown" href="#menuBorrow">#}
-{#                        家庭流水报表#}
-{#                        <b class="caret"></b>#}
-{#                    </a>#}
-{#                    <ul class="dropdown-menu">#}
-{#                        <li active-by-url="\/income\/add\/"><a href="/income/add/">周汇总统计</a></li>#}
+            <ul class="nav nav-pills">
+            {% if user|in_group:"家庭管理员" %}
+                <li class="dropdown" id="menuBorrow" active-by-url="\/income\/">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#menuBorrow">
+                        家庭流水统计
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li active-by-url="\/get_total\/family\/"><a href="/get_total/family/list/">流水汇总</a></li>
 {#                        <li active-by-url="\/income\/add\/"><a href="/income/add/">月汇总统计</a></li>#}
 {#                        <li active-by-url="\/income\/add\/"><a href="/income/add/">年汇总统计</a></li>#}
-{#                    </ul>#}
-{#                </li>#}
-{#            {% endif %}#}
-{#            </ul>#}
+                    </ul>
+                </li>
+            {% endif %}
+            </ul>
 
              <ul class="nav nav-pills">
             {% if not user.is_superuser %}
