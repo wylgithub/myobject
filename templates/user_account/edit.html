@@ -8,7 +8,9 @@
         <div class="page_header">
             <ul class="bc">
                 <li><a href="/">主页</a> <span class="divider">/</span></li>
+                {% if user|in_group:"家庭管理员" or user.is_superuser %}
                 <li><a href="/user_account/list/">用户一览</a> <span class="divider">/</span></li>
+                {% endif %}
                 <li class="active">{{ form.instance.get_full_name }}</li>
             </ul>
         </div>
@@ -84,7 +86,7 @@
                         {% endif %}
                     </div>
                 </div>
-                {% if not user|in_group:"家庭普通成员" or user.is_superuser %}
+                {% if  user|in_group:"家庭管理员" or user.is_superuser %}
                 <div class="control-group">
                     <label class="control-label" for="role">身份</label>
                     <div class="controls">
@@ -111,6 +113,11 @@
                             {% endwith %}
                         {% endif %}
                     </div>
+                </div>
+                {% else %}
+                <div class="control-group">
+                    <div class="controls">
+                        <input type="hidden" name="role" id="id_role" value="10"/>
                 </div>
                 {% endif %}
                 </div>

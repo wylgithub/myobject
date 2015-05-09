@@ -101,7 +101,9 @@
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a href="#" class="dropdownItem" for="id_role" value="10">家庭管理员</a></li>
+                                {% if user.is_superuser %}
+                                    <li><a href="#" class="dropdownItem" for="id_role" value="10">家庭管理员</a></li>
+                                {% endif %}
                                 <li><a href="#" class="dropdownItem" for="id_role" value="30">家庭普通成员</a></li>
                             </ul>
                         </div>

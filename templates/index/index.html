@@ -16,61 +16,61 @@
     <div>
         <div id="myCarousel" class="carousel slide">
           <div class="carousel-inner">
-            {% if user_count == 0 %}
-            <div class="active item">
-                <a href="/user_account/list/">
-                <div class="active item">
-                    <div class="row">
-                        <div class="span12 alert alert-block">
-                            <h4>注意!</h4>
-                            用户信息不存在,请点击添加!。
-                        </div>
-                    </div>
-                </div>
-                </a>
-            </div>
-            {% else %}
-            <div class="active item">
-                <a href="/user_account/list/">
-                    <div class="row">
-                        <div class="span12">
-                            <div class="search_result_list">
-                                <button type="button" id="btnRegister" class="btn btn-success span12" >用户信息一览</button>
-                                <table class="table table-bordered table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th>帐号</th>
-                                        <th>姓名</th>
-                                        <th><a href="#" class="data_column" sort_key="cd">创建日期</a></th>
-                                        <th>身份</th>
-                                        <th>手机</th>
-                                        <th>邮箱</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for user in users %}
-                                        <tr>
-                                            <td>
-                                                <a href="/user_account/edit/{{ user.id }}/" class="btn-link edit_link">{{ user.username }}</a>
-                                            </td>
-                                            <td>{{ user.get_full_name }}</td>
-                                            <td>{{ user.create_datetime|format_date}}</td>
-                                            <td>{{ user.groups.all|first }}</td>
-                                            <td>{{ user.mobile }}</td>
-                                            <td>{{ user.email }}</td>
-                                        </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
-                             <button type="button" id="btnRegister" class="btn btn-success span12" >用户信息一览</button>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            {% endif %}
+{#            {% if user_count == 0 %}#}
+{#            <div class="active item">#}
+{#                <a href="/user_account/list/">#}
+{#                <div class="active item">#}
+{#                    <div class="row">#}
+{#                        <div class="span12 alert alert-block">#}
+{#                            <h4>注意!</h4>#}
+{#                            用户信息不存在,请点击添加!。#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#                </a>#}
+{#            </div>#}
+{#            {% else %}#}
+{#            <div class="active item">#}
+{#                <a href="/user_account/list/">#}
+{#                    <div class="row">#}
+{#                        <div class="span12">#}
+{#                            <div class="search_result_list">#}
+{#                                <button type="button" id="btnRegister" class="btn btn-success span12" >用户信息一览</button>#}
+{#                                <table class="table table-bordered table-hover">#}
+{#                                    <thead>#}
+{#                                    <tr>#}
+{#                                        <th>帐号</th>#}
+{#                                        <th>姓名</th>#}
+{#                                        <th><a href="#" class="data_column" sort_key="cd">创建日期</a></th>#}
+{#                                        <th>身份</th>#}
+{#                                        <th>手机</th>#}
+{#                                        <th>邮箱</th>#}
+{#                                    </tr>#}
+{#                                    </thead>#}
+{#                                    <tbody>#}
+{#                                    {% for user in users %}#}
+{#                                        <tr>#}
+{#                                            <td>#}
+{#                                                <a href="/user_account/edit/{{ user.id }}/" class="btn-link edit_link">{{ user.username }}</a>#}
+{#                                            </td>#}
+{#                                            <td>{{ user.get_full_name }}</td>#}
+{#                                            <td>{{ user.create_datetime|format_date}}</td>#}
+{#                                            <td>{{ user.groups.all|first }}</td>#}
+{#                                            <td>{{ user.mobile }}</td>#}
+{#                                            <td>{{ user.email }}</td>#}
+{#                                        </tr>#}
+{#                                    {% endfor %}#}
+{#                                    </tbody>#}
+{#                                </table>#}
+{#                             <button type="button" id="btnRegister" class="btn btn-success span12" >用户信息一览</button>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </a>#}
+{#            </div>#}
+{#            {% endif %}#}
             {% if income_count == 0 %}
-            <div class="item">
+            <div class="active item">
                 <a href="/income/list/">
                     <div class="row">
                         <div class="span12 alert alert-block">
@@ -81,7 +81,7 @@
                 </a>
             </div>
             {% else %}
-            <div class="item">
+            <div class="active item">
                 <div class="row">
                     <a href="/income/list/">
                         <div class="span12">

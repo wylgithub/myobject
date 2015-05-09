@@ -1,3 +1,6 @@
+/**
+ * Created by wyl on 15-5-7.
+ */
 
 define([
     'require',

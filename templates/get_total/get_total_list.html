@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load extfilters %}
+{% block content %}
+    <input type="hidden" id="amd_module" value="{% static "js/views/family_list.js" %}"/>
+    <div class="container" style="margin-top:100px;">
+        <div class="page_header">
+            <ul class="bc">
+                <li><a href="/">主页</a> <span class="divider">/</span></li>
+                <li class="active">家庭流水汇总</li>
+            </ul>
+        </div>
+        {% if total_expend == 0 and total_income == 0 and total_lend == 0 and total_borrow == 0%}
+            <div class="row">
+                <div class="span12 alert alert-block">
+                    <h4>注意!</h4>
+                    目前没有家庭流水记录，请确认后再尝试！
+                </div>
+            </div>
+        {% else %}
+            {% if user|in_group:"家庭管理员" %}
+                <div class="row">
+                    <div class="span8">
+                        <div class="search_result_list">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th>总收入</th>
+                                    <th>总之处</th>
+                                    <th>总借入</th>
+                                    <th>总借出</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        {% if total_income != 0 %}
+                                            <td>{{ total_income }}</td>
+                                        {% else %}
+                                            <td>暂无收入记录</td>
+                                        {% endif %}
+                                        {% if total_expend != 0 %}
+                                            <td>{{ total_expend }}</td>
+                                        {% else %}
+                                            <td>暂无支出记录</td>
+                                        {% endif %}
+                                        {% if total_borrow != 0 %}
+                                            <td>{{ total_borrow }}</td>
+                                        {% else %}
+                                            <td>暂无借入记录</td>
+                                        {% endif %}
+                                        {% if total_lend != 0 %}
+                                            <td>{{ total_lend }}</td>
+                                        {% else %}
+                                            <td>暂无借出记录</td>
+                                        {% endif %}
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="row">
+                <div class="span12 alert alert-block">
+                    <h4>注意!</h4>
+                    权限不够，你不是家庭管理员！
+                </div>
+            </div>
+            {% endif %}
+        {% endif %}
+    </div>
+{% endblock %}
