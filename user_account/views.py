@@ -256,8 +256,6 @@ def user_edit_action(request):
     """
     编辑用户动作
     """
-    # if not request.POST.has_key('id'):
-    #     raise InvalidPostDataError()
     id = request.POST['id']
 
     user = get_object_or_404(User, id=id)
@@ -266,12 +264,7 @@ def user_edit_action(request):
         form = UserForm(request.POST, instance=user)
     else:
         form = UserEditForm(request.POST, instance=user)
-
     if form.is_valid():
-        # 数据一致性校验
-        # if not 'update_timestamp' in request.POST or crypt.loads(request.POST["update_timestamp"]) != unicode(
-        #         user.update_datetime):
-        #     raise DataExclusivityError()
         if request.user.is_superuser:
             role = form.cleaned_data['role']
             group = role_manager.get_role(role)
@@ -286,7 +279,6 @@ def user_edit_action(request):
         else:
             user.save(update_fields=("full_name", "update_datetime"))
 
-        # 员工没有访问list权限,所以这里返回index
         if check_role(request, ROLE_FAMILY_COMMON_USER):
             return back_to_original_page(request, "/")
         return back_to_original_page(request, "/user_account/list/")
@@ -297,5 +289,4 @@ def user_edit_action(request):
             "id": id,
             "role": role,
             "role_name": ROLES[role] if role in ROLES else "",
-            # "update_timestamp": crypt.encryt(unicode(user.update_datetime))
         })

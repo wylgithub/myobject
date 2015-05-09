@@ -35,11 +35,13 @@
             <div class="row">
                 <div class="span4">
                     <div class="btn-toolbar">
+                        {% if user|in_group:"家庭管理员" or user.is_superuser %}
                         <div class="btn-group">
                             <a class="btn" id="btnNew" href="/user_account/add/" title="添加"><i class="icon-plus"></i></a>
                             <a class="btn disabled" id="btnEdit" title="修改"><i class="icon-edit"></i></a>、
                             <a class="btn disabled" id="btnDelete" title="删除"><i class="icon-trash"></i></a>
                         </div>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="span4" style="text-align: right;padding-top: 20px;">
@@ -52,7 +54,9 @@
                         <table class="table table-bordered table-hover">
                             <thead>
                             <tr>
+                                {% if user|in_group:"家庭管理员" or user.is_superuser %}
                                 <th class="check_column"><input type="checkbox" id="checkSelectAll"/></th>
+                                {% endif %}
                                 <th>帐号</th>
                                 <th>姓名</th>
                                 <th><a href="#" class="data_column" sort_key="cd">创建日期</a></th>
@@ -62,17 +66,21 @@
                             </tr>
                             </thead>
                             <tbody>
-                            {% for user in users %}
+                            {% for u in users %}
                                 <tr>
-                                    <td class="cell_center"><input type="checkbox" class="list_selector" pk="{{ user.id }}"/></td>
+                                    {% if user|in_group:"家庭管理员" or user.is_superuser %}
+                                    <td class="cell_center"><input type="checkbox" class="list_selector" pk="{{ u.id }}"/></td>
                                     <td>
-                                        <a href="/user_account/edit/{{ user.id }}/" class="btn-link edit_link">{{ user.username }}</a>
+                                        <a href="/user_account/edit/{{ u.id }}/" class="btn-link edit_link">{{ u.username }}</a>
                                     </td>
-                                    <td>{{ user.get_full_name }}</td>
-                                    <td>{{ user.create_datetime|format_date}}</td>
-                                    <td>{{ user.groups.all|first }}</td>
-                                    <td>{{ user.mobile }}</td>
-                                    <td>{{ user.email }}</td>
+                                    {% else %}
+                                        <td>{{ u.username }}</td>
+                                    {% endif %}
+                                    <td>{{ u.get_full_name }}</td>
+                                    <td>{{ u.create_datetime|format_date}}</td>
+                                    <td>{{ u.groups.all|first }}</td>
+                                    <td>{{ u.mobile }}</td>
+                                    <td>{{ u.email }}</td>
                                 </tr>
                             {% endfor %}
                             </tbody>
