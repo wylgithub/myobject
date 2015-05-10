@@ -26,7 +26,7 @@
                                 <thead>
                                 <tr>
                                     <th>总收入</th>
-                                    <th>总之处</th>
+                                    <th>总支出</th>
                                     <th>总借入</th>
                                     <th>总借出</th>
                                 </tr>
@@ -34,22 +34,22 @@
                                 <tbody>
                                     <tr>
                                         {% if total_income != 0 %}
-                                            <td>{{ total_income }}</td>
+                                            <td>{{ total_income }} 元</td>
                                         {% else %}
                                             <td>暂无收入记录</td>
                                         {% endif %}
                                         {% if total_expend != 0 %}
-                                            <td>{{ total_expend }}</td>
+                                            <td>{{ total_expend }} 元</td>
                                         {% else %}
                                             <td>暂无支出记录</td>
                                         {% endif %}
                                         {% if total_borrow != 0 %}
-                                            <td>{{ total_borrow }}</td>
+                                            <td>{{ total_borrow }} 元</td>
                                         {% else %}
                                             <td>暂无借入记录</td>
                                         {% endif %}
                                         {% if total_lend != 0 %}
-                                            <td>{{ total_lend }}</td>
+                                            <td>{{ total_lend }} 元</td>
                                         {% else %}
                                             <td>暂无借出记录</td>
                                         {% endif %}
