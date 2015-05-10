@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% load extfilters %}
+{% load staticfiles %}
+{% block title %} - 支出汇总{% endblock %}
+{% block content %}
+    <input type="hidden" id="amd_module" value="{% static "js/views/income_total.js" %}"/>
+    <input type="hidden" id="js_base_url" value="/get_total/borrow/list/?"/>
+    <div class="container" style="margin-top:60px;">
+        <div class="page_header">
+            <ul class="bc">
+                <li><a href="/">主页</a> <span class="divider">/</span></li>
+                <li class="active">家庭汇总-借入</li>
+            </ul>
+        </div>
+        <div class="row" style="margin-top:10px;">
+            <div class="span12">
+                <div class="span4">
+                    {% if error_message %}<br><br><span class="error_message">{{ error_message }}</span>{% endif %}
+                </div>
+                <div class="span3" id="start_time_span" style="text-align: right;">
+                    <label class="span1" style="padding-top: 4px;">起始日：</label>
+                    <div class="input-append date" id="id_start_date" data-date="{{ sss_time_str|format_date }}" data-date-format="yyyy-mm-dd">
+                        <input id="sss" class="span2 highlight{% if form.start_date.errors %} error_flg{% endif %}"
+                               size="16" type="text" name="start_date" value="{{ sss_time_str|format_date }}" maxlength="10" readonly/>
+                        <span class="add-on"><i class="icon-th"></i></span>
+                    </div>
+                    <span class="error_message hidden" id="hidden_start_time_message">开始时间不得大于结束时间！</span>
+                </div>
+                <div class="span3" id="end_time_span" style="text-align: right;">
+                    <label class="span1" style="padding-top: 4px;">结束日：</label>
+                    <div class="input-append date" id="id_end_date" data-date="{{ eee_time_str|format_date }}" data-date-format="yyyy-mm-dd">
+                        <input id="eee" class="span2 highlight{% if form.end_date.errors %} error_flg{% endif %}"
+                               size="16" type="text" name="end_date" value="{{ eee_time_str|format_date }}" maxlength="10" readonly/>
+                        <span class="add-on"><i class="icon-th"></i></span>
+                    </div>
+                    <span class="error_message hidden" id="hidden_end_time_message">结束时间不得小于开始时间！</span>
+                </div>
+                <div class="search_box" style="text-align: right;">
+                    <button type="button" class="btn btn-success default_button" id="btnGoGo">汇总</button>
+                </div>
+            </div>
+        </div>
+        {% if not time_is_ok %}
+            <div class="row">
+                <div class="span12 alert alert-block">
+                    <h4>提示：</h4>
+                    <ul><li>请选择要汇总的时间段，单击汇总按钮。</li></ul>
+                <h5>汇总说明：</h5>
+                <ul>
+                    <li>首先选择任意想汇总的时间段,</li>
+                    <li>然后点解汇总按钮进行汇总信息查询。</li>
+                </ul>
+            </div>
+        {% elif total_count == 0 %}
+            <div class="row">
+                <div class="span12 alert alert-block">
+                    <h4>警告：</h4>
+                    <ul><li>该时间段内无任何借入记录！</li></ul>
+                </div>
+            </div>
+        {% else %}
+            <input type="hidden" id="total_count" value="{{ total_count }}"/>
+            {% for key,value in query_params.items %}
+                <input type="hidden" id="qs_{{ key }}" value="{{ value }}"/>
+            {% endfor %}
+            <div class="row">
+                <div class="span8" style="text-align: left;padding-top: 20px;">
+                    <span class="label">{{ time_content }}</span>
+                </div><div class="span4" style="text-align: right;padding-top: 20px;">
+                    <span class="label">共{{ total_count }}条记录</span>
+                </div>
+                </div>
+                    <div class="row">
+                        <div class="span12">
+                            <div class="search_result_list">
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th><a href="#" class="data_column" sort_key="op">操作人员</a></th>
+                                            <th><a href="#" class="data_column" sort_key="jr">借入款人</a></th>
+                                            <th><a href="#" class="data_column" sort_key="jc">借出款人</a></th>
+                                            <th><a href="#" class="data_column" sort_key="jj">借入金额</a></th>
+                                            <th><a href="#" class="data_column" sort_key="ky">卡类余额</a></th>
+                                            <th><a href="#" class="data_column" sort_key="jq">借入日期</a></th>
+                                            <th><a href="#" class="data_column" sort_key="hq">预还日期</a></th>
+                                            <th><a href="#" class="data_column" sort_key="mk">备&nbsp;&nbsp;注</a></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for borrow in borrows %}
+                                            <tr>
+                                                <td>
+                                                    {{ borrow.handler }}
+                                                </td>
+                                                <td>{{ borrow.borrow_person }}</td>
+                                                <td>{{ borrow.lend_person }}</td>
+                                                <td>{{ borrow.borrow_amount }}</td>
+                                                <td>{{ borrow.balance }}</td>
+                                                <td>{{ borrow.borrow_datetime|format_date }}</td>
+                                                <td>{{ borrow.repay_datetime|format_date }}</td>
+                                                <td>
+                                                    <a href="javascript: void(0);" class="tip" data-toggle="tooltip" title="{{ borrow.remarks }}">
+                                                        <div style="width: 140px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{ borrow.remarks }}</div>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    {% if need_pagination %}
+                                        <div class="pagination pagination-centered pagination-small" style="margin-top:-10px;">
+                                            <ul>
+                                                <li id="btnPrevPage"><a href="#">前页</a></li>
+                                                <li id="btnNextPage"><a href="#">次页</a></li>
+                                            </ul>
+                                            <div class="pull-right label" id="lblPageCounter">
+                                                0/0页
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="label" style="float: right;">
+                    <h5>支出汇总说明：</h5>
+                    <ul>
+                        <li>首先选择任意想汇总的时间段,</li>
+                        <li>然后点解汇总按钮进行汇总信息查询。</li>
+                    </ul>
+                </div>
+                <div>汇总起始时间：{{ sss_time_str }}</div>
+                <div>汇总结束时间：{{ eee_time_str }}</div>
+                <div>总共收入金额：{{ total_borrow }} 元</div>
+            {% endif %}
+    </div>
+{% endblock %}
