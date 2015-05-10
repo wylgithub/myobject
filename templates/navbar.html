@@ -65,7 +65,6 @@
                         <li active-by-url="\/plan/month\/"><a href="/plan/month/add/{{ user.id }}/">月流水计划</a></li>
                         <li active-by-url="\/plan/year\/"><a href="/plan/year/add/{{ user.id }}/">年流水计划</a></li>
                         <li class="divider"></li>
-{#                        <li active-by-url="\/plan/week\/"><a href="/plan/week/list/">周流水计划查询</a></li>#}
                         <li active-by-url="\/plan/month\/"><a href="/plan/month/list/">月流水计划一览</a></li>
                         <li active-by-url="\/plan/year\/"><a href="/plan/year/list/">年流水计划一览</a></li>
                     </ul>
@@ -77,7 +76,7 @@
             {% if user|in_group:"家庭管理员" %}
                 <li class="dropdown" id="menuBorrow" active-by-url="\/income\/">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#menuBorrow">
-                        家庭流水统计
+                        家庭流水汇总
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
@@ -87,7 +86,6 @@
                         <li active-by-url="\/get_total\/expend\/"><a href="/get_total/expend/list/">支出统计</a></li>
                         <li active-by-url="\/get_total\/borrow\/"><a href="/get_total/borrow/list/">借入统计</a></li>
                         <li active-by-url="\/get_total\/lend\/"><a href="/get_total/lend/list/">借出统计</a></li>
-{#                        <li active-by-url="\/income\/add\/"><a href="/income/add/">年汇总统计</a></li>#}
                     </ul>
                 </li>
             {% endif %}
