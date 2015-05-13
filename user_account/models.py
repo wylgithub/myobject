@@ -161,7 +161,7 @@ class UserForm(ModelForm):
 
 class UserRegisterForm(ModelForm):
     role = forms.IntegerField()
-    check_password = forms.CharField(required=False)  # 用户的密码验证
+    check_password = forms.CharField(required=True)  # 用户的密码验证
 
     def clean(self):
         cleaned_data = super(UserRegisterForm, self).clean()
@@ -177,16 +177,33 @@ class UserRegisterForm(ModelForm):
         if 'password' in cleaned_data and 'check_password' in cleaned_data:
             password = cleaned_data['password']
             check_password = cleaned_data['check_password']
-            msg = u''
-            if password != check_password:
-                msg = u'两次输入的密码不配配!'
-
-            if password is u'' or check_password is u'':
-                msg = u'密码不可以为空!'
 
             if len(password) < 6 or len(check_password) < 6:
                 msg = u'密码太简单!(建议密码长度为6-18位!)'
 
+                self._errors['password'] = self.error_class([msg])
+                self._errors['check_password'] = self.error_class([msg])
+
+                del cleaned_data['password']
+                del cleaned_data['check_password']
+
+        if 'password' in cleaned_data and 'check_password' in cleaned_data:
+            password = cleaned_data['password']
+            check_password = cleaned_data['check_password']
+            if password != check_password:
+                msg = u'两次输入的密码不配配!'
+
+                self._errors['password'] = self.error_class([msg])
+                self._errors['check_password'] = self.error_class([msg])
+
+                del cleaned_data['password']
+                del cleaned_data['check_password']
+
+        if 'password' in cleaned_data and 'check_password' in cleaned_data:
+            password = cleaned_data['password']
+            check_password = cleaned_data['check_password']
+            if password is u'' or check_password is u'':
+                msg = u'密码不可以为空!'
                 self._errors['password'] = self.error_class([msg])
                 self._errors['check_password'] = self.error_class([msg])
 
