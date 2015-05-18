@@ -33,6 +33,23 @@
             margin-bottom: 15px;
             padding: 7px 9px;
         }
+        div#picture{
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            bottom: 0px;
+            right: 0px;
+            z-index: -1;
+        }
+        div#picture > img{
+            height: 100%;
+            width: 100%;
+            border: 0px;
+        }
+        #frmLogin{
+{#            background-color  ;#}
+        }
+        .register{ color: red;}
     </style>
     <script type="text/javascript" data-main="{{ STATIC_URL }}js/main.js"
             src="{{ STATIC_URL }}js/lib/require-jquery.js"></script>
@@ -53,6 +70,9 @@
 </head>
 <body>
     <input type="hidden" id="amd_module" value="{% static "js/views/login.js" %}"/>
+    <div id="picture">
+        <img src="/static/img/background/back2.jpg" class="background">
+    </div>
     <div class="container" style="margin-top:30px;">
         <form class="form-signin" action="/user_account/login/action/" id="frmLogin" method="post">
             {% csrf_token %}
@@ -72,8 +92,8 @@
             <div style="width: 100%; text-align: center">
                 <button class="btn btn-large btn-primary default_button" type="button" id="btnLogin">登录</button>
             </div>
-            <div style="width: 100%; text-align: center">
-                有账号请登录，没账号请注册！<br><a href="/user_account/register/">新用户注册</a>
+            <div style="width: 100%; text-align: center;">
+                有账号请登录，没账号请注册！<br><a href="/user_account/register/" class="register">新用户注册</a>
             </div>
         </form>
     </div>
