@@ -49,6 +49,11 @@
         #frmLogin{
 {#            background-color  ;#}
         }
+        #size_info{
+            width: 100%;
+            text-align: center;
+            font-size: 16px;
+        }
         .register{ color: red;}
     </style>
     <script type="text/javascript" data-main="{{ STATIC_URL }}js/main.js"
@@ -74,10 +79,10 @@
         <img src="/static/img/background/back2.jpg" class="background">
     </div>
     <div class="container" style="margin-top:30px;">
-        <form class="form-signin" action="/user_account/login/action/" id="frmLogin" method="post">
+        <form class="form-signin" action="/user_account/login/action/" id="frmLogin" method="post" style="border-radius: 50px; border: 6px solid #003bb3;">
             {% csrf_token %}
             <input type="hidden" name="redirect_url" id="redirect_url" value="{{ redirect_url|default_if_none:"" }}"/>
-            <h2 class="form-signin-heading">家庭理财管理系统</h2>
+            <h3 class="form-signin-heading">家庭理财管理系统</h3>
             <input type="text" name="username" class="input-block-level first_focus{% if form.username.errors %} error_flg{% endif %}" placeholder="帐号" maxlength="30" value="{{ form.username.value }}">
                 {% with form.username.errors|first as error %}
                     <span class="error_message">{{ error }}</span>
@@ -92,8 +97,8 @@
             <div style="width: 100%; text-align: center">
                 <button class="btn btn-large btn-primary default_button" type="button" id="btnLogin">登录</button>
             </div>
-            <div style="width: 100%; text-align: center;">
-                有账号请登录，没账号请注册！<br><a href="/user_account/register/" class="register">新用户注册</a>
+            <div id="size_info">
+                <br><a href="/user_account/register/" class="register">新用户注册</a>
             </div>
         </form>
     </div>
