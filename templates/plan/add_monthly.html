@@ -22,7 +22,7 @@
                     <div class="controls">
                         <div class="input-prepend">
                             <span class="add-on"><i class="icon-user"></i></span>
-                            <input type="text" id="regName" name="handler" class="highlight span2" maxlength="30" value="{{ username }}" readonly/>
+                            <input type="text" id="regName" placeholder="例如: username" name="handler" class="highlight span2" maxlength="30" value="{{ username }}" readonly/>
                         </div>
                     </div>
                 </div>
@@ -31,7 +31,7 @@
                     <div class="controls">
                         <div class="input-prepend">
                             <span class="add-on">￥</span>
-                            <input type="text" id="regName" name="work_income" class="highlight span2" maxlength="30" value="{{ form.work_income.value }}"/>
+                            <input type="text" id="regName" name="work_income" placeholder="例如: 100000" class="highlight span2" maxlength="30" value="{{ form.work_income.value }}"/>
                         </div>
                         {% if form.work_income.errors %}
                         {% with form.work_income.errors|first as error %}
@@ -46,7 +46,7 @@
                     <div class="controls">
                         <div class="input-prepend">
                             <span class="add-on">￥</span>
-                            <input type="text" class="highlight span2" name="investment_income" id="incomeAmount" maxlength="20" value="{{ form.investment_income.value }}"/>
+                            <input type="text" class="highlight span2" placeholder="例如:101000" name="investment_income" id="incomeAmount" maxlength="20" value="{{ form.investment_income.value }}"/>
                         </div>
                         {% if form.investment_income.errors %}
                             {% with form.investment_income.errors|first as error %}
@@ -61,7 +61,7 @@
                     <div class="controls">
                         <div class="input-prepend">
                             <span class="add-on">￥</span>
-                            <input type="text" class="highlight span2" name="life_spend" id="incomeAmount" maxlength="20" value="{{ form.life_spend.value }}"/>
+                            <input type="text" class="highlight span2" placeholder="例如:10000" name="life_spend" id="incomeAmount" maxlength="20" value="{{ form.life_spend.value }}"/>
                         </div>
                         {% if form.life_spend.errors %}
                             {% with form.life_spend.errors|first as error %}
@@ -76,7 +76,7 @@
                     <div class="controls">
                         <div class="input-prepend">
                             <span class="add-on">￥</span>
-                            <input type="text" class="highlight span2" name="other_spend" id="incomeAmount" maxlength="20" value="{{ form.other_spend.value }}"/>
+                            <input type="text" class="highlight span2" name="other_spend" placeholder="例如:50000" id="incomeAmount" maxlength="20" value="{{ form.other_spend.value }}"/>
                         </div>
                         {% if form.other_spend.errors %}
                             {% with form.other_spend.errors|first as error %}

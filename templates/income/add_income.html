@@ -19,7 +19,7 @@
                     <div class="controls">
                         <div class="input-prepend">
                             <span class="add-on"><i class="icon-user"></i></span>
-                            <input type="text" id="regName" name="handler" class="highlight span2" maxlength="30" value="{{ username|default_if_none:"" }}" readonly/>
+                            <input type="text" id="regName" name="handler" placeholder="例如:username" class="highlight span2" maxlength="30" value="{{ username|default_if_none:"" }}" readonly/>
                         </div>
                         {% if form.recode_name.errors %}
                             {% with form.recode_name.errors|first as error %}
@@ -34,7 +34,7 @@
                     <div class="controls">
                         <div class="input-prepend">
                             <span class="add-on"><i class="icon-star-empty"></i></span>
-                            <input type="text" class="highlight span2" name="income_type" id="incomeType" maxlength="20" value="{{ form.income_type.value|default_if_none:"" }}"/>
+                            <input type="text" class="highlight span2" placeholder="例如: 工资收入(劳动收入)" name="income_type" id="incomeType" maxlength="20" value="{{ form.income_type.value|default_if_none:"" }}"/>
                         </div>
                         {% if form.income_type.errors %}
                             {% with form.income_type.errors|first as error %}
@@ -49,7 +49,7 @@
                     <div class="controls">
                         <div class="input-prepend">
                             <span class="add-on">￥</span>
-                            <input type="text" class="highlight span2" name="income_amount" id="incomeAmount" maxlength="20" value="{{ form.income_amount.value|default_if_none:"" }}"/>
+                            <input type="text" class="highlight span2" placeholder="例如:1000" name="income_amount" id="incomeAmount" maxlength="20" value="{{ form.income_amount.value|default_if_none:"" }}"/>
                         </div>
                         {% if form.income_amount.errors %}
                             {% with form.income_amount.errors|first as error %}
@@ -78,7 +78,7 @@
                 <div class="control-group">
                     <label class="control-label" for="addRemarks">撰写备注</label>
                     <div class="controls">
-                        <textarea rows="5" class="highlight" id="addRemarks" name="remarks">
+                        <textarea rows="5"  class="highlight" id="addRemarks" name="remarks">
                             {{ form.remarks.value|default_if_none:"" }}
                         </textarea>
 {#                        {% if form.remarks.errors %}#}
