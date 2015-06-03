@@ -22,7 +22,7 @@
                     <div class="controls">
                         <div class="input-prepend">
                             <span class="add-on"><i class="icon-user"></i></span>
-                            <input type="text" id="regName" name="lend_person" class="highlight span2" maxlength="30" value="{{ username }}" readonly/>
+                            <input type="text" id="regName" placeholder="例如:张三" name="lend_person" class="highlight span2" maxlength="30" value="{{ username }}" readonly/>
                         </div>
                     </div>
                 </div>
@@ -31,7 +31,7 @@
                     <div class="controls">
                         <div class="input-prepend">
                             <span class="add-on"><i class="icon-user"></i></span>
-                            <input type="text" id="regName" name="borrow_person" class="highlight span2" maxlength="30" value="{{ form.borrow_person.value }}"/>
+                            <input type="text" id="regName" placeholder="例如:李四" name="borrow_person" class="highlight span2" maxlength="30" value="{{ form.borrow_person.value }}"/>
                         </div>
                         {% if form.borrow_person.errors %}
                             {% with form.borrow_person.errors|first as error %}
@@ -46,7 +46,7 @@
                     <div class="controls">
                         <div class="input-prepend">
                             <span class="add-on">￥</span>
-                            <input type="text" class="highlight span2" name="lend_amount" id="incomeAmount" maxlength="20" value="{{ form.borrow_amount.value }}"/>
+                            <input type="text" class="highlight span2" placeholder="例如:1000000" name="lend_amount" id="incomeAmount" maxlength="20" value="{{ form.borrow_amount.value }}"/>
                         </div>
                         {% if form.lend_amount.errors %}
                             {% with form.lend_amount.errors|first as error %}
@@ -61,7 +61,7 @@
                     <div class="controls">
                         <div class="input-prepend">
                             <span class="add-on">￥</span>
-                            <input type="text" class="highlight span2" name="balance" id="incomeAmount" maxlength="20" value="{{ form.balance.value }}"/>
+                            <input type="text" class="highlight span2" name="balance" placeholder="例如:100000" id="incomeAmount" maxlength="20" value="{{ form.balance.value }}"/>
                         </div>
                         {% if form.balance.errors %}
                             {% with form.balance.errors|first as error %}
