@@ -153,8 +153,16 @@ class ExpendForm(ModelForm):
         if 'expend_account' in cleaned_data:
             expend_data = cleaned_data['expend_account']
 
+            expend_length = str(expend_data).__len__()
+
             if expend_data is u'' or (not expend_data.isdigit()):
                 msg = u'支出账户不可以为空,且必须为数字!'
+                self._errors['expend_account'] = self.error_class([msg])
+
+                del cleaned_data['expend_account']
+
+            if expend_length != 19:
+                msg = u'支出账户为银行账户,应该为19位合法数字组成,例如:622848 003816516 2378'
                 self._errors['expend_account'] = self.error_class([msg])
 
                 del cleaned_data['expend_account']
