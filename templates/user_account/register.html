@@ -15,9 +15,12 @@
 	<link href="{% static "css/common.css" %}" rel="stylesheet">
     <script type="text/javascript" data-main="{{ STATIC_URL }}js/main.js"
         src="{{ STATIC_URL }}js/lib/require-jquery.js"></script>
+    <style type="text/css">
+    </style>
 </head>
 <body>
 <input type="hidden" id="amd_module" value="{% static "js/views/account_register.js" %}"/>
+
     <div id="navbar" class="navbar navbar-fixed-top navbar-inverse">
             <div class="navbar-inner">
                 <ul class="nav nav-pills">
@@ -29,11 +32,11 @@
                 </ul>
             </div>
             <div class="container" style="margin-top:60px;">
-                <form class="form-horizontal" action="/user_account/register/action/" id="registerForm" method="post">
+                <form class="form-horizontal background_img" action="/user_account/register/action/" id="registerForm" method="post">
                 <button class="btn btn-large btn-block btn-success" type="button"><a  style="color: #cd0a0a" class="btn btn-link" id="lnkLogin" href="/user_account/login/">已经账号,立即登录</a></button>
                     {% csrf_token %}
                     <div class="well well-large">
-                        <div class="control-group">
+                        <div class="control-group" id="user_name">
                             <label class="control-label" for="txtUserName">用户名</label>
                             <div class="controls">
                                 <div class="input-prepend">

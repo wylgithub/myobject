@@ -174,6 +174,20 @@ class UserRegisterForm(ModelForm):
 
                 del cleaned_data["username"]
 
+            if not re.search(u'^[_a-zA-Z0-9\u4e00-\u9fa5]+$', username):
+                msg = u"用户名不可以包含非法字符(!,@,#,$,%...)"
+                self._errors['username'] = self.error_class([msg])
+                del cleaned_data['username']
+
+        # if "username" in cleaned_data:
+        #     user_name = cleaned_data['username']
+        #
+        #     # 判断用户名是否包含非法字符
+        #     if not re.search(u'^[_a-zA-Z0-9\u4e00-\u9fa5]+$', user_name):
+        #         msg = u"用户名包含了非法字符"
+        #         self._errors['user_name'] = self.error_class([msg])
+        #         del cleaned_data['username']
+
         if 'password' in cleaned_data and 'check_password' in cleaned_data:
             password = cleaned_data['password']
             check_password = cleaned_data['check_password']
