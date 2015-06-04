@@ -93,7 +93,9 @@
                         <div class="input-append date" id="borrow_date" data-date="{{ current_now }}" data-date-format="yyyy-mm-dd">
                             <input class="span2 highlight" id="r_date"
                                   size="16" type="text" name="start_date" value="{{ form.start_date.value|default_if_none:""|format_date }}" maxlength="10" readonly/>
-                            <span class="add-on"><i class="icon-calendar"></i></span>
+                            {% if validate_date %}
+                                <span class="add-on"><i class="icon-calendar"></i></span>
+                            {% endif %}
                         </div>
                         {% if form.start_date.errors %}
                             {% with form.start_date.errors|first as error %}
@@ -109,7 +111,9 @@
                         <div class="input-append date" id="repay_date" data-date="{{ current_now }}" data-date-format="yyyy-mm-dd">
                             <input class="span2 highlight" id="r_date"
                                   size="16" type="text" name="end_date" value="{{ form.end_date.value|default_if_none:""|format_date }}" maxlength="10" readonly/>
-                            <span class="add-on"><i class="icon-calendar"></i></span>
+                            {% if validate_date %}
+                                <span class="add-on"><i class="icon-calendar"></i></span>
+                            {% endif %}
                         </div>
                         {% if form.end_date.errors %}
                             {% with form.end_date.errors|first as error %}

@@ -58,18 +58,19 @@ class MonthlyForm(ModelForm):
         cleaned_data = super(MonthlyForm, self).clean()
 
         # # 日期是否合适:
-        # if 'create_datetime' in cleaned_data:
-        #     r_date = cleaned_data['create_datetime']
-        #     # 获取当前时间date类型
-        #     today = datetime.date.today()
-        #
-        #     # 将前端传过来的datetime转换为date
-        #     todate = r_date.date()
-        #     if r_date is u'' or todate > today:
-        #         msg = u'请填写记录撰写时间(时间必须小于等于当前日期)!'
-        #         self._errors['create_datetime'] = self.error_class([msg])
-        #
-        #         del cleaned_data['create_datetime']
+        if 'start_date' and 'end_date' in cleaned_data:
+            # 获取前端起始和截止日期
+            r_date = cleaned_data['start_date'].date()
+            e_date = cleaned_data['end_date'].date()
+
+            # 起始日期和截止日期相减
+            sub_day = (e_date - r_date).days
+
+            if sub_day < 28 or sub_day > 32 or sub_day is None:
+                msg = u"选择的日期不满足一个月的需求!"
+                self._errors['end_date'] = self.error_class([msg])
+
+                del cleaned_data['end_date']
 
         return cleaned_data
 
@@ -113,18 +114,21 @@ class YearlyForm(ModelForm):
         cleaned_data = super(YearlyForm, self).clean()
 
         # # 日期是否合适:
-        # if 'create_datetime' in cleaned_data:
-        #     r_date = cleaned_data['create_datetime']
-        #     # 获取当前时间date类型
-        #     today = datetime.date.today()
-        #
-        #     # 将前端传过来的datetime转换为date
-        #     todate = r_date.date()
-        #     if r_date is u'' or todate > today:
-        #         msg = u'请填写记录撰写时间(时间必须小于等于当前日期)!'
-        #         self._errors['create_datetime'] = self.error_class([msg])
-        #
-        #         del cleaned_data['create_datetime']
+        if 'start_date' and 'end_date' in cleaned_data:
+            # 获取前端起始和截止日期
+            r_date = cleaned_data['start_date'].date()
+            e_date = cleaned_data['end_date'].date()
+
+            # 起始日期和截止日期相减
+            sub_day = (e_date - r_date).days
+
+            sub_day_to_int = int(sub_day)
+
+            if sub_day < 365 or sub_day > 366 or sub_day is None:
+                msg = u"选择的日期不满足一个月的需求!"
+                self._errors['end_date'] = self.error_class([msg])
+
+                del cleaned_data['end_date']
 
         return cleaned_data
 

@@ -65,18 +65,18 @@ class IncomeForm(ModelForm):
                 del cleaned_data['income_amount']
 
         # 日期是否合适:
-        if 'create_datetime' in cleaned_data:
-            r_date = cleaned_data['create_datetime']
-            # 获取当前时间date类型
-            today = datetime.date.today()
-
-            # 将前端传过来的datetime转换为date
-            todate = r_date.date()
-            if r_date is u'' or todate > today:
-                msg = u'请填写记录撰写时间(时间必须小于等于当前日期)!'
-                self._errors['create_datetime'] = self.error_class([msg])
-
-                del cleaned_data['create_datetime']
+        # if 'create_datetime' in cleaned_data:
+        #     r_date = cleaned_data['create_datetime']
+        #     # 获取当前时间date类型
+        #     today = datetime.date.today()
+        #
+        #     # 将前端传过来的datetime转换为date
+        #     todate = r_date.date()
+        #     if r_date is u'' or todate > today:
+        #         msg = u'请填写记录撰写时间(时间必须小于等于当前日期)!'
+        #         self._errors['create_datetime'] = self.error_class([msg])
+        #
+        #         del cleaned_data['create_datetime']
 
         # 判断是否有备注:这个备注可有可无,因为不是每一笔收入有要写入备注,
         # if 'remark' in cleaned_data:
@@ -159,17 +159,17 @@ class ExpendForm(ModelForm):
 
                 del cleaned_data['expend_account']
 
-        if 'create_datetime' in cleaned_data:
-            create_datetime = cleaned_data['create_datetime']
-
-            c_date = create_datetime.date()
-            n_date = datetime.date.today()
-            if create_datetime is u"" or c_date > n_date:
-                msg = u"请填写正确的支出时间(支出时间必须小于当前时间!)!"
-
-                self._errors['create_datetime'] = self.error_class([msg])
-
-                del cleaned_data['create_datetime']
+        # if 'create_datetime' in cleaned_data:
+        #     create_datetime = cleaned_data['create_datetime']
+        #
+        #     c_date = create_datetime.date()
+        #     n_date = datetime.date.today()
+        #     if create_datetime is u"" or c_date > n_date:
+        #         msg = u"请填写正确的支出时间(支出时间必须小于当前时间!)!"
+        #
+        #         self._errors['create_datetime'] = self.error_class([msg])
+        #
+        #         del cleaned_data['create_datetime']
         # 家庭支出信息后端check结束
         return cleaned_data
 
@@ -242,32 +242,32 @@ class BorrowForm(ModelForm):
 
                 del cleaned_data['balance']
 
-        if 'borrow_datetime' in cleaned_data:
-            borrow_datetime = cleaned_data['borrow_datetime']
-            # 前端传过来的时间,将其格式化为日期格式
-            b_date = borrow_datetime.date()
+        # if 'borrow_datetime' in cleaned_data:
+        #     borrow_datetime = cleaned_data['borrow_datetime']
+        #     # 前端传过来的时间,将其格式化为日期格式
+        #     b_date = borrow_datetime.date()
+        #
+        #     # 获取当前日期
+        #     n_date = datetime.date.today()
+        #
+        #     if borrow_datetime is u"" or b_date > n_date:
+        #         msg = u"请选择有效的借入时间(借入时间不可以大于当前时间)!!"
+        #         self._errors['borrow_datetime'] = self.error_class([msg])
+        #
+        #         del cleaned_data['borrow_datetime']
 
-            # 获取当前日期
-            n_date = datetime.date.today()
-
-            if borrow_datetime is u"" or b_date > n_date:
-                msg = u"请选择有效的借入时间(借入时间不可以大于当前时间)!!"
-                self._errors['borrow_datetime'] = self.error_class([msg])
-
-                del cleaned_data['borrow_datetime']
-
-        if 'repay_datetime' in cleaned_data:
-            repay_datetime = cleaned_data['repay_datetime']
-            # 将前端传过来的时间格式化为日期类型
-            r_date = repay_datetime.date()
-
-            # 获取当前时间
-            now_date = datetime.date.today()
-            if repay_datetime is u"" or r_date <= now_date:
-                msg = u"还款日期必须比借款日期晚!"
-                self._errors['repay_datetime'] = self.error_class([msg])
-
-                del cleaned_data['repay_datetime']
+        # if 'repay_datetime' in cleaned_data:
+        #     repay_datetime = cleaned_data['repay_datetime']
+        #     # 将前端传过来的时间格式化为日期类型
+        #     r_date = repay_datetime.date()
+        #
+        #     # 获取当前时间
+        #     now_date = datetime.date.today()
+        #     if repay_datetime is u"" or r_date <= now_date:
+        #         msg = u"还款日期必须比借款日期晚!"
+        #         self._errors['repay_datetime'] = self.error_class([msg])
+        #
+        #         del cleaned_data['repay_datetime']
 
         return cleaned_data
         # 家庭借入信息后端check结束
@@ -342,31 +342,31 @@ class LendForm(ModelForm):
 
                 del cleaned_data['balance']
 
-        if 'lend_datetime' in cleaned_data:
-            lend_datetime = cleaned_data['lend_datetime']
-            # 前端传过来的时间,将其格式化为日期格式
-            b_date = lend_datetime.date()
-            # 获取当前日期
-            n_date = datetime.date.today()
-
-            if lend_datetime is u"" or b_date > n_date:
-                msg = u"请选择有效的借入时间(借出时间不可以大于当前时间)!!"
-                self._errors['lend_datetime'] = self.error_class([msg])
-
-                del cleaned_data['lend_datetime']
-
-        if 'pay_datetime' in cleaned_data:
-            pay_datetime = cleaned_data['pay_datetime']
-            p_date = pay_datetime.date()
-
-            # 获取当前时间
-            n_date = datetime.date.today()
-
-            if pay_datetime is u"" or p_date <= n_date:
-                msg = u"请填写合理的还款日期(还款日期必须小于等于当前时间!)!!"
-                self._errors['pay_datetime'] = self.error_class([msg])
-
-                del cleaned_data['pay_datetime']
+        # if 'lend_datetime' in cleaned_data:
+        #     lend_datetime = cleaned_data['lend_datetime']
+        #     # 前端传过来的时间,将其格式化为日期格式
+        #     b_date = lend_datetime.date()
+        #     # 获取当前日期
+        #     n_date = datetime.date.today()
+        #
+        #     if lend_datetime is u"" or b_date > n_date:
+        #         msg = u"请选择有效的借入时间(借出时间不可以大于当前时间)!!"
+        #         self._errors['lend_datetime'] = self.error_class([msg])
+        #
+        #         del cleaned_data['lend_datetime']
+        #
+        # if 'pay_datetime' in cleaned_data:
+        #     pay_datetime = cleaned_data['pay_datetime']
+        #     p_date = pay_datetime.date()
+        #
+        #     # 获取当前时间
+        #     n_date = datetime.date.today()
+        #
+        #     if pay_datetime is u"" or p_date <= n_date:
+        #         msg = u"请填写合理的还款日期(还款日期必须小于等于当前时间!)!!"
+        #         self._errors['pay_datetime'] = self.error_class([msg])
+        #
+        #         del cleaned_data['pay_datetime']
 
         return cleaned_data
         # 家庭借入信息后端check结束

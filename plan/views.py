@@ -203,6 +203,7 @@ def month_edit_view(request, id, month_id):
 
     return render(request, "plan/month_edit.html", {
         "form": form,
+        "validate_date": False,
         "month_id": month_id,
         'user_id': user_id,
         "current_now": get_today().strftime(DATE_INPUT_FORMAT_HYPHEN),
@@ -386,6 +387,7 @@ def year_edit_view(request, id, year_id):
 
     return render(request, "plan/year_edit.html", {
         "form": form,
+        "validate_date": False,
         "year_id": year_id,
         'user_id': user_id,
         "current_now": get_today().strftime(DATE_INPUT_FORMAT_HYPHEN),
