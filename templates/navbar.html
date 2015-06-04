@@ -133,10 +133,10 @@
                         {% endif %}
                         {% if user.get_full_name %}{{ user.get_full_name }}{% else %}{{ user.username }}{% endif %}
                         {% if user.groups.all %}
-                        ({{ user.groups.all|first }})
+                            <code style="color: red; background-color: #d3d3d3;">({{ user.groups.all|first }})</code>
                         {% else %}
                             {% if user.is_superuser %}
-                                (系统管理员)
+                                <code style="color: red">(系统管理员)</code>
                             {% endif %}
                         {% endif %}
                         </a>
