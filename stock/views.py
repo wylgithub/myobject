@@ -210,3 +210,133 @@ def stock_delete_action(request, user_pk):
         'user_pk': user_id,
         'stock_count': stock_count,
     }, context_instance=RequestContext(request))
+
+
+def log(f):
+    def fn(x):
+        print "call "+f.__name__+"..."
+        return f(x)
+    return fn
+
+
+@log
+def new_fun(n):
+    return reduce(lambda x, y: x*y, range(1, n+1))
+
+
+def new_log(f):
+    def fn(*args, **kw):
+        print ("call"+f.__name__+"()...")
+        return f(*args, **kw)
+    return fn
+
+
+@new_log
+def add(x, y):
+    return x+y
+
+
+import time, datetime
+
+
+def performance(f):
+    def fn(*args, **kwargs):
+        t1 = time.time()
+        r = f(*args, **kwargs)
+        t2 = time.time()
+        print ("call %s() in %fs" % (f.__name__, t2-t1))
+        return r
+    return fn
+
+
+@performance
+def factires(n):
+    return reduce(lambda x, y: x*y, range(1, n+1))
+
+print factires(10)
+
+
+def log(prefix):
+    def log_decorator(f):
+        def wrapper(*args, **kw):
+            print '[%s] %s()...' % (prefix, f.__name__)
+            return f(*args, **kw)
+        return wrapper
+    return log_decorator
+
+
+@log('DEBUG')
+def test():
+    pass
+print test()
+
+
+def log(prefix):
+    def log_decorator(f):
+        def wrapper(*args, **kwargs):
+            print("[%s] %s()..." %(prefix, f.__name__))
+            return f(*args, **kwargs)
+        return wrapper
+    return log_decorator
+
+@log
+def test():
+    pass
+
+print(test)
+
+
+def performance(unit):
+    def perf_decorator(f):
+        def wrapper(*args, **kw):
+            t1 = time.time()
+            r = f(*args, **kw)
+            t2 = time.time()
+            t = (t2 - t1) * 1000 if unit=='ms' else (t2 - t1)
+            print 'call %s() in %f %s' % (f.__name__, t, unit)
+            return r
+        return wrapper
+    return perf_decorator
+
+
+def performance(unit):
+    def perf_decorator(f):
+        def wrapper(*args, **kwargs):
+            t1 = time.time()
+            r = f(*args, **kwargs)
+            t2 = time.time()
+            t = (t2 - t1) * 1000 if unit == "ms" else (t2 - t1)
+            print("call %s() in %f %s" %(f.__name__, t, unit))
+            return r
+        return wrapper
+    return perf_decorator
+
+
+@performance("ms")
+def factorice(n):
+    return reduce(lambda x, y: x*y, range(1, n+1))
+
+print(factorice)
+
+
+import functools
+
+def log(f):
+    @functools.wraps(f)
+    def wrapper(*args, **kwargs):
+        print("called ...")
+        return f(*args, **kwargs)
+    return wrapper
+
+functools.partial(sorted, cmp=lambda s1, s2: cmp(s1.upper(), s2.upper()))
+
+
+class Person(object):
+    def __init__(self, name, gender, bith):
+        self.name = name
+        self.gender = gender
+        self.bith = bith
+
+
+xiaoming = Person("xiaoming", "hello", "1999.1.1")
+print(xiaoming.name, xiaoming.gender, xiaoming.bith)
