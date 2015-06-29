@@ -57,7 +57,7 @@ def index_view(request):
     year_params = get_list_params(request)
     year_count = year_queryset.count()
 
-    return render(request, "index/index.html", {
+    return render(request, "index_index/demo_html.html", {
         # 首页一览用户信息return开始
         "users": queryset[params['from']:params['to']],
         "user_count": user_count,
