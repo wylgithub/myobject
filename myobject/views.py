@@ -59,6 +59,7 @@ def index_view(request):
 
     return render(request, "index_index/demo_html.html", {
         # 首页一览用户信息return开始
+    # return render(request, "index/index.html", {
         "users": queryset[params['from']:params['to']],
         "user_count": user_count,
         # 首页一览用户信息return结束
